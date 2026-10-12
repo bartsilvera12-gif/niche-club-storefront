@@ -27,23 +27,51 @@
   ::selection { background:#E3C492; color:#080808; }
   @keyframes ncFade { from { opacity:0; } to { opacity:1; } }
   @keyframes ncUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
+  .nc-nav { scrollbar-width:none; }
+  .nc-nav::-webkit-scrollbar { display:none; }
+  @media (max-width:720px) {
+    .nc-hd { gap:2px 16px !important; padding:8px 16px !important; }
+    .nc-brand { margin-right:auto; }
+    .nc-brand span { letter-spacing:.18em !important; }
+    .nc-nav { order:3; flex:1 0 100%; margin:0 -16px !important; padding:0 16px; -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 16px,#000 calc(100% - 36px),transparent); mask-image:linear-gradient(90deg,transparent 0,#000 16px,#000 calc(100% - 36px),transparent); }
+    .nc-buscar-t { display:none; }
+    .nc-filters { gap:14px 12px !important; }
+    .nc-filters > div:first-child { flex:1 0 100%; gap:8px 20px !important; }
+    .nc-filters > span:nth-child(2) { display:none; }
+    .nc-filters > label { flex:1 1 calc(50% - 6px); flex-direction:column; align-items:stretch !important; gap:8px !important; min-width:0; }
+    .nc-filters select { width:100%; min-width:0; }
+    .nc-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; gap:36px 14px !important; }
+    .nc-grid article > span:first-of-type { margin-top:14px !important; font-size:9px !important; letter-spacing:.18em !important; }
+    .nc-grid h2 { font-size:19px !important; }
+    .nc-grid article > div:nth-of-type(2) { gap:14px !important; margin-top:12px !important; }
+    .nc-buy { flex-direction:column; align-items:stretch !important; gap:10px !important; margin-top:12px !important; }
+    .nc-buy > span { font-size:17px !important; }
+    .nc-buy > button { border:1px solid rgba(227,196,146,0.36) !important; border-radius:999px; padding:12px 0 !important; text-align:center; }
+    .nc-sheet [role="img"] { min-height:300px !important; max-height:46vh; border-radius:0 !important; }
+    .nc-ctas > button { flex:1 1 100%; }
+    .nc-cart { max-width:none !important; border-radius:0 !important; border-left:none !important; }
+  }
+  @media (max-width:720px) {
+    .nc-ft { grid-template-columns:1fr 1fr !important; gap:28px 18px !important; }
+    .nc-ft > div:first-child, .nc-ft > div:nth-child(4) { grid-column:1 / -1; }
+  }
 </style>
 </helmet>
 
 <div style="background:#080808;color:#FFFFFF;font-family:'Manrope',sans-serif;min-height:100vh;overflow-x:hidden">
 
   <header style="position:sticky;top:0;z-index:40;background:rgba(8,8,8,0.94)">
-    <div style="max-width:1400px;margin:0 auto;padding:10px 22px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px">
-      <a href="Niche Club.dc.html" style="display:flex;align-items:center;gap:10px;flex:0 0 auto">
+    <div class="nc-hd" style="max-width:1400px;margin:0 auto;padding:10px 22px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px">
+      <a class="nc-brand" href="Niche Club.dc.html" style="display:flex;align-items:center;gap:10px;flex:0 0 auto">
         <img src="img/logo.jpeg" alt="Niche Club" style="width:40px;height:40px;object-fit:contain;display:block" />
         <span style="font:400 14px/1 'Cormorant Garamond',serif;letter-spacing:.26em;color:#E3C492">NICHE CLUB</span>
       </a>
-      <nav style="display:flex;gap:16px;overflow-x:auto;margin-right:auto;font:300 11px/1 'Manrope',sans-serif;letter-spacing:.18em;text-transform:uppercase">
+      <nav class="nc-nav" style="display:flex;gap:16px;overflow-x:auto;margin-right:auto;font:300 11px/1 'Manrope',sans-serif;letter-spacing:.18em;text-transform:uppercase">
         <sc-for list="{{ navChips }}" as="n" hint-placeholder-count="4">
           <button onClick="{{ n.pick }}" style="{{ n.style }}">{{ n.label }}</button>
         </sc-for>
       </nav>
-      <button onClick="{{ openSearch }}" style="background:transparent;border:none;color:#CFCAC2;padding:12px 0;font:300 11px/1 'Manrope',sans-serif;letter-spacing:.18em;text-transform:uppercase;flex:0 0 auto" style-hover="color:#E3C492">Buscar</button>
+      <button onClick="{{ openSearch }}" aria-label="Buscar" class="nc-buscar" style="display:flex;align-items:center;gap:8px;background:transparent;border:none;color:#CFCAC2;padding:12px 0;font:300 11px/1 'Manrope',sans-serif;letter-spacing:.18em;text-transform:uppercase;flex:0 0 auto;min-height:44px" style-hover="color:#E3C492"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="nc-buscar-t">Buscar</span></button>
       <button onClick="{{ openCart }}" style="display:flex;align-items:center;gap:8px;background:transparent;border:1px solid rgba(227,196,146,0.3);color:#FFFFFF;padding:11px 15px;font:400 11px/1 'Manrope',sans-serif;letter-spacing:.16em;text-transform:uppercase;min-height:44px;white-space:nowrap;flex:0 0 auto;border-radius:999px" style-hover="background:#E3C492;color:#080808;border-color:#E3C492">
         Carrito <span style="color:#E3C492">{{ cartCount }}</span>
       </button>
@@ -54,7 +82,7 @@
     <h1 style="margin:0;font:300 clamp(32px,5vw,68px)/1.02 'Cormorant Garamond',serif;letter-spacing:-0.015em">Todas las fragancias</h1>
     <p style="margin:16px 0 0;max-width:420px;font:300 14px/1.7 'Manrope',sans-serif;color:#A9A49A">Elegí la fragancia, elegí 5 ml o 10 ml y coordinamos el pedido por WhatsApp.</p>
 
-    <div style="margin-top:clamp(30px,4vw,54px);padding-top:18px;border-top:1px solid rgba(227,196,146,0.14);display:flex;flex-wrap:wrap;align-items:center;gap:14px 26px">
+    <div class="nc-filters" style="margin-top:clamp(30px,4vw,54px);padding-top:18px;border-top:1px solid rgba(227,196,146,0.14);display:flex;flex-wrap:wrap;align-items:center;gap:14px 26px">
       <div style="display:flex;flex-wrap:wrap;gap:8px 22px">
         <sc-for list="{{ typeChips }}" as="chip" hint-placeholder-count="4">
           <button onClick="{{ chip.pick }}" style="{{ chip.style }}">{{ chip.label }}</button>
@@ -85,7 +113,7 @@
   </section>
 
   <section data-screen-label="Grilla" style="max-width:1400px;margin:0 auto;padding:clamp(34px,4vw,60px) 22px clamp(70px,8vw,120px)">
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(max(270px,30%),1fr));gap:clamp(44px,5vw,86px) clamp(22px,2.6vw,44px)">
+    <div class="nc-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(max(270px,30%),1fr));gap:clamp(44px,5vw,86px) clamp(22px,2.6vw,44px)">
       <sc-for list="{{ items }}" as="p" hint-placeholder-count="6">
         <article style="display:flex;flex-direction:column">
           <div onClick="{{ p.open }}" style="overflow:hidden;cursor:pointer;background:#0E0E0E;border-radius:999px 999px 12px 12px">
@@ -98,7 +126,7 @@
             <button onClick="{{ p.pick5 }}" style="{{ p.style5 }}">5 ml</button>
             <button onClick="{{ p.pick10 }}" style="{{ p.style10 }}">10 ml</button>
           </div>
-          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-top:16px">
+          <div class="nc-buy" style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-top:16px">
             <span style="font:300 clamp(19px,2vw,24px)/1 'Manrope',sans-serif;color:#FBF8F2">{{ p.price }}</span>
             <button onClick="{{ p.add }}" style="background:transparent;border:none;color:#CFCAC2;padding:12px 0;font:400 10px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;border-bottom:1px solid rgba(227,196,146,0.36);min-height:44px" style-hover="color:#E3C492;border-color:#E3C492">Agregar</button>
           </div>
@@ -114,25 +142,32 @@
     </sc-if>
   </section>
 
-  <footer style="padding:clamp(32px,4vw,48px) 22px 22px;border-top:1px solid rgba(227,196,146,0.1)">
-    <div style="max-width:1400px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:22px 40px">
-      <a href="Niche Club.dc.html" style="display:flex;align-items:center;gap:12px">
-        <img src="img/logo.jpeg" alt="Niche Club" style="width:44px;height:44px;object-fit:contain;display:block;border-radius:6px" />
-        <span style="display:flex;flex-direction:column;gap:6px">
-          <span style="font:400 13px/1 'Cormorant Garamond',serif;letter-spacing:.26em;color:#E3C492">NICHE CLUB</span>
-          <span style="font:300 11px/1.3 'Manrope',sans-serif;color:#7E786E">Perfumería de nicho y diseñador · Decants 5 y 10 ml</span>
-        </span>
-      </a>
-      <nav style="display:flex;flex-wrap:wrap;gap:6px 22px">
-        <a href="Niche Club.dc.html" style="font:300 13px/1.6 'Manrope',sans-serif;color:#CFCAC2" style-hover="color:#E3C492">Inicio</a>
-        <a href="Niche Club.dc.html#decants" style="font:300 13px/1.6 'Manrope',sans-serif;color:#CFCAC2" style-hover="color:#E3C492">Decants</a>
-      </nav>
-      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 22px">
-        <button onClick="{{ waGeneral }}" style="background:transparent;border:none;padding:0;font:300 13px/1.6 'Manrope',sans-serif;color:#CFCAC2;cursor:pointer" style-hover="color:#E3C492">WhatsApp {{ waDisplay }}</button>
-        <a href="https://instagram.com/nicheclub.py" target="_blank" rel="noopener" style="font:300 13px/1.6 'Manrope',sans-serif;color:#CFCAC2" style-hover="color:#E3C492">@nicheclub.py</a>
+  <footer style="padding:clamp(44px,5vw,68px) 22px 26px;border-top:1px solid rgba(227,196,146,0.1)">
+    <div class="nc-ft" style="max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:30px clamp(26px,4vw,56px)">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <a href="Niche Club.dc.html" style="display:flex;align-items:center;gap:14px">
+          <img src="img/logo.jpeg" alt="Niche Club" style="width:62px;height:62px;object-fit:contain;display:block;border-radius:8px" />
+          <span style="font:400 15px/1 'Cormorant Garamond',serif;letter-spacing:.26em;color:#E3C492">NICHE CLUB</span>
+        </a>
+        <p style="margin:0;max-width:260px;font:300 13px/1.7 'Manrope',sans-serif;color:#7E786E">Perfumería de nicho y diseñador. Decants de 5 ml y 10 ml en Paraguay.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <span style="font:400 10px/1 'Manrope',sans-serif;letter-spacing:.26em;text-transform:uppercase;color:#B99B63;margin-bottom:4px">Explorar</span>
+        <a href="Niche Club.dc.html" style="font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC" style-hover="color:#E3C492">Inicio</a>
+        <a href="Niche Club.dc.html#decants" style="font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC" style-hover="color:#E3C492">Decants</a>
+        <a href="privacidad.html" style="font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC" style-hover="color:#E3C492">Privacidad</a>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <span style="font:400 10px/1 'Manrope',sans-serif;letter-spacing:.26em;text-transform:uppercase;color:#B99B63;margin-bottom:4px">Contacto</span>
+        <button onClick="{{ waGeneral }}" style="text-align:left;background:transparent;border:none;padding:0;font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC;cursor:pointer" style-hover="color:#E3C492">WhatsApp {{ waDisplay }}</button>
+        <a href="https://instagram.com/nicheclub.py" target="_blank" rel="noopener" style="font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC" style-hover="color:#E3C492">@nicheclub.py</a>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <span style="font:400 10px/1 'Manrope',sans-serif;letter-spacing:.26em;text-transform:uppercase;color:#B99B63">Cómo compramos juntos</span>
+        <span style="max-width:280px;font:300 13px/1.7 'Manrope',sans-serif;color:#7E786E">Elegís fragancia, elegís 5 ml o 10 ml, lo sumás al carrito y coordinamos el pedido por WhatsApp.</span>
       </div>
     </div>
-    <div style="max-width:1400px;margin:26px auto 0;padding-top:16px;border-top:1px solid rgba(227,196,146,0.08);display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;font:300 11px/1.6 'Manrope',sans-serif;color:#8C857B">
+    <div style="max-width:1400px;margin:clamp(30px,4vw,44px) auto 0;padding:16px 0 0;border-top:1px solid rgba(227,196,146,0.08);display:flex;flex-wrap:wrap;gap:8px 24px;font:300 12px/1.6 'Manrope',sans-serif;color:#8C857B">
       <span>© 2026 Niche Club · Paraguay · <a href="privacidad.html" style="color:#8C857B;border-bottom:1px solid rgba(140,133,123,0.4)" style-hover="color:#E3C492">Política de privacidad</a></span>
       <span>Desarrollado por <a href="https://neura.com.py" target="_blank" rel="noopener" style="color:#CFCAC2;font-weight:400" style-hover="color:#E3C492">Neura</a></span>
     </div>
@@ -175,7 +210,7 @@
 
   <sc-if value="{{ sheet }}" hint-placeholder-val="{{ false }}">
     <div style="position:fixed;inset:0;z-index:60;background:rgba(8,8,8,0.9);display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:clamp(8px,2.6vw,42px)">
-      <div style="position:relative;width:100%;max-width:1180px;background:#0C0C0C;color:#FFFFFF;border:1px solid rgba(227,196,146,0.14);border-radius:22px;overflow:hidden">
+      <div class="nc-sheet" style="position:relative;width:100%;max-width:1180px;background:#0C0C0C;color:#FFFFFF;border:1px solid rgba(227,196,146,0.14);border-radius:22px;overflow:hidden">
         <button onClick="{{ closeSheet }}" style="position:absolute;top:10px;right:10px;z-index:2;background:rgba(8,8,8,0.72);border:1px solid rgba(227,196,146,0.3);color:#FFFFFF;width:46px;height:46px;border-radius:999px;font:300 17px/1 'Manrope',sans-serif" style-hover="background:#E3C492;color:#080808">×</button>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
           <div role="img" aria-label="{{ sheet.alt }}" style="{{ sheet.imgStyle }}"></div>
@@ -199,7 +234,7 @@
                 <button onClick="{{ incQty }}" style="background:transparent;border:none;color:#FFFFFF;width:44px;height:44px;border-radius:999px;font:300 16px/1 'Manrope',sans-serif" style-hover="color:#E3C492">+</button>
               </span>
             </div>
-            <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:34px">
+            <div class="nc-ctas" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:34px">
               <button onClick="{{ sheet.addQty }}" style="background:#FFFFFF;border:none;color:#080808;padding:17px 28px;font:500 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;min-height:50px;white-space:nowrap;border-radius:999px" style-hover="background:#E3C492">Agregar al carrito</button>
               <button onClick="{{ sheet.wa }}" style="background:transparent;border:1px solid rgba(227,196,146,0.3);color:#FFFFFF;padding:17px 26px;font:400 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;min-height:50px;white-space:nowrap;border-radius:999px" style-hover="border-color:#E3C492;color:#E3C492">Consultar por WhatsApp</button>
             </div>
@@ -230,7 +265,7 @@
 
   <sc-if value="{{ cartOpen }}" hint-placeholder-val="{{ false }}">
     <div style="position:fixed;inset:0;z-index:70;background:rgba(8,8,8,0.78);display:flex;justify-content:flex-end">
-      <div style="width:100%;max-width:450px;background:#0C0C0C;color:#FFFFFF;border-left:1px solid rgba(227,196,146,0.16);display:flex;flex-direction:column;max-height:100vh;border-radius:22px 0 0 22px">
+      <div class="nc-cart" style="width:100%;max-width:450px;background:#0C0C0C;color:#FFFFFF;border-left:1px solid rgba(227,196,146,0.16);display:flex;flex-direction:column;max-height:100vh;max-height:100dvh;border-radius:22px 0 0 22px">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 22px 16px;border-bottom:1px solid rgba(227,196,146,0.14)">
           <span style="font:300 24px/1 'Cormorant Garamond',serif;color:#FBF8F2">Tu pedido</span>
           <button onClick="{{ closeCart }}" style="background:transparent;border:1px solid rgba(227,196,146,0.28);color:#FFFFFF;width:44px;height:44px;border-radius:999px;font:300 16px/1 'Manrope',sans-serif" style-hover="background:#E3C492;color:#080808">×</button>
