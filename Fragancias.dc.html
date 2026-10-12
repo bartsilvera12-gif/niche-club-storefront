@@ -30,10 +30,7 @@
   .nc-nav { scrollbar-width:none; }
   .nc-nav::-webkit-scrollbar { display:none; }
   @media (max-width:720px) {
-    .nc-hd { gap:2px 16px !important; padding:8px 16px !important; }
-    .nc-brand { margin-right:auto; }
     .nc-brand span { letter-spacing:.18em !important; }
-    .nc-nav { order:3; flex:1 0 100%; margin:0 -16px !important; padding:0 16px; -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 16px,#000 calc(100% - 36px),transparent); mask-image:linear-gradient(90deg,transparent 0,#000 16px,#000 calc(100% - 36px),transparent); }
     .nc-buscar-t { display:none; }
     .nc-filters { gap:14px 12px !important; }
     .nc-filters > div:first-child { flex:1 0 100%; gap:8px 20px !important; }
@@ -55,6 +52,29 @@
     .nc-ft { grid-template-columns:1fr 1fr !important; gap:28px 18px !important; }
     .nc-ft > div:first-child, .nc-ft > div:nth-child(4) { grid-column:1 / -1; }
   }
+  .nc-menu-cb, .nc-burger { display:none; }
+  .nc-only-m { display:none !important; }
+  @media (max-width:720px) {
+    .nc-only-m { display:block !important; }
+    .nc-hd { column-gap:10px !important; }
+    .nc-brand span { letter-spacing:.14em !important; font-size:13px !important; }
+    .nc-cartbtn { padding:10px 12px !important; letter-spacing:.1em !important; }
+  }
+  @media (max-width:720px) {
+    .nc-hd { gap:4px 12px !important; padding:8px 16px !important; }
+    .nc-brand, .nc-hd > a:first-child { margin-right:auto; }
+    .nc-burger { display:flex; order:5; flex-direction:column; justify-content:center; gap:5px; width:44px; height:44px; padding:0 10px; border:1px solid rgba(227,196,146,0.3); border-radius:999px; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+    .nc-burger span { display:block; height:1.5px; background:#FBF8F2; border-radius:2px; transition:transform .35s cubic-bezier(.2,.7,.2,1), opacity .25s ease; }
+    .nc-menu-cb:checked ~ .nc-burger span:nth-child(1) { transform:translateY(6.5px) rotate(45deg); }
+    .nc-menu-cb:checked ~ .nc-burger span:nth-child(2) { opacity:0; }
+    .nc-menu-cb:checked ~ .nc-burger span:nth-child(3) { transform:translateY(-6.5px) rotate(-45deg); }
+    .nc-nav { display:none !important; order:9; flex:1 0 100%; flex-direction:column; gap:0 !important; margin:6px 0 4px !important; padding:0; overflow:visible !important; }
+    .nc-menu-cb:checked ~ .nc-nav { display:flex !important; animation:ncMenu .35s cubic-bezier(.2,.7,.2,1) both; }
+    .nc-nav > a, .nc-nav > button { display:block; width:100%; text-align:left; padding:16px 2px !important; margin:0 !important; font:300 13px/1 'Manrope',sans-serif !important; letter-spacing:.2em !important; text-transform:uppercase; color:#E9E4DC !important; background:transparent !important; border:none !important; border-bottom:1px solid rgba(227,196,146,0.12) !important; border-radius:0 !important; }
+    .nc-nav > :last-child { border-bottom:none !important; }
+    header:has(.nc-menu-cb:checked) { background:rgba(8,8,8,0.97) !important; }
+  }
+  @keyframes ncMenu { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:none; } }
 </style>
 </helmet>
 
@@ -66,15 +86,18 @@
         <img src="img/logo.jpeg" alt="Niche Club" style="width:40px;height:40px;object-fit:contain;display:block" />
         <span style="font:400 14px/1 'Cormorant Garamond',serif;letter-spacing:.26em;color:#E3C492">NICHE CLUB</span>
       </a>
+      <input type="checkbox" id="nc-menu" class="nc-menu-cb" aria-hidden="true" tabindex="-1" />
       <nav class="nc-nav" style="display:flex;gap:16px;overflow-x:auto;margin-right:auto;font:300 11px/1 'Manrope',sans-serif;letter-spacing:.18em;text-transform:uppercase">
+        <a href="Niche Club.dc.html" class="nc-only-m">Inicio</a>
         <sc-for list="{{ navChips }}" as="n" hint-placeholder-count="4">
           <button onClick="{{ n.pick }}" style="{{ n.style }}">{{ n.label }}</button>
         </sc-for>
       </nav>
       <button onClick="{{ openSearch }}" aria-label="Buscar" class="nc-buscar" style="display:flex;align-items:center;gap:8px;background:transparent;border:none;color:#CFCAC2;padding:12px 0;font:300 11px/1 'Manrope',sans-serif;letter-spacing:.18em;text-transform:uppercase;flex:0 0 auto;min-height:44px" style-hover="color:#E3C492"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="nc-buscar-t">Buscar</span></button>
-      <button onClick="{{ openCart }}" style="display:flex;align-items:center;gap:8px;background:transparent;border:1px solid rgba(227,196,146,0.3);color:#FFFFFF;padding:11px 15px;font:400 11px/1 'Manrope',sans-serif;letter-spacing:.16em;text-transform:uppercase;min-height:44px;white-space:nowrap;flex:0 0 auto;border-radius:999px" style-hover="background:#E3C492;color:#080808;border-color:#E3C492">
+      <button onClick="{{ openCart }}" class="nc-cartbtn" style="display:flex;align-items:center;gap:8px;background:transparent;border:1px solid rgba(227,196,146,0.3);color:#FFFFFF;padding:11px 15px;font:400 11px/1 'Manrope',sans-serif;letter-spacing:.16em;text-transform:uppercase;min-height:44px;white-space:nowrap;flex:0 0 auto;border-radius:999px" style-hover="background:#E3C492;color:#080808;border-color:#E3C492">
         Carrito <span style="color:#E3C492">{{ cartCount }}</span>
       </button>
+      <label for="nc-menu" class="nc-burger" aria-label="Abrir menú"><span></span><span></span><span></span></label>
     </div>
   </header>
 
@@ -316,6 +339,11 @@ class Component extends DCLogic {
   state = { data: null, cart: [], query: '', type: 'Todos', brand: 'Todas', sort: 'curado', sizes: {}, cartOpen: false, searchOpen: false, sheetId: null, qty: 1 };
 
   componentDidMount() {
+    document.addEventListener('click', ev => {
+      if (!ev.target.closest || !ev.target.closest('.nc-nav a, .nc-nav button')) return;
+      const cb = document.getElementById('nc-menu');
+      if (cb) cb.checked = false;
+    });
     import('./catalog.js').then(m => {
       this.mod = m;
       const hash = decodeURIComponent((location.hash || '').replace('#', '')).toLowerCase();
