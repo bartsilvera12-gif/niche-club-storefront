@@ -1,0 +1,10 @@
+# Material de trabajo, no se usa en el sitio
+uploads/
+.thumbnail
+Niche Club v1.dc.html
+
+# Local
+.claude/
+.vercel/
+.DS_Store
+Thumbs.db

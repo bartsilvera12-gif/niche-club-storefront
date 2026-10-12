@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Niche Club — Perfumería de nicho y diseñador | Decants 5 ml y 10 ml en Paraguay</title>
+<meta name="description" content="Niche Club — perfumería de nicho y diseñador en Paraguay. Decants de 5 ml y 10 ml para descubrir antes de decidir." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Manrope:wght@200;300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin:0; padding:0; background:#080808; }
+  * { box-sizing:border-box; }
+  a { color:#E3C492; text-decoration:none; }
+  a:hover { color:#FFFFFF; }
+  button { font-family:'Manrope', sans-serif; cursor:pointer; }
+  ::selection { background:#E3C492; color:#080808; }
+  @keyframes ncMask { from { clip-path:inset(100% 0 0 0); } to { clip-path:inset(0 0 0 0); } }
+  @keyframes ncUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:none; } }
+  @keyframes ncLine { from { transform:scaleX(0); } to { transform:scaleX(1); } }
+  @keyframes ncIn { from { opacity:0; transform:translateY(26px); } to { opacity:1; transform:none; } }
+  @keyframes ncClip { from { clip-path:polygon(100% 0, 100% 0, 100% 100%, 100% 100%); } to { clip-path:polygon(22% 0, 100% 0, 100% 100%, 0% 100%); } }
+  #statement [data-nc-rv] { animation:ncUp .5s ease-out both paused; animation-delay:calc(var(--d, 0) * .15s + .2s); }
+  #statement [data-nc-rv="line"] { animation-name:ncLine; }
+  #statement [data-nc-rv="img"] { animation:ncClip 1.2s cubic-bezier(0,.55,.45,1) both paused; }
+  #statement.nc-in [data-nc-rv] { animation-play-state:running; }
+  #nc-edit-track { scrollbar-width:none; cursor:grab; -webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 70px),transparent); mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 70px),transparent); }
+  #nc-edit-track::-webkit-scrollbar { display:none; }
+  #nc-edit-track.nc-drag { cursor:grabbing; scroll-snap-type:none !important; }
+  #nc-edit-track.nc-drag * { pointer-events:none; }
+  #nc-edit-track article { animation:ncIn .8s cubic-bezier(.2,.7,.2,1) both paused; transition:transform .6s cubic-bezier(.2,.7,.2,1); }
+  #nc-edit-track article:nth-child(2) { animation-delay:.09s; }
+  #nc-edit-track article:nth-child(3) { animation-delay:.18s; }
+  #nc-edit-track article:nth-child(4) { animation-delay:.27s; }
+  #nc-edit-track article:nth-child(5) { animation-delay:.36s; }
+  #nc-edit-track article:nth-child(n+6) { animation-delay:.45s; }
+  #nc-edit-track.nc-in article { animation-play-state:running; }
+  #nc-edit-track article:hover { transform:translateY(-8px); }
+  #nc-edit-track article > button:first-child { position:relative; box-shadow:0 0 0 1px rgba(227,196,146,0); transition:box-shadow .6s ease; }
+  #nc-edit-track article > button:first-child::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,transparent 55%,rgba(8,8,8,0.45)); opacity:0; transition:opacity .6s ease; pointer-events:none; }
+  #nc-edit-track article:hover > button:first-child { box-shadow:0 0 0 1px rgba(227,196,146,0.55), 0 22px 44px -18px rgba(227,196,146,0.28); }
+  #nc-edit-track article:hover > button:first-child::after { opacity:1; }
+  #nc-edit-track article:hover img { transform:scale(1.07); }
+  [data-nc-edit-bar] { cursor:pointer; }
+  [data-nc-edit-bar]:hover [data-nc-edit-thumb] { box-shadow:0 0 14px rgba(227,196,146,0.6); }
+  [data-nc-edit]:disabled { opacity:.3; cursor:default; }
+  #decants [data-nc-cap] { transform-box:fill-box; transform-origin:50% 100%; }
+  #decants [data-nc-spray] line { transform-box:fill-box; transform-origin:0 50%; opacity:0; }
+  #decants.nc-in [data-nc-cap] { animation:ncPress 3.2s ease var(--v, 0s) infinite both; }
+  #decants.nc-in [data-nc-spray] line { animation:ncSpray 3.2s cubic-bezier(.2,.7,.2,1) infinite both; animation-delay:calc(var(--v, 0s) + .22s + var(--i) * .035s); }
+  #decants [data-nc-vial="10"] { --v:.55s; }
+  @keyframes ncPress { 0%,16%,100% { transform:none; } 6% { transform:translateY(5px) scaleY(.88); } }
+  @keyframes ncSpray { 0% { opacity:0; transform:translateX(-26px) scale(.2); } 10% { opacity:1; } 22% { opacity:1; transform:none; } 55% { opacity:0; transform:translateX(14px) scale(1.15); } 100% { opacity:0; transform:translateX(14px) scale(1.15); } }
+  .nc-nav { scrollbar-width:none; }
+  .nc-nav::-webkit-scrollbar { display:none; }
+  @media (max-width:720px) {
+    .nc-hd { gap:4px 14px !important; padding:8px 16px !important; }
+    .nc-hd > a:first-child { margin-right:auto; }
+    .nc-nav { order:3; flex:1 0 100%; margin:0 -16px !important; padding:0 16px; gap:20px !important; -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 16px,#000 calc(100% - 36px),transparent); mask-image:linear-gradient(90deg,transparent 0,#000 16px,#000 calc(100% - 36px),transparent); }
+    .nc-buscar { display:none; }
+    #statement [data-nc-rv="img"] { animation-name:ncUp; }
+    .nc-dgrid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; gap:26px 14px !important; }
+    .nc-dgrid img { aspect-ratio:1/1.2 !important; }
+    .nc-dgrid h3 { font-size:19px !important; }
+  }
+</style>
+</helmet>
+
+<div style="background:#080808;color:#FFFFFF;font-family:'Manrope',sans-serif;overflow-x:hidden">
+
+  <header data-nc-header="1" style="position:sticky;top:0;z-index:40;transition:background .5s ease;background:transparent">
+    <div class="nc-hd" style="max-width:1400px;margin:0 auto;padding:10px 22px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px">
+      <a href="#top" style="display:flex;align-items:center;gap:10px;flex:0 0 auto">
+        <img src="img/logo.jpeg" alt="Niche Club" style="width:40px;height:40px;object-fit:contain;display:block" />
+        <span style="font:400 14px/1 'Cormorant Garamond',serif;letter-spacing:.26em;color:#E3C492">NICHE CLUB</span>
+      </a>
+      <nav class="nc-nav" style="display:flex;gap:18px;overflow-x:auto;margin-right:auto;font:300 11px/1 'Manrope',sans-serif;letter-spacing:.18em;text-transform:uppercase">
+        <a href="#statement" style="color:#CFCAC2;white-space:nowrap;padding:10px 0">Descubrir</a>
+        <a href="Fragancias.dc.html" style="color:#CFCAC2;white-space:nowrap;padding:10px 0">Perfumes</a>
+        <a href="Fragancias.dc.html#nicho" style="color:#CFCAC2;white-space:nowrap;padding:10px 0">Nicho</a>
+        <a href="#disenador" style="color:#CFCAC2;white-space:nowrap;padding:10px 0">Diseñador</a>
+        <a href="#arabes" style="color:#CFCAC2;white-space:nowrap;padding:10px 0">Árabes</a>
+        <a href="#decants" style="color:#CFCAC2;white-space:nowrap;padding:10px 0">Decants</a>
+      </nav>
+      <a class="nc-buscar" href="Fragancias.dc.html#buscar" style="font:300 11px/1 'Manrope',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#CFCAC2;padding:12px 0;flex:0 0 auto" style-hover="color:#E3C492">Buscar</a>
+      <a href="Fragancias.dc.html#carrito" style="display:flex;align-items:center;gap:8px;border:1px solid rgba(227,196,146,0.3);color:#FFFFFF;padding:11px 15px;font:400 11px/1 'Manrope',sans-serif;letter-spacing:.16em;text-transform:uppercase;min-height:44px;white-space:nowrap;flex:0 0 auto;border-radius:999px" style-hover="background:#E3C492;color:#080808;border-color:#E3C492">Carrito <span style="color:#E3C492">{{ cartCount }}</span></a>
+    </div>
+  </header>
+
+  <section id="top" data-screen-label="Portada" style="position:relative;margin-top:-66px;display:flex;flex-wrap:wrap;min-height:clamp(560px,100vh,1100px)">
+    <a href="Fragancias.dc.html#nicho" data-nc-panel="1" onMouseOver="{{ onPanelOver }}" onMouseOut="{{ onPanelOut }}" onFocus="{{ onPanelOver }}" onBlur="{{ onPanelOut }}" style="position:relative;flex:1 1 240px;min-height:clamp(280px,50vh,1100px);overflow:hidden;display:flex;align-items:flex-end;justify-content:center;filter:brightness(0.86);transition:flex-grow .7s cubic-bezier(.2,.7,.2,1),filter .7s ease">
+      <img src="img/layton-exclusif.jpeg" alt="Parfums de Marly Layton Exclusif en Niche Club" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%;display:block" />
+      <span style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,8,0.6) 0%,rgba(8,8,8,0.34) 28%,rgba(8,8,8,0.42) 50%,rgba(8,8,8,0.8) 100%)"></span>
+      <span style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:14px;padding:0 22px clamp(96px,15vh,150px);text-align:center">
+        <span style="font:300 clamp(24px,3.4vw,44px)/1.1 'Cormorant Garamond',serif;color:#FFFFFF;letter-spacing:.01em;text-shadow:0 2px 18px rgba(8,8,8,0.9)">Nicho y Diseñador</span>
+        <span style="font:400 11px/1 'Manrope',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#FFFFFF;border-bottom:1px solid rgba(255,255,255,0.85);padding-bottom:5px;text-shadow:0 1px 12px rgba(8,8,8,0.9)">Descubrir</span>
+      </span>
+    </a>
+    <a href="Fragancias.dc.html#arabes" data-nc-panel="2" onMouseOver="{{ onPanelOver }}" onMouseOut="{{ onPanelOut }}" onFocus="{{ onPanelOver }}" onBlur="{{ onPanelOut }}" style="position:relative;flex:1 1 240px;min-height:clamp(280px,50vh,1100px);overflow:hidden;display:flex;align-items:flex-end;justify-content:center;filter:brightness(0.86);transition:flex-grow .7s cubic-bezier(.2,.7,.2,1),filter .7s ease">
+      <img src="img/bharara-king.jpeg" alt="Bharara King en Niche Club" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 46%;display:block" />
+      <span style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,8,0.6) 0%,rgba(8,8,8,0.34) 28%,rgba(8,8,8,0.42) 50%,rgba(8,8,8,0.8) 100%)"></span>
+      <span style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:14px;padding:0 22px clamp(96px,15vh,150px);text-align:center">
+        <span style="font:300 clamp(24px,3.4vw,44px)/1.1 'Cormorant Garamond',serif;color:#FFFFFF;letter-spacing:.01em;text-shadow:0 2px 18px rgba(8,8,8,0.9)">Perfumería Árabe</span>
+        <span style="font:400 11px/1 'Manrope',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#FFFFFF;border-bottom:1px solid rgba(255,255,255,0.85);padding-bottom:5px;text-shadow:0 1px 12px rgba(8,8,8,0.9)">Descubrir</span>
+      </span>
+    </a>
+    <a href="Niche Club.dc.html#decants" data-nc-panel="3" onMouseOver="{{ onPanelOver }}" onMouseOut="{{ onPanelOut }}" onFocus="{{ onPanelOver }}" onBlur="{{ onPanelOut }}" style="position:relative;flex:1 1 240px;min-height:clamp(280px,50vh,1100px);overflow:hidden;display:flex;align-items:flex-end;justify-content:center;filter:brightness(0.86);transition:flex-grow .7s cubic-bezier(.2,.7,.2,1),filter .7s ease">
+      <img src="img/creed-aventus.jpeg" alt="Creed Aventus junto a decants de 5 ml y 10 ml" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 52%;display:block" />
+      <span style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,8,0.6) 0%,rgba(8,8,8,0.34) 28%,rgba(8,8,8,0.42) 50%,rgba(8,8,8,0.8) 100%)"></span>
+      <span style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:14px;padding:0 22px clamp(96px,15vh,150px);text-align:center">
+        <span style="font:300 clamp(24px,3.4vw,44px)/1.1 'Cormorant Garamond',serif;color:#FFFFFF;letter-spacing:.01em;text-shadow:0 2px 18px rgba(8,8,8,0.9)">Decants 5 y 10 ml</span>
+        <span style="font:400 11px/1 'Manrope',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#FFFFFF;border-bottom:1px solid rgba(255,255,255,0.85);padding-bottom:5px;text-shadow:0 1px 12px rgba(8,8,8,0.9)">Descubrir</span>
+      </span>
+    </a>
+    <div style="position:absolute;left:0;right:0;top:44%;transform:translateY(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:12px;pointer-events:none;padding:0 16px;text-align:center">
+      <h1 style="margin:0;font:300 clamp(26px,6.4vw,88px)/1 'Cormorant Garamond',serif;letter-spacing:.12em;color:#FFFFFF;text-shadow:0 2px 26px rgba(8,8,8,0.95),0 1px 3px rgba(8,8,8,0.9)">NICHE CLUB</h1>
+      <span style="font:400 clamp(8px,1vw,11px)/1.5 'Manrope',sans-serif;letter-spacing:.34em;text-transform:uppercase;color:#EED9AE;text-shadow:0 1px 14px rgba(8,8,8,0.95)">Perfumería de nicho y diseñador</span>
+    </div>
+    <span aria-hidden="true" style="position:absolute;left:50%;bottom:clamp(26px,5vh,46px);transform:translateX(-50%);z-index:3;font:400 9px/1 'Manrope',sans-serif;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,0.82);text-shadow:0 1px 12px rgba(8,8,8,0.9)">5 ml · 10 ml</span>
+  </section>
+
+  <section id="statement" data-screen-label="Qué es un decant" style="position:relative;display:flex;flex-wrap:wrap;background:#FFFFFF;color:#111010;overflow:hidden">
+    <div style="flex:1 1 420px;display:flex;flex-direction:column;justify-content:space-between;gap:clamp(40px,6vw,80px);padding:clamp(34px,5vw,80px) clamp(22px,4vw,64px)">
+      <div>
+        <header data-nc-rv style="--d:0;display:flex;align-items:center;gap:12px;margin-bottom:clamp(30px,5vw,56px)">
+          <img src="img/logo.jpeg" alt="Niche Club" style="width:40px;height:40px;object-fit:contain;display:block;border-radius:999px" />
+          <span style="display:flex;flex-direction:column;gap:5px">
+            <span style="font:400 13px/1 'Cormorant Garamond',serif;letter-spacing:.26em;color:#111010">NICHE CLUB</span>
+            <span style="font:400 8px/1 'Manrope',sans-serif;letter-spacing:.3em;text-transform:uppercase;color:#6B655B">Descubrir antes de decidir</span>
+          </span>
+        </header>
+        <h2 data-nc-rv style="--d:1;margin:0;max-width:20ch;font:300 clamp(30px,4.4vw,58px)/1.05 'Cormorant Garamond',serif;letter-spacing:-0.015em;text-wrap:pretty">Usalo varios días. Conocelo en tu piel. <span style="color:#7A5C22">Después decidí.</span></h2>
+        <div data-nc-rv="line" style="--d:2;height:2px;width:84px;margin:clamp(24px,3vw,36px) 0;background:#7A5C22;transform-origin:left"></div>
+        <p data-nc-rv style="--d:3;margin:0;max-width:440px;font:300 15px/1.75 'Manrope',sans-serif;color:#4B463E">Un decant es una presentación fraccionada: te permite usar la fragancia varias veces y descubrir cómo evoluciona realmente antes de empezar por el frasco completo.</p>
+        <a data-nc-rv href="Fragancias.dc.html" style="--d:4;display:inline-block;margin-top:clamp(26px,3vw,38px);font:500 15px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#7A5C22;border-bottom:1px solid rgba(122,92,34,0.4);padding-bottom:6px" style-hover="color:#111010;border-color:#111010">Ver decants de 5 y 10 ml</a>
+      </div>
+      <footer data-nc-rv style="--d:5;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:18px 24px;padding-top:24px;border-top:1px solid rgba(17,16,16,0.14)">
+        <span style="display:flex;align-items:center;gap:10px;font:300 12px/1.5 'Manrope',sans-serif;color:#4B463E">
+          <span style="display:block;width:7px;height:7px;background:#7A5C22;border-radius:999px;flex:0 0 auto"></span>
+          WhatsApp 0994 146975
+        </span>
+        <span style="display:flex;align-items:center;gap:10px;font:300 12px/1.5 'Manrope',sans-serif;color:#4B463E">
+          <span style="display:block;width:7px;height:7px;background:#7A5C22;border-radius:999px;flex:0 0 auto"></span>
+          @nicheclub.py
+        </span>
+        <span style="display:flex;align-items:center;gap:10px;font:300 12px/1.5 'Manrope',sans-serif;color:#4B463E">
+          <span style="display:block;width:7px;height:7px;background:#7A5C22;border-radius:999px;flex:0 0 auto"></span>
+          Presentaciones de 5 ml y 10 ml
+        </span>
+      </footer>
+    </div>
+    <div data-nc-rv="img" role="img" aria-label="Creed Aventus junto a dos decants de 5 ml y 10 ml" style="flex:1 1 340px;min-height:clamp(300px,52vh,620px);background:#E7E1D6 url(img/creed-aventus.jpeg) center 58%/cover no-repeat"></div>
+  </section>
+
+  <section data-screen-label="The Niche Edit" style="padding:clamp(60px,8vw,130px) 0">
+    <div style="max-width:1400px;margin:0 auto;padding:0 22px;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px">
+      <h2 style="margin:0;font:300 clamp(28px,4vw,58px)/1.05 'Cormorant Garamond',serif;color:#FBF8F2">The Niche Edit</h2>
+      <div style="display:flex;align-items:center;gap:14px">
+        <a href="Fragancias.dc.html" style="font:400 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#CFCAC2;border-bottom:1px solid rgba(227,196,146,0.4);padding-bottom:5px" style-hover="color:#E3C492">Todas las fragancias</a>
+        <button data-nc-edit="prev" aria-label="Anterior" style="background:transparent;border:1px solid rgba(227,196,146,0.3);color:#FFFFFF;width:44px;height:44px;border-radius:999px;font:300 16px/1 'Manrope',sans-serif" style-hover="background:#E3C492;color:#080808;border-color:#E3C492">←</button>
+        <button data-nc-edit="next" aria-label="Siguiente" style="background:transparent;border:1px solid rgba(227,196,146,0.3);color:#FFFFFF;width:44px;height:44px;border-radius:999px;font:300 16px/1 'Manrope',sans-serif" style-hover="background:#E3C492;color:#080808;border-color:#E3C492">→</button>
+      </div>
+    </div>
+
+    <div id="nc-edit-track" style="display:flex;gap:clamp(16px,2.2vw,32px);overflow-x:auto;scroll-snap-type:x proximity;scroll-padding-left:22px;padding:clamp(34px,4vw,56px) 22px 8px;margin:0 auto;max-width:1400px">
+      <sc-for list="{{ edit }}" as="e" hint-placeholder-count="4">
+        <article style="flex:0 0 clamp(210px,24vw,300px);scroll-snap-align:start;display:flex;flex-direction:column">
+          <button onClick="{{ e.go }}" style="display:block;overflow:hidden;border:none;padding:0;background:#0E0E0E;border-radius:10px;cursor:pointer">
+            <img src="{{ e.img }}" alt="{{ e.alt }}" loading="lazy" style="width:100%;aspect-ratio:1/1;object-fit:cover;object-position:center 46%;display:block;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)" />
+          </button>
+          <span style="margin-top:18px;font:400 10px/1 'Manrope',sans-serif;letter-spacing:.24em;text-transform:uppercase;color:#B99B63">{{ e.brand }}</span>
+          <h3 style="margin:10px 0 0;font:400 clamp(19px,2vw,24px)/1.15 'Cormorant Garamond',serif;color:#FBF8F2;text-wrap:pretty">{{ e.name }}</h3>
+          <div style="display:flex;align-items:baseline;gap:18px;margin-top:14px">
+            <button onClick="{{ e.pick5 }}" style="{{ e.style5 }}">5 ml</button>
+            <button onClick="{{ e.pick10 }}" style="{{ e.style10 }}">10 ml</button>
+          </div>
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:14px;margin-top:14px">
+            <span style="font:300 clamp(18px,2vw,23px)/1 'Manrope',sans-serif;color:#FBF8F2">{{ e.price }}</span>
+            <button onClick="{{ e.go }}" style="background:transparent;border:none;color:#CFCAC2;padding:12px 0;font:400 10px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;border-bottom:1px solid rgba(227,196,146,0.36);min-height:44px" style-hover="color:#E3C492;border-color:#E3C492">Descubrir</button>
+          </div>
+        </article>
+      </sc-for>
+    </div>
+
+    <div style="max-width:1400px;margin:clamp(26px,3vw,40px) auto 0;padding:0 22px;display:flex;align-items:center;gap:18px">
+      <div data-nc-edit-bar role="presentation" style="position:relative;flex:1;height:14px;display:flex;align-items:center">
+        <span style="position:absolute;left:0;right:0;height:1px;background:rgba(227,196,146,0.18)"></span>
+        <span data-nc-edit-thumb style="position:absolute;left:0;width:20%;height:3px;border-radius:3px;background:linear-gradient(90deg,#B99B63,#E3C492);transition:box-shadow .3s ease"></span>
+      </div>
+    </div>
+  </section>
+
+  <section id="decants" data-screen-label="Decants" style="background:#FFFFFF;color:#111010;padding:clamp(60px,8vw,120px) 22px">
+    <div style="max-width:1240px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(30px,4vw,70px);align-items:center">
+      <div>
+        <h2 style="margin:0;max-width:18ch;font:300 clamp(28px,4vw,52px)/1.06 'Cormorant Garamond',serif;color:#111010;text-wrap:pretty">Una fragancia. Dos formas de descubrirla.</h2>
+        <div style="margin-top:clamp(30px,4vw,48px);display:flex;flex-direction:column">
+          <div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 22px;align-items:baseline;padding:22px 0;border-top:1px solid rgba(17,16,16,0.14)">
+            <span style="font:300 clamp(30px,3.6vw,46px)/1 'Cormorant Garamond',serif;color:#7A5C22">5<span style="font:300 15px/1 'Manrope',sans-serif;letter-spacing:.08em"> ml</span></span>
+            <span style="display:flex;flex-direction:column;gap:8px">
+              <span style="font:300 14px/1.65 'Manrope',sans-serif;color:#4B463E">Para conocer una fragancia, usarla varias veces y entender cómo evoluciona.</span>
+              <span style="font:400 10px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#7A5C22">Desde {{ from5 }}</span>
+            </span>
+          </div>
+          <div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 22px;align-items:baseline;padding:22px 0;border-top:1px solid rgba(17,16,16,0.14);border-bottom:1px solid rgba(17,16,16,0.14)">
+            <span style="font:300 clamp(30px,3.6vw,46px)/1 'Cormorant Garamond',serif;color:#7A5C22">10<span style="font:300 15px/1 'Manrope',sans-serif;letter-spacing:.08em"> ml</span></span>
+            <span style="display:flex;flex-direction:column;gap:8px">
+              <span style="font:300 14px/1.65 'Manrope',sans-serif;color:#4B463E">Para tenerla durante más tiempo antes de decidir tu siguiente compra.</span>
+              <span style="font:400 10px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#7A5C22">Desde {{ from10 }}</span>
+            </span>
+          </div>
+        </div>
+        <a href="Fragancias.dc.html" style="display:inline-block;margin-top:30px;font:400 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#111010;border-bottom:1px solid rgba(17,16,16,0.3);padding-bottom:5px;white-space:nowrap" style-hover="color:#7A5C22;border-color:#7A5C22">Elegir tamaño en el catálogo</a>
+      </div>
+      <div style="display:flex;flex-direction:column;justify-self:center;width:100%;max-width:440px">
+        <div style="display:flex;align-items:flex-end;justify-content:center;gap:clamp(34px,6vw,64px);padding:clamp(20px,3vw,30px) 0 0">
+          <span data-nc-vial="5" style="position:relative;display:flex;flex-direction:column;align-items:center;gap:14px">
+            <svg viewBox="0 0 64 192" width="clamp(46px,5vw,58px)" style="display:block;height:auto;overflow:visible" aria-hidden="true">
+              <rect x="10" y="75" width="44" height="110" rx="4" fill="#C9CCD0" stroke="#2E1F45" stroke-width="9" stroke-linejoin="round"/>
+              <path d="M15 80H42V173Q42 180 35 180H15Z" fill="#EBEDEE"/>
+              <rect x="10" y="35" width="44" height="16" rx="3" fill="#C9CCD0" stroke="#2E1F45" stroke-width="9" stroke-linejoin="round"/>
+              <rect x="15" y="40" width="28" height="7" fill="#EBEDEE"/>
+              <rect x="5" y="49" width="54" height="26" rx="3" fill="#5A6170" stroke="#2E1F45" stroke-width="9" stroke-linejoin="round"/>
+              <rect x="44" y="54" width="10" height="16" fill="#4A505C"/>
+              <g data-nc-cap>
+                <rect x="15" y="5" width="34" height="30" rx="3" fill="#F5CE6E" stroke="#2E1F45" stroke-width="9" stroke-linejoin="round"/>
+              </g>
+              <g data-nc-spray stroke="#2E1F45" stroke-width="6" stroke-linecap="round">
+                <line x1="60" y1="10" x2="66" y2="10" style="--i:0"/>
+                <line x1="73" y1="6" x2="80" y2="6" style="--i:1"/>
+                <line x1="87" y1="2" x2="92" y2="2" style="--i:2"/>
+                <line x1="62" y1="19" x2="69" y2="19" style="--i:3"/>
+                <line x1="76" y1="19" x2="84" y2="19" style="--i:4"/>
+                <line x1="91" y1="19" x2="97" y2="19" style="--i:5"/>
+                <line x1="60" y1="28" x2="66" y2="28" style="--i:6"/>
+                <line x1="73" y1="32" x2="80" y2="32" style="--i:7"/>
+                <line x1="87" y1="36" x2="92" y2="36" style="--i:8"/>
+              </g>
+            </svg>
+            <span style="font:300 20px/1 'Cormorant Garamond',serif;color:#7A5C22">5 ml</span>
+          </span>
+          <span data-nc-vial="10" style="position:relative;display:flex;flex-direction:column;align-items:center;gap:14px">
+            <svg viewBox="0 0 64 192" width="clamp(64px,7vw,82px)" style="display:block;height:auto;overflow:visible" aria-hidden="true">
+              <rect x="10" y="75" width="44" height="110" rx="4" fill="#C9CCD0" stroke="#2E1F45" stroke-width="9" stroke-linejoin="round"/>
+              <path d="M15 80H42V173Q42 180 35 180H15Z" fill="#EBEDEE"/>
+              <rect x="10" y="35" width="44" height="16" rx="3" fill="#C9CCD0" stroke="#2E1F45" stroke-width="9" stroke-linejoin="round"/>
+              <rect x="15" y="40" width="28" height="7" fill="#EBEDEE"/>
+              <rect x="5" y="49" width="54" height="26" rx="3" fill="#5A6170" stroke="#2E1F45" stroke-width="9" stroke-linejoin="round"/>
+              <rect x="44" y="54" width="10" height="16" fill="#4A505C"/>
+              <g data-nc-cap>
+                <rect x="15" y="5" width="34" height="30" rx="3" fill="#F5CE6E" stroke="#2E1F45" stroke-width="9" stroke-linejoin="round"/>
+              </g>
+              <g data-nc-spray stroke="#2E1F45" stroke-width="6" stroke-linecap="round">
+                <line x1="60" y1="10" x2="66" y2="10" style="--i:0"/>
+                <line x1="73" y1="6" x2="80" y2="6" style="--i:1"/>
+                <line x1="87" y1="2" x2="92" y2="2" style="--i:2"/>
+                <line x1="62" y1="19" x2="69" y2="19" style="--i:3"/>
+                <line x1="76" y1="19" x2="84" y2="19" style="--i:4"/>
+                <line x1="91" y1="19" x2="97" y2="19" style="--i:5"/>
+                <line x1="60" y1="28" x2="66" y2="28" style="--i:6"/>
+                <line x1="73" y1="32" x2="80" y2="32" style="--i:7"/>
+                <line x1="87" y1="36" x2="92" y2="36" style="--i:8"/>
+              </g>
+            </svg>
+            <span style="font:300 20px/1 'Cormorant Garamond',serif;color:#7A5C22">10 ml</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <sc-if value="{{ finderOn }}" hint-placeholder-val="{{ true }}">
+    <section data-screen-label="Scent finder" style="background:#080808;color:#FFFFFF;padding:clamp(60px,8vw,130px) 22px">
+      <div style="max-width:1100px;margin:0 auto">
+        <h2 style="margin:0;max-width:18ch;font:300 clamp(28px,4vw,56px)/1.06 'Cormorant Garamond',serif;letter-spacing:-0.01em;color:#FBF8F2;text-wrap:pretty">Encontrá algo que vaya con vos.</h2>
+        <p style="margin:16px 0 0;max-width:420px;font:300 14px/1.7 'Manrope',sans-serif;color:#A9A49A">{{ finderLead }}</p>
+
+        <div style="margin-top:clamp(32px,4vw,56px)">
+          <p style="margin:0;font:400 11px/1 'Manrope',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#B99B63">{{ finderQuestion }}</p>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:22px">
+            <sc-for list="{{ finderOptions }}" as="o" hint-placeholder-count="3">
+              <button onClick="{{ o.pick }}" style="{{ o.style }}">{{ o.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+
+        <sc-if value="{{ finderResults }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:clamp(36px,4vw,60px);border-top:1px solid rgba(227,196,146,0.16);padding-top:clamp(28px,3vw,44px)">
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:clamp(22px,3vw,44px)">
+              <sc-for list="{{ finderResults }}" as="r" hint-placeholder-count="3">
+                <a href="Fragancias.dc.html" style="display:flex;flex-direction:column;color:#FFFFFF">
+                  <img src="{{ r.img }}" alt="{{ r.alt }}" loading="lazy" style="width:100%;aspect-ratio:1/1.18;object-fit:cover;display:block;border-radius:999px 999px 10px 10px" />
+                  <span style="margin-top:14px;font:400 10px/1 'Manrope',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#B99B63">{{ r.brand }}</span>
+                  <span style="margin-top:8px;font:400 21px/1.2 'Cormorant Garamond',serif">{{ r.name }}</span>
+                  <span style="margin-top:9px;font:400 12px/1 'Manrope',sans-serif;color:#A9A49A">{{ r.line }}</span>
+                </a>
+              </sc-for>
+            </div>
+            <button onClick="{{ finderReset }}" style="margin-top:30px;background:transparent;border:none;color:#E3C492;padding:10px 0;font:400 10px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;border-bottom:1px solid rgba(227,196,146,0.45)" style-hover="color:#FFFFFF;border-color:#FFFFFF">Empezar de nuevo</button>
+          </div>
+        </sc-if>
+      </div>
+    </section>
+  </sc-if>
+
+  <section id="disenador" data-screen-label="Diseñador" style="background:#FFFFFF;color:#111010;padding:clamp(60px,8vw,130px) 22px">
+    <div style="max-width:1340px;margin:0 auto">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:clamp(20px,3vw,56px);align-items:end">
+        <div style="flex:2 1 520px">
+          <span style="font:400 10px/1 'Manrope',sans-serif;letter-spacing:.34em;text-transform:uppercase;color:#7A5C22">Diseñador</span>
+          <h2 style="margin:18px 0 0;max-width:28ch;font:300 clamp(30px,4.6vw,62px)/1.03 'Cormorant Garamond',serif;letter-spacing:-0.015em;text-wrap:pretty">Iconos que ya conocés, en la medida que querés probar.</h2>
+        </div>
+        <div style="flex:1 1 280px;display:flex;flex-direction:column;gap:20px;max-width:420px">
+          <p style="margin:0;font:300 15px/1.75 'Manrope',sans-serif;color:#4B463E">Dior, Armani, Yves Saint Laurent y Jean Paul Gaultier: las casas que ya reconocés, disponibles en 5 ml y 10 ml.</p>
+          <a href="Fragancias.dc.html#disenador" style="align-self:flex-start;background:#111010;color:#FFFFFF;padding:16px 26px;font:500 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap;border-radius:999px" style-hover="background:#7A5C22">Ver todos</a>
+        </div>
+      </div>
+
+      <div class="nc-dgrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(228px,1fr));gap:clamp(22px,2.6vw,40px);margin-top:clamp(40px,5vw,78px)">
+        <sc-for list="{{ designer }}" as="d" hint-placeholder-count="4">
+          <article style="display:flex;flex-direction:column">
+            <a href="Fragancias.dc.html#disenador" style="display:block;overflow:hidden;border-radius:12px;background:#F2EFEA">
+              <img src="{{ d.img }}" alt="{{ d.alt }}" loading="lazy" style="width:100%;aspect-ratio:1/1.14;max-height:420px;object-fit:cover;object-position:center 46%;display:block;transition:transform 1.1s cubic-bezier(.2,.7,.2,1)" style-hover="transform:scale(1.03)" />
+            </a>
+            <span style="margin-top:18px;height:1px;width:38px;background:#7A5C22"></span>
+            <span style="margin-top:16px;font:400 10px/1 'Manrope',sans-serif;letter-spacing:.24em;text-transform:uppercase;color:#7A5C22">{{ d.brand }}</span>
+            <h3 style="margin:10px 0 0;font:400 clamp(20px,2.1vw,26px)/1.14 'Cormorant Garamond',serif;text-wrap:pretty">{{ d.name }}</h3>
+            <span style="margin-top:12px;font:300 13px/1 'Manrope',sans-serif;color:#4B463E">desde {{ d.from }}</span>
+          </article>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="arabes" data-screen-label="Árabes" style="padding:0 22px clamp(60px,8vw,130px)">
+    <div style="max-width:1400px;margin:0 auto;border-top:1px solid rgba(227,196,146,0.12);padding-top:clamp(40px,5vw,70px);display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:clamp(28px,4vw,70px);align-items:center">
+      <img src="img/bharara-king.jpeg" alt="Bharara King" loading="lazy" style="width:100%;max-height:clamp(320px,58vh,640px);aspect-ratio:4/3.4;object-fit:cover;display:block;border-radius:18px" />
+      <div>
+        <h2 style="margin:0;max-width:18ch;font:300 clamp(28px,4vw,52px)/1.06 'Cormorant Garamond',serif;color:#FBF8F2;text-wrap:pretty">Otra forma de descubrir perfumería.</h2>
+        <p style="margin:18px 0 0;max-width:400px;font:300 15px/1.75 'Manrope',sans-serif;color:#A9A49A">Rasasi, Afnan, Armaf, Bharara y Maison Alhambra: carácter y proyección a un precio accesible para empezar.</p>
+        <a href="Fragancias.dc.html#arabes" style="display:inline-block;margin-top:30px;border:1px solid rgba(227,196,146,0.32);color:#FFFFFF;padding:16px 26px;font:400 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;border-radius:999px;white-space:nowrap" style-hover="background:#E3C492;color:#080808;border-color:#E3C492">Ver árabes</a>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="CTA final" style="background:#FFFFFF;color:#111010;padding:clamp(70px,10vw,150px) 22px;text-align:center">
+    <h2 style="margin:0 auto;max-width:20ch;font:300 clamp(30px,4.6vw,64px)/1.05 'Cormorant Garamond',serif;letter-spacing:-0.01em;text-wrap:pretty">Elegí la que te intriga. Probala. Después decidí.</h2>
+    <a href="Fragancias.dc.html" style="display:inline-block;margin-top:34px;background:#111010;color:#FFFFFF;padding:17px 30px;font:500 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;border-radius:999px" style-hover="background:#8A6B2E">Ver todas las fragancias</a>
+  </section>
+
+  <footer style="padding:clamp(50px,7vw,100px) 22px 34px">
+    <div style="max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:clamp(26px,4vw,60px)">
+      <div>
+        <img src="img/logo.jpeg" alt="Niche Club" style="width:92px;height:92px;object-fit:contain;display:block;opacity:.9" />
+        <p style="margin:18px 0 0;max-width:270px;font:300 13px/1.7 'Manrope',sans-serif;color:#7E786E">Perfumería de nicho y diseñador. Decants de 5 ml y 10 ml en Paraguay.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:11px">
+        <span style="font:400 10px/1 'Manrope',sans-serif;letter-spacing:.26em;text-transform:uppercase;color:#B99B63">Explorar</span>
+        <a href="Fragancias.dc.html" style="font:300 14px/1.6 'Manrope',sans-serif;color:#FFFFFF" style-hover="color:#E3C492">Perfumes</a>
+        <a href="Fragancias.dc.html#nicho" style="font:300 14px/1.6 'Manrope',sans-serif;color:#FFFFFF" style-hover="color:#E3C492">Nicho</a>
+        <a href="Fragancias.dc.html#disenador" style="font:300 14px/1.6 'Manrope',sans-serif;color:#FFFFFF" style-hover="color:#E3C492">Diseñador</a>
+        <a href="Fragancias.dc.html#arabes" style="font:300 14px/1.6 'Manrope',sans-serif;color:#FFFFFF" style-hover="color:#E3C492">Árabes</a>
+        <a href="#decants" style="font:300 14px/1.6 'Manrope',sans-serif;color:#FFFFFF" style-hover="color:#E3C492">Decants</a>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:11px">
+        <span style="font:400 10px/1 'Manrope',sans-serif;letter-spacing:.26em;text-transform:uppercase;color:#B99B63">Contacto</span>
+        <button onClick="{{ waGeneral }}" style="text-align:left;background:transparent;border:none;color:#FFFFFF;padding:0;font:300 14px/1.6 'Manrope',sans-serif" style-hover="color:#E3C492">WhatsApp 0994 146975</button>
+        <a href="https://instagram.com/nicheclub.py" target="_blank" rel="noopener" style="font:300 14px/1.6 'Manrope',sans-serif;color:#FFFFFF" style-hover="color:#E3C492">@nicheclub.py</a>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:11px">
+        <span style="font:400 10px/1 'Manrope',sans-serif;letter-spacing:.26em;text-transform:uppercase;color:#B99B63">Cómo compramos juntos</span>
+        <span style="font:300 13px/1.7 'Manrope',sans-serif;color:#7E786E">Elegís fragancia, elegís 5 ml o 10 ml, lo sumás al carrito y coordinamos el pedido por WhatsApp.</span>
+      </div>
+    </div>
+    <div style="max-width:1400px;margin:clamp(36px,5vw,64px) auto 0;padding-top:22px;border-top:1px solid rgba(227,196,146,0.1);font:300 11px/1.6 'Manrope',sans-serif;color:#8C857B">Niche Club · Perfumería de nicho y diseñador · Paraguay</div>
+  </footer>
+
+  <sc-if value="{{ helperVisible }}" hint-placeholder-val="{{ false }}">
+    <button onClick="{{ waHelp }}" aria-label="Escribinos por WhatsApp" title="¿Necesitás ayuda para elegir? Escribinos" style="position:fixed;right:18px;bottom:18px;z-index:50;display:flex;align-items:center;justify-content:center;width:60px;height:60px;padding:0;background:#25D366;border:none;border-radius:999px;color:#FFFFFF;box-shadow:0 10px 28px -8px rgba(0,0,0,0.55)" style-hover="background:#1EBE5A">
+      <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </button>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultSize&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;5 ml&quot;,&quot;10 ml&quot;],&quot;default&quot;:&quot;5 ml&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Catálogo&quot;},&quot;showScentFinder&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Home&quot;},&quot;showHelperBubble&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Contacto&quot;}}">
+class Component extends DCLogic {
+  state = { data: null, count: 0, sizes: {}, fType: null, fBudget: null, hover: null };
+
+  componentDidMount() {
+    this._bindArrows = () => {
+      const prev = document.querySelector('[data-nc-edit="prev"]');
+      const next = document.querySelector('[data-nc-edit="next"]');
+      this._bindTries = (this._bindTries || 0) + 1;
+      if (!prev || !next) {
+        if (this._bindTries < 25) this._bindTimer = setTimeout(this._bindArrows, 200);
+        return;
+      }
+      if (prev.dataset.ncBound) return;
+      prev.dataset.ncBound = '1';
+      next.dataset.ncBound = '1';
+      prev.addEventListener('click', () => this.scrollEdit(-1));
+      next.addEventListener('click', () => this.scrollEdit(1));
+      this.bindTrack();
+    };
+    this._bindArrows();
+    this._onScroll = () => {
+      const el = document.querySelector('[data-nc-header]');
+      if (!el) return;
+      const past = window.scrollY > Math.max(120, window.innerHeight * 0.6);
+      const want = past ? 'rgba(8, 8, 8, 0.94)' : 'transparent';
+      if (el.style.background !== want) el.style.background = want;
+      const tr = document.getElementById('nc-edit-track');
+      if (tr && !tr.classList.contains('nc-in') && tr.getBoundingClientRect().top < window.innerHeight * 0.9) tr.classList.add('nc-in');
+      const dc = document.getElementById('decants');
+      if (dc && !dc.classList.contains('nc-in') && dc.getBoundingClientRect().top < window.innerHeight * 0.6) dc.classList.add('nc-in');
+      const st = document.getElementById('statement');
+      if (st && !st.classList.contains('nc-in') && st.getBoundingClientRect().top < window.innerHeight * 0.85) st.classList.add('nc-in');
+    };
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+    this._onScroll();
+    import('./catalog.js').then(m => {
+      this.mod = m;
+      const cart = m.readCart();
+      this.setState({ data: m.PRODUCTS, count: cart.reduce((t, l) => t + l.qty, 0) });
+    });
+  }
+
+  componentWillUnmount() {
+    if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
+    if (this._bindTimer) clearTimeout(this._bindTimer);
+    if (this._slideRaf) cancelAnimationFrame(this._slideRaf);
+    if (this._onResize) window.removeEventListener('resize', this._onResize);
+  }
+
+  bindTrack() {
+    const track = document.getElementById('nc-edit-track');
+    const bar = document.querySelector('[data-nc-edit-bar]');
+    if (!track || !bar) return;
+    const thumb = bar.querySelector('[data-nc-edit-thumb]');
+    const prev = document.querySelector('[data-nc-edit="prev"]');
+    const next = document.querySelector('[data-nc-edit="next"]');
+    this._paintTrack = () => {
+      const max = track.scrollWidth - track.clientWidth;
+      const p = max > 0 ? track.scrollLeft / max : 0;
+      const ratio = track.scrollWidth ? Math.min(1, track.clientWidth / track.scrollWidth) : 1;
+      const w = Math.max(0.08, ratio) * 100;
+      thumb.style.width = w + '%';
+      thumb.style.left = (p * (100 - w)) + '%';
+      if (prev) prev.disabled = track.scrollLeft <= 2;
+      if (next) next.disabled = track.scrollLeft >= max - 2;
+    };
+    track.addEventListener('scroll', this._paintTrack, { passive: true });
+    this._onResize = this._paintTrack;
+    window.addEventListener('resize', this._onResize);
+    setTimeout(this._paintTrack, 300);
+    this._paintTrack();
+
+    bar.addEventListener('click', ev => {
+      const r = bar.getBoundingClientRect();
+      const p = Math.max(0, Math.min(1, (ev.clientX - r.left) / r.width));
+      track.scrollTo({ left: p * (track.scrollWidth - track.clientWidth), behavior: 'smooth' });
+    });
+
+    let down = false, moved = false, x0 = 0, s0 = 0;
+    track.addEventListener('pointerdown', ev => {
+      if (ev.pointerType !== 'mouse' || ev.button !== 0) return;
+      down = true; moved = false; x0 = ev.clientX; s0 = track.scrollLeft;
+    });
+    window.addEventListener('pointermove', ev => {
+      if (!down) return;
+      const dx = ev.clientX - x0;
+      if (!moved && Math.abs(dx) > 5) { moved = true; track.classList.add('nc-drag'); }
+      if (moved) track.scrollLeft = s0 - dx;
+    });
+    window.addEventListener('pointerup', () => {
+      if (!down) return;
+      down = false;
+      if (moved) setTimeout(() => track.classList.remove('nc-drag'), 0);
+    });
+  }
+
+  paintPanels(active) {
+    const panels = document.querySelectorAll('[data-nc-panel]');
+    panels.forEach(el => {
+      const isActive = el === active;
+      el.style.flexGrow = active ? (isActive ? '1.7' : '0.65') : '1';
+      el.style.filter = 'brightness(' + (active ? (isActive ? 1.06 : 0.58) : 0.86) + ')';
+    });
+  }
+
+  scrollEdit(dir) {
+    const track = document.getElementById('nc-edit-track');
+    if (!track) return;
+    const card = track.querySelector('article');
+    const gap = parseFloat(getComputedStyle(track).columnGap) || 20;
+    const unit = card ? card.getBoundingClientRect().width + gap : track.clientWidth * 0.8;
+    const max = track.scrollWidth - track.clientWidth;
+    const steps = Math.max(1, Math.round(track.clientWidth / unit) - 1);
+    const from = track.scrollLeft;
+    const raw = from + dir * unit * steps;
+    const target = Math.max(0, Math.min(max, Math.round(raw / unit) * unit));
+    if (Math.abs(target - from) < 1) return;
+    track.scrollLeft = target;
+    if (typeof requestAnimationFrame !== 'function') return;
+    let frames = 0;
+    const t0 = Date.now();
+    const dur = 320;
+    const tick = () => {
+      frames += 1;
+      if (frames === 1) track.scrollLeft = from;
+      const p = Math.min(1, (Date.now() - t0) / dur);
+      const e = 1 - Math.pow(1 - p, 3);
+      track.scrollLeft = from + (target - from) * e;
+      if (p < 1) this._slideRaf = requestAnimationFrame(tick);
+    };
+    this._slideRaf = requestAnimationFrame(tick);
+  }
+
+  gs(n) { return 'Gs. ' + Number(n).toLocaleString('de-DE'); }
+
+  wa(text) {
+    if (this.mod) { this.mod.waOpen(text); return; }
+    window.open('https://wa.me/595994146975?text=' + encodeURIComponent(text), '_blank', 'noopener');
+  }
+
+  sizeOf(id) { return this.state.sizes[id] || (this.props.defaultSize === '10 ml' ? 10 : 5); }
+
+  setSize(id, ml) { this.setState(s => ({ sizes: Object.assign({}, s.sizes, { [id]: ml }) })); }
+
+  sizeLink(active) {
+    return 'background:transparent;border:none;padding:8px 2px;font:400 12px/1 Manrope,sans-serif;letter-spacing:.2em;text-transform:uppercase;transition:all .3s ease;min-height:40px;'
+      + (active
+        ? 'color:#E3C492;border-bottom:1px solid #E3C492'
+        : 'color:#7E786E;border-bottom:1px solid transparent');
+  }
+
+  finderOpt(active) {
+    const base = 'min-height:48px;padding:15px 20px;border-radius:999px;white-space:nowrap;font:400 12px/1 Manrope,sans-serif;letter-spacing:.14em;transition:all .25s ease;';
+    return active
+      ? base + 'background:#FFFFFF;border:1px solid #FFFFFF;color:#080808'
+      : base + 'background:transparent;border:1px solid rgba(227,196,146,0.26);color:#F4F0E8';
+  }
+
+  renderVals() {
+    const s = this.state;
+    const all = s.data || [];
+    const pick = id => all.find(p => p.id === id);
+    const editIds = ['layton-exclusif', 'sauvage-elixir', 'tf-costa-azzurra', 'creed-aventus', 'lv-imagination', 'hawas-ice', 'ysl-y-edp', 'tf-oud-wood', 'bharara-king'];
+
+    const edit = editIds.map(id => {
+      const p = pick(id);
+      if (!p) return null;
+      const ml = this.sizeOf(id);
+      return {
+        img: p.img, alt: p.brand + ' ' + p.name, brand: p.brand, name: p.name,
+        price: this.gs(ml === 10 ? p.p10 : p.p5),
+        style5: this.sizeLink(ml === 5),
+        style10: this.sizeLink(ml === 10),
+        pick5: () => this.setSize(id, 5),
+        pick10: () => this.setSize(id, 10),
+        go: () => { window.location.href = 'Fragancias.dc.html'; }
+      };
+    }).filter(Boolean);
+
+    const budgets = [
+      { label: 'Hasta Gs. 60.000', max: 60000 },
+      { label: 'Hasta Gs. 150.000', max: 150000 },
+      { label: 'Sin límite', max: Infinity }
+    ];
+
+    let finderQuestion = '¿Por dónde querés empezar?';
+    let finderOptions = ['Nicho', 'Diseñador', 'Árabe'].map(t => ({
+      label: t, style: this.finderOpt(s.fType === t), pick: () => this.setState({ fType: t, fBudget: null })
+    }));
+    let finderLead = 'Dos elecciones y te mostramos tres fragancias reales de nuestro catálogo para probar en decant.';
+    let finderResults = null;
+
+    if (s.fType) {
+      finderQuestion = '¿Cuánto querés invertir en tu primer decant de 5 ml?';
+      finderOptions = budgets.map(b => ({
+        label: b.label, style: this.finderOpt(s.fBudget === b.label), pick: () => this.setState({ fBudget: b.label })
+      }));
+      finderLead = 'Elegiste ' + s.fType.toLowerCase() + '. Ahora el rango de precio del decant de 5 ml.';
+    }
+
+    if (s.fType && s.fBudget) {
+      const max = (budgets.find(b => b.label === s.fBudget) || {}).max || Infinity;
+      const matches = all.filter(p => p.type === s.fType && p.p5 <= max).sort((a, b) => a.p5 - b.p5).slice(0, 3);
+      finderResults = matches.length ? matches.map(p => ({
+        img: p.img, alt: p.brand + ' ' + p.name, brand: p.brand, name: p.name,
+        line: '5 ml · ' + this.gs(p.p5)
+      })) : null;
+      finderLead = matches.length === 0
+        ? 'No tenemos nada en ese rango todavía — escribinos y lo buscamos.'
+        : (matches.length === 1 ? 'Una opción de nuestro catálogo dentro de ese rango.' : matches.length + ' opciones de nuestro catálogo, ordenadas por precio de 5 ml.');
+    }
+
+    return {
+      onPanelOver: e => this.paintPanels(e.currentTarget),
+      onPanelOut: () => this.paintPanels(null),
+      cartCount: s.count,
+      designer: ['sauvage-elixir', 'swy-powerfully', 'ysl-y-edp', 'le-beau-le-parfum'].map(id => {
+        const p = pick(id);
+        if (!p) return null;
+        return { img: p.img, alt: p.brand + ' ' + p.name, brand: p.brand, name: p.name, from: this.gs(p.p5) };
+      }).filter(Boolean),
+      from5: all.length ? this.gs(Math.min.apply(null, all.map(p => p.p5))) : 'Gs. —',
+      from10: all.length ? this.gs(Math.min.apply(null, all.map(p => p.p10))) : 'Gs. —',
+      edit: edit,
+      finderOn: this.props.showScentFinder !== false,
+      finderQuestion: finderQuestion,
+      finderOptions: finderOptions,
+      finderLead: finderLead,
+      finderResults: finderResults,
+      finderReset: () => this.setState({ fType: null, fBudget: null }),
+      moods: ['Fresco', 'Oscuro', 'Elegante', 'Dulce', 'Limpio', 'Intenso', 'Cálido'].map(m => ({
+        label: m,
+        ask: () => this.wa('Hola Niche Club, busco algo ' + m.toLowerCase() + '. ¿Qué decants me recomiendan?')
+      })),
+      helperVisible: this.props.showHelperBubble !== false,
+      waGeneral: () => this.wa('Hola Niche Club, quiero consultar por decants de 5 ml y 10 ml.'),
+      waHelp: () => this.wa('Hola Niche Club, necesito ayuda para elegir una fragancia.')
+    };
+  }
+}
+</script>
+</body>
+</html>

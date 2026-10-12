@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Todas las fragancias — Niche Club | Decants de 5 ml y 10 ml en Paraguay</title>
+<meta name="description" content="Todas las fragancias de Niche Club en decants de 5 ml y 10 ml: nicho, diseñador y perfumería árabe en Paraguay." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Manrope:wght@200;300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin:0; padding:0; background:#080808; }
+  * { box-sizing:border-box; }
+  a { color:#E3C492; text-decoration:none; }
+  a:hover { color:#FFFFFF; }
+  button { font-family:'Manrope', sans-serif; cursor:pointer; }
+  input, select { font-family:'Manrope', sans-serif; }
+  ::selection { background:#E3C492; color:#080808; }
+  @keyframes ncFade { from { opacity:0; } to { opacity:1; } }
+  @keyframes ncUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
+</style>
+</helmet>
+
+<div style="background:#080808;color:#FFFFFF;font-family:'Manrope',sans-serif;min-height:100vh;overflow-x:hidden">
+
+  <header style="position:sticky;top:0;z-index:40;background:rgba(8,8,8,0.94)">
+    <div style="max-width:1400px;margin:0 auto;padding:10px 22px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px">
+      <a href="Niche Club.dc.html" style="display:flex;align-items:center;gap:10px;flex:0 0 auto">
+        <img src="img/logo.jpeg" alt="Niche Club" style="width:40px;height:40px;object-fit:contain;display:block" />
+        <span style="font:400 14px/1 'Cormorant Garamond',serif;letter-spacing:.26em;color:#E3C492">NICHE CLUB</span>
+      </a>
+      <nav style="display:flex;gap:16px;overflow-x:auto;margin-right:auto;font:300 11px/1 'Manrope',sans-serif;letter-spacing:.18em;text-transform:uppercase">
+        <sc-for list="{{ navChips }}" as="n" hint-placeholder-count="4">
+          <button onClick="{{ n.pick }}" style="{{ n.style }}">{{ n.label }}</button>
+        </sc-for>
+      </nav>
+      <button onClick="{{ openSearch }}" style="background:transparent;border:none;color:#CFCAC2;padding:12px 0;font:300 11px/1 'Manrope',sans-serif;letter-spacing:.18em;text-transform:uppercase;flex:0 0 auto" style-hover="color:#E3C492">Buscar</button>
+      <button onClick="{{ openCart }}" style="display:flex;align-items:center;gap:8px;background:transparent;border:1px solid rgba(227,196,146,0.3);color:#FFFFFF;padding:11px 15px;font:400 11px/1 'Manrope',sans-serif;letter-spacing:.16em;text-transform:uppercase;min-height:44px;white-space:nowrap;flex:0 0 auto;border-radius:999px" style-hover="background:#E3C492;color:#080808;border-color:#E3C492">
+        Carrito <span style="color:#E3C492">{{ cartCount }}</span>
+      </button>
+    </div>
+  </header>
+
+  <section data-screen-label="Cabecera catálogo" style="max-width:1400px;margin:0 auto;padding:clamp(36px,5vw,72px) 22px 0">
+    <h1 style="margin:0;font:300 clamp(32px,5vw,68px)/1.02 'Cormorant Garamond',serif;letter-spacing:-0.015em">Todas las fragancias</h1>
+    <p style="margin:16px 0 0;max-width:420px;font:300 14px/1.7 'Manrope',sans-serif;color:#A9A49A">Elegí la fragancia, elegí 5 ml o 10 ml y coordinamos el pedido por WhatsApp.</p>
+
+    <div style="margin-top:clamp(30px,4vw,54px);padding-top:18px;border-top:1px solid rgba(227,196,146,0.14);display:flex;flex-wrap:wrap;align-items:center;gap:14px 26px">
+      <div style="display:flex;flex-wrap:wrap;gap:8px 22px">
+        <sc-for list="{{ typeChips }}" as="chip" hint-placeholder-count="4">
+          <button onClick="{{ chip.pick }}" style="{{ chip.style }}">{{ chip.label }}</button>
+        </sc-for>
+      </div>
+      <span style="flex:1 1 20px"></span>
+      <label style="display:flex;align-items:center;gap:9px;font:400 10px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#7E786E">
+        Marca
+        <select value="{{ brand }}" onChange="{{ onBrand }}" style="background:#0E0E0E;color:#FFFFFF;border:1px solid rgba(227,196,146,0.22);padding:11px 14px;font:300 11px/1 'Manrope',sans-serif;min-height:42px;border-radius:999px">
+          <sc-for list="{{ brandOptions }}" as="b" hint-placeholder-count="6">
+            <option value="{{ b }}">{{ b }}</option>
+          </sc-for>
+        </select>
+      </label>
+      <label style="display:flex;align-items:center;gap:9px;font:400 10px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#7E786E">
+        Orden
+        <select value="{{ sort }}" onChange="{{ onSort }}" style="background:#0E0E0E;color:#FFFFFF;border:1px solid rgba(227,196,146,0.22);padding:11px 14px;font:300 11px/1 'Manrope',sans-serif;min-height:42px;border-radius:999px">
+          <option value="curado">Selección</option>
+          <option value="asc">Precio: menor a mayor</option>
+          <option value="desc">Precio: mayor a menor</option>
+        </select>
+      </label>
+      <span style="font:400 10px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#B99B63">{{ resultLabel }}</span>
+      <sc-if value="{{ hasFilters }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ clearFilters }}" style="background:transparent;border:none;color:#CFCAC2;padding:10px 0;font:400 10px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;border-bottom:1px solid rgba(227,196,146,0.4)" style-hover="color:#E3C492">Limpiar</button>
+      </sc-if>
+    </div>
+  </section>
+
+  <section data-screen-label="Grilla" style="max-width:1400px;margin:0 auto;padding:clamp(34px,4vw,60px) 22px clamp(70px,8vw,120px)">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(max(270px,30%),1fr));gap:clamp(44px,5vw,86px) clamp(22px,2.6vw,44px)">
+      <sc-for list="{{ items }}" as="p" hint-placeholder-count="6">
+        <article style="display:flex;flex-direction:column">
+          <div onClick="{{ p.open }}" style="overflow:hidden;cursor:pointer;background:#0E0E0E;border-radius:999px 999px 12px 12px">
+            <img src="{{ p.img }}" alt="{{ p.alt }}" loading="lazy" style="{{ p.imgStyle }}" style-hover="transform:scale(1.02)" />
+          </div>
+          <span style="margin-top:20px;font:400 10px/1 'Manrope',sans-serif;letter-spacing:.24em;text-transform:uppercase;color:#B99B63">{{ p.brand }}</span>
+          <h2 onClick="{{ p.open }}" style="margin:10px 0 0;font:400 clamp(21px,2.2vw,27px)/1.16 'Cormorant Garamond',serif;color:#FBF8F2;cursor:pointer;text-wrap:pretty" style-hover="color:#E3C492">{{ p.name }}</h2>
+          <span style="margin-top:9px;font:300 10px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#7E786E">{{ p.type }}</span>
+          <div style="display:flex;align-items:baseline;gap:18px;margin-top:18px">
+            <button onClick="{{ p.pick5 }}" style="{{ p.style5 }}">5 ml</button>
+            <button onClick="{{ p.pick10 }}" style="{{ p.style10 }}">10 ml</button>
+          </div>
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-top:16px">
+            <span style="font:300 clamp(19px,2vw,24px)/1 'Manrope',sans-serif;color:#FBF8F2">{{ p.price }}</span>
+            <button onClick="{{ p.add }}" style="background:transparent;border:none;color:#CFCAC2;padding:12px 0;font:400 10px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;border-bottom:1px solid rgba(227,196,146,0.36);min-height:44px" style-hover="color:#E3C492;border-color:#E3C492">Agregar</button>
+          </div>
+        </article>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:80px 0;text-align:center">
+        <p style="margin:0;font:300 clamp(22px,3vw,34px)/1.3 'Cormorant Garamond',serif;color:#A9A49A">No tenemos esa fragancia cargada todavía.</p>
+        <button onClick="{{ waGeneral }}" style="margin-top:26px;background:#FFFFFF;border:none;color:#080808;padding:16px 26px;font:500 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;min-height:48px;border-radius:999px" style-hover="background:#E3C492">Consultala por WhatsApp</button>
+      </div>
+    </sc-if>
+  </section>
+
+  <footer style="padding:clamp(50px,6vw,90px) 22px 34px;border-top:1px solid rgba(227,196,146,0.1)">
+    <div style="max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:clamp(26px,4vw,60px)">
+      <div>
+        <img src="img/logo.jpeg" alt="Niche Club" style="width:84px;height:84px;object-fit:contain;display:block;opacity:.9" />
+        <p style="margin:18px 0 0;max-width:270px;font:300 13px/1.7 'Manrope',sans-serif;color:#7E786E">Perfumería de nicho y diseñador. Decants de 5 ml y 10 ml en Paraguay.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:11px">
+        <span style="font:400 10px/1 'Manrope',sans-serif;letter-spacing:.26em;text-transform:uppercase;color:#B99B63">Explorar</span>
+        <a href="Niche Club.dc.html" style="font:300 14px/1.6 'Manrope',sans-serif;color:#FFFFFF" style-hover="color:#E3C492">Inicio</a>
+        <a href="Niche Club.dc.html#decants" style="font:300 14px/1.6 'Manrope',sans-serif;color:#FFFFFF" style-hover="color:#E3C492">Decants</a>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:11px">
+        <span style="font:400 10px/1 'Manrope',sans-serif;letter-spacing:.26em;text-transform:uppercase;color:#B99B63">Contacto</span>
+        <button onClick="{{ waGeneral }}" style="text-align:left;background:transparent;border:none;color:#FFFFFF;padding:0;font:300 14px/1.6 'Manrope',sans-serif" style-hover="color:#E3C492">WhatsApp {{ waDisplay }}</button>
+        <a href="https://instagram.com/nicheclub.py" target="_blank" rel="noopener" style="font:300 14px/1.6 'Manrope',sans-serif;color:#FFFFFF" style-hover="color:#E3C492">@nicheclub.py</a>
+      </div>
+    </div>
+  </footer>
+
+  <sc-if value="{{ helperVisible }}" hint-placeholder-val="{{ false }}">
+    <button onClick="{{ waHelp }}" aria-label="Escribinos por WhatsApp" title="¿Necesitás ayuda para elegir? Escribinos" style="position:fixed;right:18px;bottom:18px;z-index:50;display:flex;align-items:center;justify-content:center;width:60px;height:60px;padding:0;background:#25D366;border:none;border-radius:999px;color:#FFFFFF;box-shadow:0 10px 28px -8px rgba(0,0,0,0.55)" style-hover="background:#1EBE5A">
+      <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </button>
+  </sc-if>
+
+  <sc-if value="{{ searchOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:80;background:#080808;overflow-y:auto">
+      <div style="max-width:1200px;margin:0 auto;padding:clamp(24px,5vw,70px) 22px 80px">
+        <div style="display:flex;justify-content:flex-end">
+          <button onClick="{{ closeSearch }}" style="background:transparent;border:1px solid rgba(227,196,146,0.3);color:#FFFFFF;width:46px;height:46px;border-radius:999px;font:300 17px/1 'Manrope',sans-serif" style-hover="background:#E3C492;color:#080808">×</button>
+        </div>
+        <input id="nc-search" type="search" value="{{ query }}" onInput="{{ onQuery }}" placeholder="¿Qué estás buscando?" style="width:100%;margin-top:clamp(20px,4vw,50px);background:transparent;border:none;border-bottom:1px solid rgba(227,196,146,0.26);outline:none;color:#FBF8F2;font:300 clamp(28px,6vw,72px)/1.1 'Cormorant Garamond',serif;padding:0 0 20px" />
+        <p style="margin:18px 0 0;font:400 10px/1 'Manrope',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#7E786E">Perfume · marca · tipo</p>
+
+        <div style="margin-top:clamp(30px,4vw,56px);display:flex;flex-direction:column;gap:clamp(18px,2.4vw,34px)">
+          <sc-for list="{{ searchResults }}" as="r" hint-placeholder-count="3">
+            <button onClick="{{ r.open }}" style="display:grid;grid-template-columns:clamp(84px,12vw,140px) minmax(0,1fr) auto;gap:clamp(16px,2.4vw,34px);align-items:center;text-align:left;background:transparent;border:none;border-bottom:1px solid rgba(227,196,146,0.12);padding:0 0 clamp(16px,2vw,28px);color:#FFFFFF" style-hover="border-color:#E3C492">
+              <span style="{{ r.imgStyle }}"></span>
+              <span style="display:flex;flex-direction:column;gap:8px;min-width:0">
+                <span style="font:400 10px/1 'Manrope',sans-serif;letter-spacing:.24em;text-transform:uppercase;color:#B99B63">{{ r.brand }}</span>
+                <span style="font:300 clamp(22px,3.4vw,40px)/1.1 'Cormorant Garamond',serif;color:#FBF8F2">{{ r.name }}</span>
+                <span style="font:300 10px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#7E786E">{{ r.type }}</span>
+              </span>
+              <span style="font:300 clamp(15px,1.8vw,22px)/1 'Manrope',sans-serif;color:#E3C492;white-space:nowrap">{{ r.line }}</span>
+            </button>
+          </sc-for>
+          <sc-if value="{{ searchEmpty }}" hint-placeholder-val="{{ false }}">
+            <p style="margin:0;font:300 clamp(20px,2.6vw,30px)/1.3 'Cormorant Garamond',serif;color:#7E786E">Nada con ese nombre todavía.</p>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ sheet }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:60;background:rgba(8,8,8,0.9);display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:clamp(8px,2.6vw,42px)">
+      <div style="position:relative;width:100%;max-width:1180px;background:#0C0C0C;color:#FFFFFF;border:1px solid rgba(227,196,146,0.14);border-radius:22px;overflow:hidden">
+        <button onClick="{{ closeSheet }}" style="position:absolute;top:10px;right:10px;z-index:2;background:rgba(8,8,8,0.72);border:1px solid rgba(227,196,146,0.3);color:#FFFFFF;width:46px;height:46px;border-radius:999px;font:300 17px/1 'Manrope',sans-serif" style-hover="background:#E3C492;color:#080808">×</button>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+          <div role="img" aria-label="{{ sheet.alt }}" style="{{ sheet.imgStyle }}"></div>
+          <div style="padding:clamp(26px,3.4vw,52px)">
+            <span style="font:400 10px/1 'Manrope',sans-serif;letter-spacing:.26em;text-transform:uppercase;color:#B99B63">{{ sheet.brand }}</span>
+            <h2 style="margin:16px 0 0;font:300 clamp(30px,3.8vw,50px)/1.04 'Cormorant Garamond',serif;color:#FBF8F2">{{ sheet.name }}</h2>
+            <div style="margin-top:12px;font:300 10px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#7E786E">{{ sheet.type }} · {{ sheet.status }}</div>
+            <div style="display:flex;align-items:baseline;gap:24px;margin-top:34px">
+              <button onClick="{{ sheet.pick5 }}" style="{{ sheet.style5 }}">5 ml</button>
+              <button onClick="{{ sheet.pick10 }}" style="{{ sheet.style10 }}">10 ml</button>
+            </div>
+            <div style="margin-top:22px;display:flex;align-items:flex-end;gap:14px">
+              <span style="font:300 clamp(28px,3.4vw,42px)/1 'Manrope',sans-serif;color:#FBF8F2">{{ sheet.price }}</span>
+              <span style="font:400 10px/1 'Manrope',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#7E786E">{{ sheet.sizeNote }}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:14px;margin-top:26px">
+              <span style="font:400 10px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#7E786E">Cantidad</span>
+              <span style="display:flex;align-items:center;border:1px solid rgba(227,196,146,0.24);border-radius:999px">
+                <button onClick="{{ decQty }}" style="background:transparent;border:none;color:#FFFFFF;width:44px;height:44px;border-radius:999px;font:300 16px/1 'Manrope',sans-serif" style-hover="color:#E3C492">−</button>
+                <span style="min-width:34px;text-align:center;font:400 14px/1 'Manrope',sans-serif;color:#FBF8F2">{{ qty }}</span>
+                <button onClick="{{ incQty }}" style="background:transparent;border:none;color:#FFFFFF;width:44px;height:44px;border-radius:999px;font:300 16px/1 'Manrope',sans-serif" style-hover="color:#E3C492">+</button>
+              </span>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:34px">
+              <button onClick="{{ sheet.addQty }}" style="background:#FFFFFF;border:none;color:#080808;padding:17px 28px;font:500 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;min-height:50px;white-space:nowrap;border-radius:999px" style-hover="background:#E3C492">Agregar al carrito</button>
+              <button onClick="{{ sheet.wa }}" style="background:transparent;border:1px solid rgba(227,196,146,0.3);color:#FFFFFF;padding:17px 26px;font:400 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;min-height:50px;white-space:nowrap;border-radius:999px" style-hover="border-color:#E3C492;color:#E3C492">Consultar por WhatsApp</button>
+            </div>
+            <div style="margin-top:38px;border-top:1px solid rgba(227,196,146,0.14);padding-top:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:18px">
+              <span style="display:flex;flex-direction:column;gap:7px"><span style="font:400 9px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#B99B63">Familia olfativa</span><span style="font:300 13px/1.5 'Manrope',sans-serif;color:#7E786E">A confirmar</span></span>
+              <span style="display:flex;flex-direction:column;gap:7px"><span style="font:400 9px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#B99B63">Notas principales</span><span style="font:300 13px/1.5 'Manrope',sans-serif;color:#7E786E">A confirmar</span></span>
+              <span style="display:flex;flex-direction:column;gap:7px"><span style="font:400 9px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#B99B63">Concentración</span><span style="font:300 13px/1.5 'Manrope',sans-serif;color:#7E786E">A confirmar</span></span>
+            </div>
+            <sc-if value="{{ related }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:34px;border-top:1px solid rgba(227,196,146,0.14);padding-top:24px">
+                <span style="font:400 10px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#B99B63">Si te gustó esto, seguí por acá</span>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px">
+                  <sc-for list="{{ related }}" as="r" hint-placeholder-count="3">
+                    <button onClick="{{ r.open }}" style="display:flex;flex-direction:column;gap:9px;text-align:left;background:transparent;border:none;padding:0;color:#FFFFFF">
+                      <span style="{{ r.imgStyle }}"></span>
+                      <span style="font:400 15px/1.2 'Cormorant Garamond',serif;color:#FBF8F2">{{ r.name }}</span>
+                      <span style="font:300 10px/1 'Manrope',sans-serif;letter-spacing:.14em;color:#7E786E">{{ r.line }}</span>
+                    </button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ cartOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:70;background:rgba(8,8,8,0.78);display:flex;justify-content:flex-end">
+      <div style="width:100%;max-width:450px;background:#0C0C0C;color:#FFFFFF;border-left:1px solid rgba(227,196,146,0.16);display:flex;flex-direction:column;max-height:100vh;border-radius:22px 0 0 22px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 22px 16px;border-bottom:1px solid rgba(227,196,146,0.14)">
+          <span style="font:300 24px/1 'Cormorant Garamond',serif;color:#FBF8F2">Tu pedido</span>
+          <button onClick="{{ closeCart }}" style="background:transparent;border:1px solid rgba(227,196,146,0.28);color:#FFFFFF;width:44px;height:44px;border-radius:999px;font:300 16px/1 'Manrope',sans-serif" style-hover="background:#E3C492;color:#080808">×</button>
+        </div>
+        <div style="flex:1;overflow-y:auto;padding:18px 22px;display:flex;flex-direction:column;gap:20px">
+          <sc-for list="{{ cartLines }}" as="l" hint-placeholder-count="2">
+            <div style="display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:14px;align-items:center">
+              <span role="img" aria-label="{{ l.name }}" style="{{ l.imgStyle }}"></span>
+              <span style="display:flex;flex-direction:column;gap:5px;min-width:0">
+                <span style="font:400 9px/1 'Manrope',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#B99B63">{{ l.brand }}</span>
+                <span style="font:400 18px/1.2 'Cormorant Garamond',serif;color:#FBF8F2">{{ l.name }}</span>
+                <span style="font:300 11px/1 'Manrope',sans-serif;color:#A9A49A">{{ l.sizeLabel }} · {{ l.unit }}</span>
+                <span style="display:flex;align-items:center;gap:2px;margin-top:4px">
+                  <button onClick="{{ l.dec }}" style="background:transparent;border:1px solid rgba(227,196,146,0.2);color:#FFFFFF;width:32px;height:32px;border-radius:999px;font:300 13px/1 'Manrope',sans-serif" style-hover="border-color:#E3C492;color:#E3C492">−</button>
+                  <span style="min-width:28px;text-align:center;font:400 12px/1 'Manrope',sans-serif;color:#FBF8F2">{{ l.qty }}</span>
+                  <button onClick="{{ l.inc }}" style="background:transparent;border:1px solid rgba(227,196,146,0.2);color:#FFFFFF;width:32px;height:32px;border-radius:999px;font:300 13px/1 'Manrope',sans-serif" style-hover="border-color:#E3C492;color:#E3C492">+</button>
+                </span>
+              </span>
+              <span style="display:flex;flex-direction:column;align-items:flex-end;gap:10px">
+                <span style="font:400 14px/1 'Manrope',sans-serif;color:#FBF8F2">{{ l.subtotal }}</span>
+                <button onClick="{{ l.remove }}" style="background:transparent;border:none;color:#7E786E;padding:0;font:400 10px/1 'Manrope',sans-serif;letter-spacing:.16em;text-transform:uppercase" style-hover="color:#E3C492">Quitar</button>
+              </span>
+            </div>
+          </sc-for>
+          <sc-if value="{{ cartEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:40px 0">
+              <p style="margin:0;font:300 24px/1.25 'Cormorant Garamond',serif;color:#FBF8F2">Todavía no elegiste tu próxima fragancia.</p>
+              <button onClick="{{ closeCart }}" style="margin-top:22px;background:transparent;border:none;color:#E3C492;padding:12px 0;font:400 10px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;border-bottom:1px solid rgba(227,196,146,0.4);min-height:44px" style-hover="color:#FBF8F2;border-color:#FBF8F2">Explorar colección</button>
+            </div>
+          </sc-if>
+        </div>
+        <div style="padding:20px 22px 24px;border-top:1px solid rgba(227,196,146,0.14)">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px">
+            <span style="font:400 10px/1 'Manrope',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#7E786E">Total</span>
+            <span style="font:300 24px/1 'Manrope',sans-serif;color:#FBF8F2">{{ cartTotal }}</span>
+          </div>
+          <button onClick="{{ waCheckout }}" style="width:100%;margin-top:18px;background:#FFFFFF;border:none;color:#080808;padding:18px;font:500 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;min-height:52px;border-radius:999px" style-hover="background:#E3C492">Finalizar por WhatsApp</button>
+          <p style="margin:13px 0 0;font:300 11px/1.6 'Manrope',sans-serif;color:#67625A">Coordinamos pago y entrega por WhatsApp {{ waDisplay }}.</p>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultSize&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;5 ml&quot;,&quot;10 ml&quot;],&quot;default&quot;:&quot;5 ml&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Catálogo&quot;},&quot;showHelperBubble&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Contacto&quot;}}">
+class Component extends DCLogic {
+  state = { data: null, cart: [], query: '', type: 'Todos', brand: 'Todas', sort: 'curado', sizes: {}, cartOpen: false, searchOpen: false, sheetId: null, qty: 1 };
+
+  componentDidMount() {
+    import('./catalog.js').then(m => {
+      this.mod = m;
+      const hash = decodeURIComponent((location.hash || '').replace('#', '')).toLowerCase();
+      const map = { nicho: 'Nicho', disenador: 'Diseñador', arabes: 'Árabe' };
+      this.setState({
+        data: m.PRODUCTS,
+        cart: m.readCart(),
+        type: map[hash] || 'Todos',
+        cartOpen: hash === 'carrito',
+        searchOpen: hash === 'buscar'
+      });
+    });
+  }
+
+  gs(n) { return 'Gs. ' + Number(n).toLocaleString('de-DE'); }
+
+  priceOf(p, ml) { return ml === 10 ? p.p10 : p.p5; }
+
+  sizeOf(id) { return this.state.sizes[id] || (this.props.defaultSize === '10 ml' ? 10 : 5); }
+
+  setSize(id, ml) { this.setState(s => ({ sizes: Object.assign({}, s.sizes, { [id]: ml }) })); }
+
+  wa(text) {
+    if (this.mod) { this.mod.waOpen(text); return; }
+    window.open('https://wa.me/595994146975?text=' + encodeURIComponent(text), '_blank', 'noopener');
+  }
+
+  addToCart(p, ml, qty) {
+    this.setState(s => {
+      const cart = s.cart.map(l => Object.assign({}, l));
+      const key = p.id + '-' + ml;
+      const found = cart.find(l => l.key === key);
+      if (found) found.qty += (qty || 1);
+      else cart.push({ key: key, id: p.id, ml: ml, qty: qty || 1 });
+      if (this.mod) this.mod.writeCart(cart);
+      return { cart: cart, cartOpen: true, sheetId: null, searchOpen: false, qty: 1 };
+    });
+  }
+
+  changeQty(key, delta) {
+    this.setState(s => {
+      let cart = s.cart.map(l => Object.assign({}, l));
+      const l = cart.find(x => x.key === key);
+      if (l) l.qty += delta;
+      cart = cart.filter(x => x.qty > 0);
+      if (this.mod) this.mod.writeCart(cart);
+      return { cart: cart };
+    });
+  }
+
+  removeLine(key) {
+    this.setState(s => {
+      const cart = s.cart.filter(x => x.key !== key);
+      if (this.mod) this.mod.writeCart(cart);
+      return { cart: cart };
+    });
+  }
+
+  sizeLink(active, big) {
+    const size = big ? '13px' : '12px';
+    return 'background:transparent;border:none;padding:8px 2px;font:400 ' + size + '/1 Manrope,sans-serif;letter-spacing:.2em;text-transform:uppercase;transition:all .3s ease;min-height:40px;'
+      + (active ? 'color:#E3C492;border-bottom:1px solid #E3C492' : 'color:#7E786E;border-bottom:1px solid transparent');
+  }
+
+  chip(active) {
+    return 'background:transparent;border:none;padding:11px 2px;font:400 11px/1 Manrope,sans-serif;letter-spacing:.2em;text-transform:uppercase;min-height:44px;transition:all .25s ease;'
+      + (active ? 'color:#FBF8F2;border-bottom:1px solid #E3C492' : 'color:#7E786E;border-bottom:1px solid transparent');
+  }
+
+  navChip(active) {
+    return 'background:transparent;border:none;padding:10px 0;white-space:nowrap;font:300 11px/1 Manrope,sans-serif;letter-spacing:.18em;text-transform:uppercase;transition:color .2s ease;'
+      + (active ? 'color:#E3C492;border-bottom:1px solid #E3C492' : 'color:#CFCAC2;border-bottom:1px solid transparent');
+  }
+
+  thumb(p, ratio) {
+    return 'display:block;width:100%;aspect-ratio:' + ratio + ';background:#121212 url(' + p.img + ') center/cover no-repeat;border-radius:999px 999px 10px 10px';
+  }
+
+  decorate(p) {
+    const ml = this.sizeOf(p.id);
+    return {
+      brand: p.brand, name: p.name, type: p.type, img: p.img, status: p.status,
+      alt: p.brand + ' ' + p.name,
+      imgStyle: 'width:100%;aspect-ratio:1/1.22;object-fit:cover;object-position:center 46%;display:block;border-radius:999px 999px 12px 12px;transition:transform 1s cubic-bezier(.2,.7,.2,1)',
+      price: this.gs(this.priceOf(p, ml)),
+      sizeNote: ml + ' ml seleccionado',
+      style5: this.sizeLink(ml === 5),
+      style10: this.sizeLink(ml === 10),
+      pick5: () => this.setSize(p.id, 5),
+      pick10: () => this.setSize(p.id, 10),
+      add: () => this.addToCart(p, ml, 1),
+      open: () => this.setState({ sheetId: p.id, qty: 1, searchOpen: false })
+    };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const all = s.data || [];
+    const q = s.query.trim().toLowerCase();
+    const match = p => (p.brand + ' ' + p.name + ' ' + p.type).toLowerCase().indexOf(q) !== -1;
+
+    let list = all.filter(p => {
+      if (s.type !== 'Todos' && p.type !== s.type) return false;
+      if (s.brand !== 'Todas' && p.brand !== s.brand) return false;
+      return true;
+    });
+    if (s.sort === 'asc') list = list.slice().sort((a, b) => a.p5 - b.p5);
+    if (s.sort === 'desc') list = list.slice().sort((a, b) => b.p5 - a.p5);
+
+    const brands = all.map(p => p.brand).filter((b, i, a) => a.indexOf(b) === i).sort();
+
+    const searchResults = q ? all.filter(match).slice(0, 8).map(p => ({
+      brand: p.brand, name: p.name, type: p.type,
+      imgStyle: this.thumb(p, '1/1.2'),
+      line: '5 ml · ' + this.gs(p.p5),
+      open: () => this.setState({ sheetId: p.id, searchOpen: false, qty: 1 })
+    })) : [];
+
+    const cartLines = s.cart.map(l => {
+      const p = all.find(x => x.id === l.id);
+      if (!p) return null;
+      const unit = this.priceOf(p, l.ml);
+      return {
+        brand: p.brand, name: p.name,
+        imgStyle: this.thumb(p, '1/1.2'),
+        sizeLabel: l.ml + ' ml', unit: this.gs(unit), qty: l.qty,
+        subtotal: this.gs(unit * l.qty),
+        inc: () => this.changeQty(l.key, 1),
+        dec: () => this.changeQty(l.key, -1),
+        remove: () => this.removeLine(l.key)
+      };
+    }).filter(Boolean);
+
+    const total = s.cart.reduce((t, l) => {
+      const p = all.find(x => x.id === l.id);
+      return t + (p ? this.priceOf(p, l.ml) * l.qty : 0);
+    }, 0);
+
+    const sp = s.sheetId ? all.find(p => p.id === s.sheetId) : null;
+    let sheet = null;
+    let related = null;
+    if (sp) {
+      const ml = this.sizeOf(sp.id);
+      sheet = Object.assign(this.decorate(sp), {
+        imgStyle: 'min-height:clamp(300px,52vh,620px);height:100%;background:#121212 url(' + sp.img + ') center/cover no-repeat;border-radius:18px',
+        style5: this.sizeLink(ml === 5, true),
+        style10: this.sizeLink(ml === 10, true),
+        addQty: () => this.addToCart(sp, ml, s.qty),
+        wa: () => this.wa('Hola Niche Club, quiero consultar por ' + sp.brand + ' ' + sp.name + ' en ' + ml + ' ml.')
+      });
+      const pool = all.filter(p => p.id !== sp.id && p.type === sp.type)
+        .sort((a, b) => Math.abs(a.p5 - sp.p5) - Math.abs(b.p5 - sp.p5)).slice(0, 3);
+      related = pool.length === 3 ? pool.map(p => ({
+        name: p.name, imgStyle: this.thumb(p, '1/1.15'), line: '5 ml · ' + this.gs(p.p5),
+        open: () => this.setState({ sheetId: p.id, qty: 1 })
+      })) : null;
+    }
+
+    return {
+      items: list.map(p => this.decorate(p)),
+      isEmpty: !!s.data && list.length === 0,
+      resultLabel: s.data ? list.length + (list.length === 1 ? ' fragancia' : ' fragancias') : 'Cargando',
+      query: s.query,
+      brand: s.brand,
+      sort: s.sort,
+      qty: s.qty,
+      brandOptions: ['Todas'].concat(brands),
+      typeChips: ['Todos', 'Nicho', 'Diseñador', 'Árabe'].map(t => ({
+        label: t, style: this.chip(s.type === t), pick: () => this.setState({ type: t })
+      })),
+      navChips: ['Todos', 'Nicho', 'Diseñador', 'Árabe'].map(t => ({
+        label: t === 'Todos' ? 'Todas' : t,
+        style: this.navChip(s.type === t),
+        pick: () => { this.setState({ type: t, brand: 'Todas' }); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+      })),
+      hasFilters: s.type !== 'Todos' || s.brand !== 'Todas' || s.sort !== 'curado',
+      clearFilters: () => this.setState({ type: 'Todos', brand: 'Todas', sort: 'curado' }),
+      onQuery: e => this.setState({ query: e.target.value }),
+      onBrand: e => this.setState({ brand: e.target.value }),
+      onSort: e => this.setState({ sort: e.target.value }),
+      searchOpen: s.searchOpen,
+      openSearch: () => {
+        this.setState({ searchOpen: true });
+        setTimeout(() => { const el = document.getElementById('nc-search'); if (el) el.focus(); }, 60);
+      },
+      closeSearch: () => this.setState({ searchOpen: false }),
+      searchResults: searchResults,
+      searchEmpty: q !== '' && searchResults.length === 0,
+      sheet: sheet,
+      related: related,
+      closeSheet: () => this.setState({ sheetId: null }),
+      incQty: () => this.setState(st => ({ qty: st.qty + 1 })),
+      decQty: () => this.setState(st => ({ qty: Math.max(1, st.qty - 1) })),
+      cartOpen: s.cartOpen,
+      openCart: () => this.setState({ cartOpen: true }),
+      closeCart: () => this.setState({ cartOpen: false }),
+      cartLines: cartLines,
+      cartEmpty: cartLines.length === 0,
+      cartCount: s.cart.reduce((t, l) => t + l.qty, 0),
+      cartTotal: this.gs(total),
+      helperVisible: this.props.showHelperBubble !== false && !s.cartOpen && !s.sheetId && !s.searchOpen,
+      waDisplay: '0994 146975',
+      waGeneral: () => this.wa('Hola Niche Club, quiero consultar por decants de 5 ml y 10 ml.'),
+      waHelp: () => this.wa('Hola Niche Club, necesito ayuda para elegir una fragancia.'),
+      waCheckout: () => {
+        if (!s.cart.length) { this.wa('Hola Niche Club, quiero consultar por decants de 5 ml y 10 ml.'); return; }
+        this.wa(this.mod ? this.mod.orderText(s.cart, total) : 'Hola Niche Club, quiero hacer un pedido.');
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>
