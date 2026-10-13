@@ -20,6 +20,7 @@ DirectoryIndex "Niche Club.dc.html" index.html
   # Direcciones cortas
   RewriteRule ^fragancias/?$ "Fragancias.dc.html" [L]
   RewriteRule ^privacidad/?$ privacidad.html [L]
+  RewriteRule ^qa/?$ qa.html [L]
   RewriteRule ^admin$ admin/ [L,R=301]
 </IfModule>
 
