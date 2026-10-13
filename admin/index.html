@@ -137,10 +137,6 @@
   .cover small { display: block; color: var(--muted); font-size: 12px; }
   .cover-foot { display: grid; gap: 10px; }
   .cover-foot .btn { width: 100%; }
-  .resource { display: grid; grid-template-columns: 160px 1fr; gap: 20px; align-items: center; }
-  .resource img { width: 160px; aspect-ratio: 1; object-fit: cover; border-radius: 12px; background: var(--card); display: block; }
-  .resource b { display: block; font-weight: 500; }
-  .resource small { display: block; color: var(--muted); font-size: 12px; margin: 4px 0 14px; }
   .card-foot { display: flex; justify-content: flex-end; align-items: center; gap: 14px; }
   .card-foot span { color: var(--muted); font-size: 13px; }
 
@@ -207,8 +203,6 @@
     .row .c-vis::before { content: 'Visible'; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
     .card { padding: 18px; }
     .covers { gap: 12px; }
-    .resource { grid-template-columns: 96px 1fr; gap: 14px; }
-    .resource img { width: 96px; }
     .tab { padding: 0 10px; font-size: 10px; letter-spacing: .1em; }
     .dlg { padding: 20px; }
     .dlg .grid2 { grid-template-columns: 1fr; }
@@ -361,17 +355,6 @@
           <button class="btn primary" type="submit" id="cfg-save" disabled>Guardar configuración</button>
         </div>
       </form>
-        <div class="card" style="margin-top:18px">
-          <div class="card-head"><div><h2 class="serif">Recursos</h2><p>Para armar las fotos de producto con el mismo estilo del catálogo.</p></div></div>
-          <div class="resource">
-            <img src="../img/fondo-fotos.png" alt="Fondo de mármol oscuro con luz dorada" loading="lazy">
-            <div>
-              <b>Fondo para fotos de producto</b>
-              <small>Mármol oscuro con luz dorada · PNG 1254 × 1254 · 2,4 MB</small>
-              <a class="btn" href="../img/fondo-fotos.png" download="niche-club-fondo-fotos.png">Descargar</a>
-            </div>
-          </div>
-        </div>
     </section>
   </main>
 
