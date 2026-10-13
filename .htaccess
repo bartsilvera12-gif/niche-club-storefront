@@ -14,13 +14,25 @@ DirectoryIndex "Niche Club.dc.html" index.html
   RewriteCond %{HTTP:X-Forwarded-Proto} !https
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+  # Direcciones viejas → limpias. THE_REQUEST es lo que pidió el navegador,
+  # así no se redirigen las reescrituras internas de más abajo.
+  RewriteCond %{THE_REQUEST} \s/+Niche(%20|\+)Club\.dc\.html[\s?] [NC]
+  RewriteRule ^ / [R=301,L]
+  RewriteCond %{THE_REQUEST} \s/+Fragancias\.dc\.html[\s?] [NC]
+  RewriteRule ^ /fragancias [R=301,L]
+  RewriteCond %{THE_REQUEST} \s/+(privacidad|qa)\.html[\s?] [NC]
+  RewriteRule ^ /%1 [R=301,L]
+
+  # Sin barra final: con barra, las imágenes y scripts relativos no cargan
+  RewriteRule ^(fragancias|privacidad|qa)/$ /$1 [R=301,L]
+
   # Página de inicio (Hostinger no acepta el espacio en DirectoryIndex)
   RewriteRule ^$ "Niche Club.dc.html" [L]
 
-  # Direcciones cortas
-  RewriteRule ^fragancias/?$ "Fragancias.dc.html" [L]
-  RewriteRule ^privacidad/?$ privacidad.html [L]
-  RewriteRule ^qa/?$ qa.html [L]
+  # Direcciones limpias
+  RewriteRule ^fragancias$ "Fragancias.dc.html" [L]
+  RewriteRule ^privacidad$ privacidad.html [L]
+  RewriteRule ^qa$ qa.html [L]
   RewriteRule ^admin$ admin/ [L,R=301]
 </IfModule>
 

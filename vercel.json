@@ -1,18 +1,18 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    { "source": "/Niche Club.dc.html", "destination": "/", "permanent": true },
+    { "source": "/Niche%20Club.dc.html", "destination": "/", "permanent": true },
+    { "source": "/Fragancias.dc.html", "destination": "/fragancias", "permanent": true },
+    { "source": "/privacidad.html", "destination": "/privacidad", "permanent": true },
+    { "source": "/qa.html", "destination": "/qa", "permanent": true },
+    { "source": "/:page(fragancias|privacidad|qa)/", "destination": "/:page", "permanent": true }
+  ],
   "rewrites": [
-    {
-      "source": "/",
-      "destination": "/Niche Club.dc.html"
-    },
-    {
-      "source": "/fragancias",
-      "destination": "/Fragancias.dc.html"
-    },
-    {
-      "source": "/qa",
-      "destination": "/qa.html"
-    }
+    { "source": "/", "destination": "/Niche Club.dc.html" },
+    { "source": "/fragancias", "destination": "/Fragancias.dc.html" },
+    { "source": "/privacidad", "destination": "/privacidad.html" },
+    { "source": "/qa", "destination": "/qa.html" }
   ],
   "headers": [
     {

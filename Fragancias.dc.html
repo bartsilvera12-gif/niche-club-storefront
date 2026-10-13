@@ -90,13 +90,13 @@
 
   <header style="position:sticky;top:0;z-index:40;background:rgba(8,8,8,0.94)">
     <div class="nc-hd" style="max-width:1400px;margin:0 auto;padding:10px 22px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px">
-      <a class="nc-brand" href="Niche Club.dc.html" style="display:flex;align-items:center;gap:10px;flex:0 0 auto">
+      <a class="nc-brand" href="/" style="display:flex;align-items:center;gap:10px;flex:0 0 auto">
         <img src="img/logo.jpeg" alt="Niche Club" style="width:40px;height:40px;object-fit:contain;display:block" />
         <span style="font:400 14px/1 'Cormorant Garamond',serif;letter-spacing:.26em;color:#E3C492">NICHE CLUB</span>
       </a>
       <input type="checkbox" id="nc-menu" class="nc-menu-cb" aria-hidden="true" tabindex="-1" />
       <nav class="nc-nav" style="display:flex;gap:16px;overflow-x:auto;margin-right:auto;font:300 11px/1 'Manrope',sans-serif;letter-spacing:.18em;text-transform:uppercase">
-        <a href="Niche Club.dc.html" class="nc-only-m">Inicio</a>
+        <a href="/" class="nc-only-m">Inicio</a>
         <sc-for list="{{ navChips }}" as="n" hint-placeholder-count="4">
           <button onClick="{{ n.pick }}" style="{{ n.style }}">{{ n.label }}</button>
         </sc-for>
@@ -181,7 +181,7 @@
   <footer style="padding:clamp(44px,5vw,68px) 22px 26px;border-top:1px solid rgba(227,196,146,0.1)">
     <div class="nc-ft" style="max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:30px clamp(26px,4vw,56px)">
       <div style="display:flex;flex-direction:column;gap:14px">
-        <a href="Niche Club.dc.html" style="display:flex;align-items:center;gap:14px">
+        <a href="/" style="display:flex;align-items:center;gap:14px">
           <img src="img/logo.jpeg" alt="Niche Club" style="width:62px;height:62px;object-fit:contain;display:block;border-radius:8px" />
           <span style="font:400 15px/1 'Cormorant Garamond',serif;letter-spacing:.26em;color:#E3C492">NICHE CLUB</span>
         </a>
@@ -189,9 +189,9 @@
       </div>
       <div style="display:flex;flex-direction:column;gap:8px">
         <span style="font:400 10px/1 'Manrope',sans-serif;letter-spacing:.26em;text-transform:uppercase;color:#B99B63;margin-bottom:4px">Explorar</span>
-        <a href="Niche Club.dc.html" style="font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC" style-hover="color:#E3C492">Inicio</a>
-        <a href="Niche Club.dc.html#decants" style="font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC" style-hover="color:#E3C492">Decants</a>
-        <a href="privacidad.html" style="font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC" style-hover="color:#E3C492">Privacidad</a>
+        <a href="/" style="font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC" style-hover="color:#E3C492">Inicio</a>
+        <a href="/#decants" style="font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC" style-hover="color:#E3C492">Decants</a>
+        <a href="/privacidad" style="font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC" style-hover="color:#E3C492">Privacidad</a>
       </div>
       <div style="display:flex;flex-direction:column;gap:8px">
         <span style="font:400 10px/1 'Manrope',sans-serif;letter-spacing:.26em;text-transform:uppercase;color:#B99B63;margin-bottom:4px">Contacto</span>
@@ -207,7 +207,7 @@
       </div>
     </div>
     <div style="max-width:1400px;margin:clamp(30px,4vw,44px) auto 0;padding:16px 0 0;border-top:1px solid rgba(227,196,146,0.08);display:flex;flex-wrap:wrap;gap:8px 24px;font:300 12px/1.6 'Manrope',sans-serif;color:#8C857B">
-      <span>© 2026 Niche Club · Paraguay · <a href="privacidad.html" style="color:#8C857B;border-bottom:1px solid rgba(140,133,123,0.4)" style-hover="color:#E3C492">Política de privacidad</a></span>
+      <span>© 2026 Niche Club · Paraguay · <a href="/privacidad" style="color:#8C857B;border-bottom:1px solid rgba(140,133,123,0.4)" style-hover="color:#E3C492">Política de privacidad</a></span>
       <span>Desarrollado por <a href="https://neura.com.py" target="_blank" rel="noopener" style="color:#CFCAC2;font-weight:400" style-hover="color:#E3C492">Neura</a></span>
     </div>
   </footer>

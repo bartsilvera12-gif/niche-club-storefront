@@ -102,18 +102,18 @@
       </a>
       <input type="checkbox" id="nc-menu" class="nc-menu-cb" aria-hidden="true" tabindex="-1" />
       <nav class="nc-nav" style="display:flex;gap:18px;overflow-x:auto;margin-right:auto;font:300 11px/1 'Manrope',sans-serif;letter-spacing:.18em;text-transform:uppercase">
-        <a href="Fragancias.dc.html" style="color:#CFCAC2;white-space:nowrap;padding:10px 0">Perfumes</a>
-        <a href="Fragancias.dc.html#nicho" style="color:#CFCAC2;white-space:nowrap;padding:10px 0">Nicho</a>
+        <a href="/fragancias" style="color:#CFCAC2;white-space:nowrap;padding:10px 0">Perfumes</a>
+        <a href="/fragancias#nicho" style="color:#CFCAC2;white-space:nowrap;padding:10px 0">Nicho</a>
         <a href="#disenador" style="color:#CFCAC2;white-space:nowrap;padding:10px 0">Diseñador</a>
         <a href="#arabes" style="color:#CFCAC2;white-space:nowrap;padding:10px 0">Árabes</a>
       </nav>
-      <a href="Fragancias.dc.html#carrito" style="display:flex;align-items:center;gap:8px;border:1px solid rgba(227,196,146,0.3);color:#FFFFFF;padding:11px 15px;font:400 11px/1 'Manrope',sans-serif;letter-spacing:.16em;text-transform:uppercase;min-height:44px;white-space:nowrap;flex:0 0 auto;border-radius:999px" style-hover="background:#E3C492;color:#080808;border-color:#E3C492">Carrito <span style="color:#E3C492">{{ cartCount }}</span></a>
+      <a href="/fragancias#carrito" style="display:flex;align-items:center;gap:8px;border:1px solid rgba(227,196,146,0.3);color:#FFFFFF;padding:11px 15px;font:400 11px/1 'Manrope',sans-serif;letter-spacing:.16em;text-transform:uppercase;min-height:44px;white-space:nowrap;flex:0 0 auto;border-radius:999px" style-hover="background:#E3C492;color:#080808;border-color:#E3C492">Carrito <span style="color:#E3C492">{{ cartCount }}</span></a>
       <label for="nc-menu" class="nc-burger" aria-label="Abrir menú"><span></span><span></span><span></span></label>
     </div>
   </header>
 
   <section id="top" data-screen-label="Portada" style="position:relative;margin-top:-66px;display:flex;flex-wrap:wrap;min-height:clamp(560px,100vh,1100px)">
-    <a href="Fragancias.dc.html#nicho" data-nc-panel="1" onMouseOver="{{ onPanelOver }}" onMouseOut="{{ onPanelOut }}" onFocus="{{ onPanelOver }}" onBlur="{{ onPanelOut }}" style="position:relative;flex:1 1 240px;min-height:clamp(280px,50vh,1100px);overflow:hidden;display:flex;align-items:flex-end;justify-content:center;filter:brightness(0.86);transition:flex-grow .7s cubic-bezier(.2,.7,.2,1),filter .7s ease">
+    <a href="/fragancias#nicho" data-nc-panel="1" onMouseOver="{{ onPanelOver }}" onMouseOut="{{ onPanelOut }}" onFocus="{{ onPanelOver }}" onBlur="{{ onPanelOut }}" style="position:relative;flex:1 1 240px;min-height:clamp(280px,50vh,1100px);overflow:hidden;display:flex;align-items:flex-end;justify-content:center;filter:brightness(0.86);transition:flex-grow .7s cubic-bezier(.2,.7,.2,1),filter .7s ease">
       <img src="{{ hero1 }}" alt="Nicho y Diseñador en Niche Club" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%;display:block" />
       <span style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,8,0.6) 0%,rgba(8,8,8,0.34) 28%,rgba(8,8,8,0.42) 50%,rgba(8,8,8,0.8) 100%)"></span>
       <span style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:10px;padding:0 22px clamp(66px,9vh,96px);text-align:center">
@@ -121,7 +121,7 @@
         <span style="font:400 11px/1 'Manrope',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#FFFFFF;border-bottom:1px solid rgba(255,255,255,0.85);padding-bottom:5px;text-shadow:0 1px 12px rgba(8,8,8,0.9)">Descubrir</span>
       </span>
     </a>
-    <a href="Fragancias.dc.html#arabes" data-nc-panel="2" onMouseOver="{{ onPanelOver }}" onMouseOut="{{ onPanelOut }}" onFocus="{{ onPanelOver }}" onBlur="{{ onPanelOut }}" style="position:relative;flex:1 1 240px;min-height:clamp(280px,50vh,1100px);overflow:hidden;display:flex;align-items:flex-end;justify-content:center;filter:brightness(0.86);transition:flex-grow .7s cubic-bezier(.2,.7,.2,1),filter .7s ease">
+    <a href="/fragancias#arabes" data-nc-panel="2" onMouseOver="{{ onPanelOver }}" onMouseOut="{{ onPanelOut }}" onFocus="{{ onPanelOver }}" onBlur="{{ onPanelOut }}" style="position:relative;flex:1 1 240px;min-height:clamp(280px,50vh,1100px);overflow:hidden;display:flex;align-items:flex-end;justify-content:center;filter:brightness(0.86);transition:flex-grow .7s cubic-bezier(.2,.7,.2,1),filter .7s ease">
       <img src="{{ hero2 }}" alt="Perfumería árabe en Niche Club" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 46%;display:block" />
       <span style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,8,0.6) 0%,rgba(8,8,8,0.34) 28%,rgba(8,8,8,0.42) 50%,rgba(8,8,8,0.8) 100%)"></span>
       <span style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:10px;padding:0 22px clamp(66px,9vh,96px);text-align:center">
@@ -129,7 +129,7 @@
         <span style="font:400 11px/1 'Manrope',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#FFFFFF;border-bottom:1px solid rgba(255,255,255,0.85);padding-bottom:5px;text-shadow:0 1px 12px rgba(8,8,8,0.9)">Descubrir</span>
       </span>
     </a>
-    <a href="Niche Club.dc.html#decants" data-nc-panel="3" onMouseOver="{{ onPanelOver }}" onMouseOut="{{ onPanelOut }}" onFocus="{{ onPanelOver }}" onBlur="{{ onPanelOut }}" style="position:relative;flex:1 1 240px;min-height:clamp(280px,50vh,1100px);overflow:hidden;display:flex;align-items:flex-end;justify-content:center;filter:brightness(0.86);transition:flex-grow .7s cubic-bezier(.2,.7,.2,1),filter .7s ease">
+    <a href="/#decants" data-nc-panel="3" onMouseOver="{{ onPanelOver }}" onMouseOut="{{ onPanelOut }}" onFocus="{{ onPanelOver }}" onBlur="{{ onPanelOut }}" style="position:relative;flex:1 1 240px;min-height:clamp(280px,50vh,1100px);overflow:hidden;display:flex;align-items:flex-end;justify-content:center;filter:brightness(0.86);transition:flex-grow .7s cubic-bezier(.2,.7,.2,1),filter .7s ease">
       <img src="{{ hero3 }}" alt="Decants de 5 ml y 10 ml en Niche Club" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 52%;display:block" />
       <span style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,8,0.6) 0%,rgba(8,8,8,0.34) 28%,rgba(8,8,8,0.42) 50%,rgba(8,8,8,0.8) 100%)"></span>
       <span style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:10px;padding:0 22px clamp(66px,9vh,96px);text-align:center">
@@ -157,7 +157,7 @@
         <h2 data-nc-rv style="--d:1;margin:0;max-width:20ch;font:300 clamp(30px,4.4vw,58px)/1.05 'Cormorant Garamond',serif;letter-spacing:-0.015em;text-wrap:pretty">Usalo varios días. Conocelo en tu piel. <span style="color:#7A5C22">Después decidí.</span></h2>
         <div data-nc-rv="line" style="--d:2;height:2px;width:84px;margin:clamp(24px,3vw,36px) 0;background:#7A5C22;transform-origin:left"></div>
         <p data-nc-rv style="--d:3;margin:0;max-width:440px;font:300 15px/1.75 'Manrope',sans-serif;color:#4B463E">Un decant es una presentación fraccionada: te permite usar la fragancia varias veces y descubrir cómo evoluciona realmente antes de empezar por el frasco completo.</p>
-        <a data-nc-rv href="Fragancias.dc.html" style="--d:4;display:inline-block;margin-top:clamp(26px,3vw,38px);font:500 15px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#7A5C22;border-bottom:1px solid rgba(122,92,34,0.4);padding-bottom:6px" style-hover="color:#111010;border-color:#111010">Ver decants de 5 y 10 ml</a>
+        <a data-nc-rv href="/fragancias" style="--d:4;display:inline-block;margin-top:clamp(26px,3vw,38px);font:500 15px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#7A5C22;border-bottom:1px solid rgba(122,92,34,0.4);padding-bottom:6px" style-hover="color:#111010;border-color:#111010">Ver decants de 5 y 10 ml</a>
       </div>
       <footer data-nc-rv style="--d:5;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:18px 24px;padding-top:24px;border-top:1px solid rgba(17,16,16,0.14)">
         <span style="display:flex;align-items:center;gap:10px;font:300 12px/1.5 'Manrope',sans-serif;color:#4B463E">
@@ -181,7 +181,7 @@
     <div style="max-width:1400px;margin:0 auto;padding:0 22px;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px">
       <h2 style="margin:0;font:300 clamp(28px,4vw,58px)/1.05 'Cormorant Garamond',serif;color:#FBF8F2">The Niche Edit</h2>
       <div style="display:flex;align-items:center;gap:14px">
-        <a href="Fragancias.dc.html" style="font:400 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#CFCAC2;border-bottom:1px solid rgba(227,196,146,0.4);padding-bottom:5px" style-hover="color:#E3C492">Todas las fragancias</a>
+        <a href="/fragancias" style="font:400 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#CFCAC2;border-bottom:1px solid rgba(227,196,146,0.4);padding-bottom:5px" style-hover="color:#E3C492">Todas las fragancias</a>
         <button data-nc-edit="prev" aria-label="Anterior" style="background:transparent;border:1px solid rgba(227,196,146,0.3);color:#FFFFFF;width:44px;height:44px;border-radius:999px;font:300 16px/1 'Manrope',sans-serif" style-hover="background:#E3C492;color:#080808;border-color:#E3C492">←</button>
         <button data-nc-edit="next" aria-label="Siguiente" style="background:transparent;border:1px solid rgba(227,196,146,0.3);color:#FFFFFF;width:44px;height:44px;border-radius:999px;font:300 16px/1 'Manrope',sans-serif" style-hover="background:#E3C492;color:#080808;border-color:#E3C492">→</button>
       </div>
@@ -235,7 +235,7 @@
             </span>
           </div>
         </div>
-        <a href="Fragancias.dc.html" style="display:inline-block;margin-top:30px;font:400 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#111010;border-bottom:1px solid rgba(17,16,16,0.3);padding-bottom:5px;white-space:nowrap" style-hover="color:#7A5C22;border-color:#7A5C22">Elegir tamaño en el catálogo</a>
+        <a href="/fragancias" style="display:inline-block;margin-top:30px;font:400 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#111010;border-bottom:1px solid rgba(17,16,16,0.3);padding-bottom:5px;white-space:nowrap" style-hover="color:#7A5C22;border-color:#7A5C22">Elegir tamaño en el catálogo</a>
       </div>
       <div style="display:flex;flex-direction:column;justify-self:center;width:100%;max-width:440px">
         <div style="display:flex;align-items:flex-end;justify-content:center;gap:clamp(34px,6vw,64px);padding:clamp(20px,3vw,30px) 0 0">
@@ -313,7 +313,7 @@
           <div style="margin-top:clamp(36px,4vw,60px);border-top:1px solid rgba(227,196,146,0.16);padding-top:clamp(28px,3vw,44px)">
             <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:clamp(22px,3vw,44px)">
               <sc-for list="{{ finderResults }}" as="r" hint-placeholder-count="3">
-                <a href="Fragancias.dc.html" style="display:flex;flex-direction:column;color:#FFFFFF">
+                <a href="/fragancias" style="display:flex;flex-direction:column;color:#FFFFFF">
                   <img src="{{ r.img }}" alt="{{ r.alt }}" loading="lazy" style="width:100%;aspect-ratio:1/1.18;object-fit:cover;display:block;border-radius:999px 999px 10px 10px" />
                   <span style="margin-top:14px;font:400 10px/1 'Manrope',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#B99B63">{{ r.brand }}</span>
                   <span style="margin-top:8px;font:400 21px/1.2 'Cormorant Garamond',serif">{{ r.name }}</span>
@@ -337,14 +337,14 @@
         </div>
         <div style="flex:1 1 280px;display:flex;flex-direction:column;gap:20px;max-width:420px">
           <p style="margin:0;font:300 15px/1.75 'Manrope',sans-serif;color:#4B463E">Dior, Armani, Yves Saint Laurent y Jean Paul Gaultier: las casas que ya reconocés, disponibles en 5 ml y 10 ml.</p>
-          <a href="Fragancias.dc.html#disenador" style="align-self:flex-start;background:#111010;color:#FFFFFF;padding:16px 26px;font:500 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap;border-radius:999px" style-hover="background:#7A5C22">Ver todos</a>
+          <a href="/fragancias#disenador" style="align-self:flex-start;background:#111010;color:#FFFFFF;padding:16px 26px;font:500 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap;border-radius:999px" style-hover="background:#7A5C22">Ver todos</a>
         </div>
       </div>
 
       <div class="nc-dgrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(228px,1fr));gap:clamp(22px,2.6vw,40px);margin-top:clamp(40px,5vw,78px)">
         <sc-for list="{{ designer }}" as="d" hint-placeholder-count="4">
           <article style="display:flex;flex-direction:column">
-            <a href="Fragancias.dc.html#disenador" style="display:block;overflow:hidden;border-radius:12px;background:#F2EFEA">
+            <a href="/fragancias#disenador" style="display:block;overflow:hidden;border-radius:12px;background:#F2EFEA">
               <img src="{{ d.img }}" alt="{{ d.alt }}" loading="lazy" style="width:100%;aspect-ratio:1/1.14;max-height:420px;object-fit:cover;object-position:center 46%;display:block;transition:transform 1.1s cubic-bezier(.2,.7,.2,1)" style-hover="transform:scale(1.03)" />
             </a>
             <span style="margin-top:18px;height:1px;width:38px;background:#7A5C22"></span>
@@ -363,7 +363,7 @@
       <div>
         <h2 style="margin:0;max-width:18ch;font:300 clamp(28px,4vw,52px)/1.06 'Cormorant Garamond',serif;color:#FBF8F2;text-wrap:pretty">Otra forma de descubrir perfumería.</h2>
         <p style="margin:18px 0 0;max-width:400px;font:300 15px/1.75 'Manrope',sans-serif;color:#A9A49A">Rasasi, Afnan, Armaf, Bharara y Maison Alhambra: carácter y proyección a un precio accesible para empezar.</p>
-        <a href="Fragancias.dc.html#arabes" style="display:inline-block;margin-top:30px;border:1px solid rgba(227,196,146,0.32);color:#FFFFFF;padding:16px 26px;font:400 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;border-radius:999px;white-space:nowrap" style-hover="background:#E3C492;color:#080808;border-color:#E3C492">Ver árabes</a>
+        <a href="/fragancias#arabes" style="display:inline-block;margin-top:30px;border:1px solid rgba(227,196,146,0.32);color:#FFFFFF;padding:16px 26px;font:400 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;border-radius:999px;white-space:nowrap" style-hover="background:#E3C492;color:#080808;border-color:#E3C492">Ver árabes</a>
       </div>
     </div>
   </section>
@@ -371,7 +371,7 @@
   <section data-screen-label="CTA final" style="{{ ctaStyle }}">
     <span aria-hidden="true" style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 70% at 50% 50%,rgba(8,8,8,0.7) 0%,rgba(8,8,8,0.45) 55%,rgba(8,8,8,0.25) 100%)"></span>
     <h2 style="position:relative;margin:0 auto;max-width:20ch;font:300 clamp(30px,4.6vw,64px)/1.05 'Cormorant Garamond',serif;letter-spacing:-0.01em;text-wrap:pretty;color:#FFFFFF;text-shadow:0 2px 24px rgba(8,8,8,0.85)">Elegí la que te intriga. Probala. Después decidí.</h2>
-    <a href="Fragancias.dc.html" style="position:relative;display:inline-block;margin-top:34px;background:#FFFFFF;color:#080808;padding:17px 30px;font:500 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;border-radius:999px;box-shadow:0 12px 30px -10px rgba(0,0,0,0.6)" style-hover="background:#E3C492;color:#080808">Ver todas las fragancias</a>
+    <a href="/fragancias" style="position:relative;display:inline-block;margin-top:34px;background:#FFFFFF;color:#080808;padding:17px 30px;font:500 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;border-radius:999px;box-shadow:0 12px 30px -10px rgba(0,0,0,0.6)" style-hover="background:#E3C492;color:#080808">Ver todas las fragancias</a>
   </section>
 
   <footer style="padding:clamp(44px,5vw,68px) 22px 26px;border-top:1px solid rgba(227,196,146,0.1)">
@@ -385,10 +385,10 @@
       </div>
       <div style="display:flex;flex-direction:column;gap:8px">
         <span style="font:400 10px/1 'Manrope',sans-serif;letter-spacing:.26em;text-transform:uppercase;color:#B99B63;margin-bottom:4px">Explorar</span>
-        <a href="Fragancias.dc.html" style="font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC" style-hover="color:#E3C492">Perfumes</a>
-        <a href="Fragancias.dc.html#nicho" style="font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC" style-hover="color:#E3C492">Nicho</a>
-        <a href="Fragancias.dc.html#disenador" style="font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC" style-hover="color:#E3C492">Diseñador</a>
-        <a href="Fragancias.dc.html#arabes" style="font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC" style-hover="color:#E3C492">Árabes</a>
+        <a href="/fragancias" style="font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC" style-hover="color:#E3C492">Perfumes</a>
+        <a href="/fragancias#nicho" style="font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC" style-hover="color:#E3C492">Nicho</a>
+        <a href="/fragancias#disenador" style="font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC" style-hover="color:#E3C492">Diseñador</a>
+        <a href="/fragancias#arabes" style="font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC" style-hover="color:#E3C492">Árabes</a>
         <a href="#decants" style="font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC" style-hover="color:#E3C492">Decants</a>
       </div>
       <div style="display:flex;flex-direction:column;gap:8px">
@@ -405,7 +405,7 @@
       </div>
     </div>
     <div style="max-width:1400px;margin:clamp(30px,4vw,44px) auto 0;padding:16px 0 0;border-top:1px solid rgba(227,196,146,0.08);display:flex;flex-wrap:wrap;gap:8px 24px;font:300 12px/1.6 'Manrope',sans-serif;color:#8C857B">
-      <span>© 2026 Niche Club · Paraguay · <a href="privacidad.html" style="color:#8C857B;border-bottom:1px solid rgba(140,133,123,0.4)" style-hover="color:#E3C492">Política de privacidad</a></span>
+      <span>© 2026 Niche Club · Paraguay · <a href="/privacidad" style="color:#8C857B;border-bottom:1px solid rgba(140,133,123,0.4)" style-hover="color:#E3C492">Política de privacidad</a></span>
       <span>Desarrollado por <a href="https://neura.com.py" target="_blank" rel="noopener" style="color:#CFCAC2;font-weight:400" style-hover="color:#E3C492">Neura</a></span>
     </div>
   </footer>
@@ -599,7 +599,7 @@ class Component extends DCLogic {
         style10: this.sizeLink(ml === 10),
         pick5: () => this.setSize(id, 5),
         pick10: () => this.setSize(id, 10),
-        go: () => { window.location.href = 'Fragancias.dc.html'; }
+        go: () => { window.location.href = '/fragancias'; }
       };
     }).filter(Boolean);
 
