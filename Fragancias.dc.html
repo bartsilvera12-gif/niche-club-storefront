@@ -53,6 +53,13 @@
     .nc-ft { grid-template-columns:1fr 1fr !important; gap:28px 18px !important; }
     .nc-ft > div:first-child, .nc-ft > div:nth-child(4) { grid-column:1 / -1; }
   }
+  /* Ficha en computadora: nunca más alta que la pantalla; si no entra, se scrollea solo el texto */
+  @media (min-width:721px) {
+    .nc-sheet { margin:auto 0; max-height:calc(100vh - 2 * clamp(8px,2.6vw,42px)); }
+    .nc-sheet > div { grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr) !important; max-height:inherit; }
+    .nc-sheet [role="img"] { min-height:min(460px, calc(100vh - 2 * clamp(8px,2.6vw,42px))) !important; height:auto !important; }
+    .nc-sheet > div > div:last-child { max-height:inherit; overflow-y:auto; overscroll-behavior:contain; scrollbar-width:thin; scrollbar-color:#3A352E transparent; }
+  }
   .nc-menu-cb, .nc-burger { display:none; }
   .nc-only-m { display:none !important; }
   @media (max-width:720px) {
@@ -137,7 +144,7 @@
   </section>
 
   <section data-screen-label="Grilla" style="max-width:1400px;margin:0 auto;padding:clamp(34px,4vw,60px) 22px clamp(70px,8vw,120px)">
-    <div class="nc-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(max(270px,30%),1fr));gap:clamp(44px,5vw,86px) clamp(22px,2.6vw,44px)">
+    <div class="nc-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(max(220px,22%),1fr));gap:clamp(44px,5vw,86px) clamp(22px,2.6vw,44px)">
       <sc-for list="{{ items }}" as="p" hint-placeholder-count="6">
         <article style="display:flex;flex-direction:column">
           <div onClick="{{ p.open }}" style="overflow:hidden;cursor:pointer;background:#0E0E0E;border-radius:999px 999px 12px 12px">
