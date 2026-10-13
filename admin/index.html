@@ -158,15 +158,14 @@
       <div class="eyebrow">Niche Club</div>
       <h1 class="serif" id="auth-title">Panel</h1>
     </div>
-    <p id="auth-note" style="margin:0;color:var(--muted);font-size:13px" hidden>Es la primera vez que se abre el panel. Elegí una contraseña de al menos 10 caracteres.</p>
     <form id="auth-form">
+      <div class="field">
+        <label for="email">Email</label>
+        <input class="input" id="email" type="email" autocomplete="username" value="admin@nicheclubpy.com" required>
+      </div>
       <div class="field">
         <label for="pw">Contraseña</label>
         <input class="input" id="pw" type="password" autocomplete="current-password" required>
-      </div>
-      <div class="field" id="pw2-field" hidden>
-        <label for="pw2">Repetir contraseña</label>
-        <input class="input" id="pw2" type="password" autocomplete="new-password">
       </div>
       <button class="btn primary" type="submit" id="auth-btn">Ingresar</button>
       <div class="msg" id="auth-msg"></div>
@@ -289,13 +288,18 @@
 
 <div class="toast" id="toast"></div>
 
-<script>
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm';
+import { SUPABASE_URL, SUPABASE_SCHEMA, SUPABASE_ANON_KEY } from '../supabase-config.js';
+
 (() => {
   const $ = s => document.querySelector(s);
-  const API = 'api.php?action=';
-  let csrf = null;
-  let TYPES = [], STATUSES = [];
-  let saved = [];      // catálogo tal como está en el servidor
+  const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { db: { schema: SUPABASE_SCHEMA }, auth: { persistSession: true, storageKey: 'nicheclub-admin' } });
+  const BUCKET = 'nicheclub';
+  const TYPES = ['Nicho', 'Diseñador', 'Árabe'];
+  const STATUSES = ['Disponible', 'Agotado', 'Por encargo'];
+  const COLUMNS = 'id,brand,name,type,img,p5,p10,status,visible,light';
+  let saved = [];      // catálogo tal como está en Supabase
   let items = [];      // copia que se edita
   let editing = null;  // índice en items, o -1 para nueva
 
@@ -304,23 +308,33 @@
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const clone = x => JSON.parse(JSON.stringify(x));
 
-  async function call(action, data, isForm) {
-    const opts = { method: data ? 'POST' : 'GET', headers: {}, credentials: 'same-origin' };
-    if (csrf) opts.headers['X-CSRF'] = csrf;
-    if (data) {
-      if (isForm) opts.body = data;
-      else { opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(data); }
-    }
-    let res, json;
-    try {
-      res = await fetch(API + action, opts);
-      json = await res.json();
-    } catch (e) {
-      throw new Error('No se pudo conectar con el servidor.');
-    }
-    if (res.status === 401 && action !== 'login') { showAuth(false); }
-    if (!json.ok) throw new Error(json.error || 'Error inesperado.');
-    return json;
+  // Traduce los errores de Supabase a algo entendible
+  function fail(error) {
+    const m = (error && error.message) || String(error);
+    if (/Invalid login credentials/i.test(m)) throw new Error('Email o contraseña incorrectos.');
+    if (/No autorizado|permission denied|row-level security/i.test(m)) throw new Error('Esta cuenta no tiene permiso para editar el catálogo.');
+    if (/JWT|session/i.test(m)) { showAuth(); throw new Error('La sesión expiró. Volvé a ingresar.'); }
+    if (/Failed to fetch|NetworkError/i.test(m)) throw new Error('No se pudo conectar con el servidor.');
+    if (/duplicate key/i.test(m)) throw new Error('Hay dos fragancias con el mismo nombre y marca.');
+    if (/violates check constraint/i.test(m)) throw new Error('Revisá los datos: marca, nombre, precios y foto son obligatorios.');
+    throw new Error(m);
+  }
+  const run = async q => { const { data, error } = await q; if (error) fail(error); return data; };
+
+  // Las fotos viejas están en img/ del sitio; las nuevas, en Supabase
+  const imgSrc = img => /^https?:/.test(img) ? img : '../' + img;
+
+  const slug = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'producto';
+
+  function withIds(list) {
+    const used = new Set(list.filter(p => p.id).map(p => p.id));
+    return list.map(p => {
+      if (p.id) return p;
+      let id = slug(p.brand + ' ' + p.name), base = id, n = 2;
+      while (used.has(id)) id = base + '-' + n++;
+      used.add(id);
+      return Object.assign({}, p, { id });
+    });
   }
 
   let toastTimer;
@@ -333,31 +347,29 @@
   }
 
   // ---- Ingreso ----
-  let setupMode = false;
-  function showAuth(setup) {
-    setupMode = setup;
+  function showAuth() {
     $('#app').hidden = true;
     $('#auth').hidden = false;
-    $('#auth-title').textContent = setup ? 'Crear acceso' : 'Panel';
-    $('#auth-note').hidden = !setup;
-    $('#pw2-field').hidden = !setup;
-    $('#pw2').required = setup;
-    $('#pw').autocomplete = setup ? 'new-password' : 'current-password';
-    $('#auth-btn').textContent = setup ? 'Crear contraseña' : 'Ingresar';
     $('#pw').focus();
+  }
+
+  async function checkAdmin() {
+    const ok = await run(sb.rpc('is_admin'));
+    if (!ok) {
+      await sb.auth.signOut();
+      throw new Error('Esta cuenta no tiene acceso al panel.');
+    }
   }
 
   $('#auth-form').addEventListener('submit', async ev => {
     ev.preventDefault();
     const msg = $('#auth-msg');
     msg.textContent = '';
-    const password = $('#pw').value;
-    if (setupMode && password !== $('#pw2').value) { msg.textContent = 'Las contraseñas no coinciden.'; return; }
     $('#auth-btn').disabled = true;
     try {
-      const r = await call(setupMode ? 'setup' : 'login', { password });
-      csrf = r.csrf;
-      $('#pw').value = $('#pw2').value = '';
+      await run(sb.auth.signInWithPassword({ email: $('#email').value.trim(), password: $('#pw').value }));
+      $('#pw').value = '';
+      await checkAdmin();
       await loadCatalog();
     } catch (e) {
       msg.textContent = e.message;
@@ -368,9 +380,7 @@
 
   // ---- Catálogo ----
   async function loadCatalog() {
-    const r = await call('catalog');
-    TYPES = r.types; STATUSES = r.statuses;
-    setSaved(r.catalog.products);
+    setSaved(await run(sb.from('products').select(COLUMNS).order('position')));
     fillSelects();
     $('#auth').hidden = true;
     $('#app').hidden = false;
@@ -403,7 +413,7 @@
     $('#list').innerHTML = rows.length ? rows.map(({ p, i }) => `
       <div class="row${p.visible ? '' : ' hidden-prod'}${isDirty(p) ? ' dirty' : ''}" data-i="${i}">
         <div class="pos">${i + 1}</div>
-        <img class="thumb" src="../${esc(p.img)}" alt="" loading="lazy">
+        <img class="thumb" src="${esc(imgSrc(p.img))}" alt="" loading="lazy">
         <div class="title"><b>${esc(p.name)}</b><small>${esc(p.brand)}</small></div>
         <div class="c-type"><select class="input" data-f="type" aria-label="Tipo">${TYPES.map(t => `<option${t === p.type ? ' selected' : ''}>${esc(t)}</option>`).join('')}</select></div>
         <div class="c-p5 price" data-label="5 ml"><input class="input" data-f="p5" inputmode="numeric" value="${gs(p.p5)}" aria-label="Precio 5 ml"></div>
@@ -478,8 +488,8 @@
     const btn = $('#save-btn');
     btn.disabled = true; btn.textContent = 'Guardando…';
     try {
-      const r = await call('save', { products: items.map(strip) });
-      setSaved(r.catalog.products);
+      const rows = await run(sb.rpc('save_catalog', { items: withIds(items.map(strip)) }));
+      setSaved(rows);
       render();
       toast('Guardado. El sitio ya muestra los cambios.');
     } catch (e) {
@@ -516,13 +526,27 @@
   }
   function setPreview(img) {
     draftImg = img || '';
-    $('#e-img-preview').src = img ? '../' + img : 'data:image/gif;base64,R0lGODlhAQABAAAAACw=';
+    $('#e-img-preview').src = img ? imgSrc(img) : 'data:image/gif;base64,R0lGODlhAQABAAAAACw=';
   }
   ['#e-p5', '#e-p10'].forEach(s => $(s).addEventListener('input', ev => { const v = num(ev.target.value); ev.target.value = v ? gs(v) : ''; }));
   $('#e-visible').addEventListener('click', ev => {
     const b = ev.currentTarget;
     b.setAttribute('aria-checked', String(b.getAttribute('aria-checked') !== 'true'));
   });
+  // Achica a 1200 px y pasa a JPG (las fotos del sitio pesan ~150 KB)
+  async function toJpeg(file) {
+    if (!/^image\/(jpeg|png|webp)$/.test(file.type)) throw new Error('Formato no soportado. Usá JPG, PNG o WEBP.');
+    const bmp = await createImageBitmap(file).catch(() => { throw new Error('No se pudo leer la imagen.'); });
+    const scale = Math.min(1, 1200 / Math.max(bmp.width, bmp.height));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(bmp.width * scale);
+    canvas.height = Math.round(bmp.height * scale);
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#121212';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(bmp, 0, 0, canvas.width, canvas.height);
+    return new Promise((ok, ko) => canvas.toBlob(b => b ? ok(b) : ko(new Error('No se pudo procesar la imagen.')), 'image/jpeg', 0.82));
+  }
   $('#e-file').addEventListener('change', async ev => {
     const file = ev.target.files[0];
     ev.target.value = '';
@@ -531,11 +555,10 @@
     hint.textContent = 'Subiendo foto…';
     $('#edit-ok').disabled = true;
     try {
-      const fd = new FormData();
-      fd.append('file', file);
-      fd.append('name', ($('#e-brand').value + ' ' + $('#e-name').value).trim() || file.name);
-      const r = await call('upload', fd, true);
-      setPreview(r.img);
+      const blob = await toJpeg(file);
+      const path = 'productos/' + slug(($('#e-brand').value + ' ' + $('#e-name').value).trim() || file.name) + '-' + Date.now().toString(36) + '.jpeg';
+      await run(sb.storage.from(BUCKET).upload(path, blob, { contentType: 'image/jpeg', cacheControl: '604800' }));
+      setPreview(sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl);
       hint.textContent = 'Foto lista.';
     } catch (e) {
       hint.textContent = e.message;
@@ -569,34 +592,31 @@
   $('#menu-btn').addEventListener('click', () => $('#menu-dlg').showModal());
   $('#logout-btn').addEventListener('click', async () => {
     if (changeCount() && !confirm('Hay cambios sin guardar. ¿Salir igual?')) return;
-    await call('logout', {}).catch(() => {});
-    saved = items = []; csrf = null;
+    await sb.auth.signOut().catch(() => {});
+    saved = items = [];
     $('#menu-dlg').close();
-    showAuth(false);
+    showAuth();
   });
 
-  const fmtBackup = f => {
-    const m = f.match(/(\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})(\d{2})/);
-    return m ? `${m[3]}/${m[2]}/${m[1]} · ${m[4]}:${m[5]}` : f;
-  };
+  const fmtBackup = d => new Date(d).toLocaleString('es-PY', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
   $('#open-backups').addEventListener('click', async () => {
     $('#menu-dlg').close();
     const list = $('#backup-list');
     list.innerHTML = '<p style="color:var(--muted)">Cargando…</p>';
     $('#backups-dlg').showModal();
     try {
-      const r = await call('backups');
-      list.innerHTML = r.backups.length
-        ? r.backups.map(f => `<div><span>${fmtBackup(f)}</span><button class="btn" data-file="${esc(f)}">Restaurar</button></div>`).join('')
+      const rows = await run(sb.from('catalog_backups').select('id,created_at').order('created_at', { ascending: false }));
+      list.innerHTML = rows.length
+        ? rows.map(b => `<div><span>${fmtBackup(b.created_at)}</span><button class="btn" data-id="${b.id}" data-date="${esc(b.created_at)}">Restaurar</button></div>`).join('')
         : '<p style="color:var(--muted)">Todavía no hay copias. Se crean al guardar.</p>';
     } catch (e) { list.innerHTML = `<p class="msg">${esc(e.message)}</p>`; }
   });
   $('#backup-list').addEventListener('click', async ev => {
-    const f = ev.target.dataset.file;
-    if (!f || !confirm(`¿Volver el catálogo a como estaba el ${fmtBackup(f)}?\n\nEl estado actual queda guardado como copia.`)) return;
+    const { id, date } = ev.target.dataset;
+    if (!id || !confirm(`¿Volver el catálogo a como estaba el ${fmtBackup(date)}?\n\nEl estado actual queda guardado como copia.`)) return;
     try {
-      const r = await call('restore', { file: f });
-      setSaved(r.catalog.products);
+      const backup = await run(sb.from('catalog_backups').select('data').eq('id', id).single());
+      setSaved(await run(sb.rpc('save_catalog', { items: backup.data })));
       render();
       $('#backups-dlg').close();
       toast('Catálogo restaurado.');
@@ -607,7 +627,11 @@
   $('#pw-form').addEventListener('submit', async ev => {
     ev.preventDefault();
     try {
-      await call('password', { current: $('#pw-cur').value, password: $('#pw-new').value });
+      if ($('#pw-new').value.length < 10) throw new Error('La nueva contraseña debe tener al menos 10 caracteres.');
+      const { data: { user } } = await sb.auth.getUser();
+      const check = await sb.auth.signInWithPassword({ email: user.email, password: $('#pw-cur').value });
+      if (check.error) throw new Error('La contraseña actual no es correcta.');
+      await run(sb.auth.updateUser({ password: $('#pw-new').value }));
       $('#pw-cur').value = $('#pw-new').value = '';
       $('#pw-dlg').close();
       toast('Contraseña actualizada.');
@@ -615,12 +639,15 @@
   });
 
   // ---- Inicio ----
-  call('status').then(r => {
-    if (r.logged) { csrf = r.csrf; return loadCatalog(); }
-    showAuth(r.setup);
-  }).catch(e => {
-    showAuth(false);
-    $('#auth-msg').textContent = e.message;
+  sb.auth.getSession().then(async ({ data }) => {
+    if (!data.session) return showAuth();
+    try {
+      await checkAdmin();
+      await loadCatalog();
+    } catch (e) {
+      showAuth();
+      $('#auth-msg').textContent = e.message;
+    }
   });
 })();
 </script>

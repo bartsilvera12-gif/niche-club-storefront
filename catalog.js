@@ -1,7 +1,9 @@
+import { SUPABASE_URL, SUPABASE_SCHEMA, SUPABASE_ANON_KEY } from './supabase-config.js';
+
 export const WA_NUMBER = '595994146975';
 export const WA_DISPLAY = '0994 146975';
 
-// Respaldo por si no se puede leer data/catalog.json (el panel /admin edita ese archivo)
+// Respaldo por si Supabase no responde (el catálogo real se edita en /admin)
 const FALLBACK = [
   { id: 'layton-exclusif', brand: 'Parfums de Marly', name: 'Layton Exclusif', type: 'Nicho', img: 'img/layton-exclusif.jpeg', p5: 150000, p10: 260000, status: 'Disponible' },
   { id: 'creed-aventus', brand: 'Creed', name: 'Aventus', type: 'Nicho', img: 'img/creed-aventus.jpeg', p5: 200000, p10: 360000, status: 'Disponible' },
@@ -26,10 +28,13 @@ const FALLBACK = [
 
 const loadCatalog = async () => {
   try {
-    const r = await fetch('data/catalog.json?t=' + Date.now(), { cache: 'no-store' });
+    const r = await fetch(SUPABASE_URL + '/rest/v1/products?select=*&visible=is.true&order=position', {
+      headers: { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + SUPABASE_ANON_KEY, 'Accept-Profile': SUPABASE_SCHEMA },
+      cache: 'no-store'
+    });
     if (!r.ok) throw new Error(r.status);
-    const json = await r.json();
-    if (Array.isArray(json.products) && json.products.length) return json.products;
+    const rows = await r.json();
+    if (Array.isArray(rows) && rows.length) return rows;
   } catch (e) {}
   return FALLBACK;
 };
