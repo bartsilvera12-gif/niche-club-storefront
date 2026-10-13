@@ -14,6 +14,9 @@ DirectoryIndex "Niche Club.dc.html" index.html
   RewriteCond %{HTTP:X-Forwarded-Proto} !https
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+  # Página de inicio (Hostinger no acepta el espacio en DirectoryIndex)
+  RewriteRule ^$ "Niche Club.dc.html" [L]
+
   # Direcciones cortas
   RewriteRule ^fragancias/?$ "Fragancias.dc.html" [L]
   RewriteRule ^privacidad/?$ privacidad.html [L]
