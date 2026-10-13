@@ -94,7 +94,7 @@
 
 <div style="background:#080808;color:#FFFFFF;font-family:'Manrope',sans-serif;overflow-x:hidden">
 
-  <header data-nc-header="1" style="position:sticky;top:0;z-index:40;transition:background .5s ease;background:transparent">
+  <header data-nc-header="1" style="position:sticky;top:0;z-index:40;transition:background .5s ease;background:rgba(8, 8, 8, 0.62);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid rgba(227,196,146,0.08)">
     <div class="nc-hd" style="max-width:1400px;margin:0 auto;padding:10px 22px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px">
       <a href="#top" style="display:flex;align-items:center;gap:10px;flex:0 0 auto">
         <img src="img/logo.jpeg" alt="Niche Club" style="width:40px;height:40px;object-fit:contain;display:block" />
@@ -102,14 +102,12 @@
       </a>
       <input type="checkbox" id="nc-menu" class="nc-menu-cb" aria-hidden="true" tabindex="-1" />
       <nav class="nc-nav" style="display:flex;gap:18px;overflow-x:auto;margin-right:auto;font:300 11px/1 'Manrope',sans-serif;letter-spacing:.18em;text-transform:uppercase">
-        <a href="#statement" style="color:#CFCAC2;white-space:nowrap;padding:10px 0">Descubrir</a>
         <a href="Fragancias.dc.html" style="color:#CFCAC2;white-space:nowrap;padding:10px 0">Perfumes</a>
         <a href="Fragancias.dc.html#nicho" style="color:#CFCAC2;white-space:nowrap;padding:10px 0">Nicho</a>
         <a href="#disenador" style="color:#CFCAC2;white-space:nowrap;padding:10px 0">Diseñador</a>
         <a href="#arabes" style="color:#CFCAC2;white-space:nowrap;padding:10px 0">Árabes</a>
         <a href="#decants" style="color:#CFCAC2;white-space:nowrap;padding:10px 0">Decants</a>
       </nav>
-      <a class="nc-buscar" href="Fragancias.dc.html#buscar" style="font:300 11px/1 'Manrope',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#CFCAC2;padding:12px 0;flex:0 0 auto" style-hover="color:#E3C492">Buscar</a>
       <a href="Fragancias.dc.html#carrito" style="display:flex;align-items:center;gap:8px;border:1px solid rgba(227,196,146,0.3);color:#FFFFFF;padding:11px 15px;font:400 11px/1 'Manrope',sans-serif;letter-spacing:.16em;text-transform:uppercase;min-height:44px;white-space:nowrap;flex:0 0 auto;border-radius:999px" style-hover="background:#E3C492;color:#080808;border-color:#E3C492">Carrito <span style="color:#E3C492">{{ cartCount }}</span></a>
       <label for="nc-menu" class="nc-burger" aria-label="Abrir menú"><span></span><span></span><span></span></label>
     </div>
@@ -119,30 +117,30 @@
     <a href="Fragancias.dc.html#nicho" data-nc-panel="1" onMouseOver="{{ onPanelOver }}" onMouseOut="{{ onPanelOut }}" onFocus="{{ onPanelOver }}" onBlur="{{ onPanelOut }}" style="position:relative;flex:1 1 240px;min-height:clamp(280px,50vh,1100px);overflow:hidden;display:flex;align-items:flex-end;justify-content:center;filter:brightness(0.86);transition:flex-grow .7s cubic-bezier(.2,.7,.2,1),filter .7s ease">
       <img src="img/layton-exclusif.jpeg" alt="Parfums de Marly Layton Exclusif en Niche Club" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%;display:block" />
       <span style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,8,0.6) 0%,rgba(8,8,8,0.34) 28%,rgba(8,8,8,0.42) 50%,rgba(8,8,8,0.8) 100%)"></span>
-      <span style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:14px;padding:0 22px clamp(96px,15vh,150px);text-align:center">
-        <span style="font:300 clamp(24px,3.4vw,44px)/1.1 'Cormorant Garamond',serif;color:#FFFFFF;letter-spacing:.01em;text-shadow:0 2px 18px rgba(8,8,8,0.9)">Nicho y Diseñador</span>
+      <span style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:10px;padding:0 22px clamp(66px,9vh,96px);text-align:center">
+        <span style="font:300 clamp(20px,2.3vw,32px)/1.1 'Cormorant Garamond',serif;color:#FFFFFF;letter-spacing:.01em;text-shadow:0 2px 18px rgba(8,8,8,0.9)">Nicho y Diseñador</span>
         <span style="font:400 11px/1 'Manrope',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#FFFFFF;border-bottom:1px solid rgba(255,255,255,0.85);padding-bottom:5px;text-shadow:0 1px 12px rgba(8,8,8,0.9)">Descubrir</span>
       </span>
     </a>
     <a href="Fragancias.dc.html#arabes" data-nc-panel="2" onMouseOver="{{ onPanelOver }}" onMouseOut="{{ onPanelOut }}" onFocus="{{ onPanelOver }}" onBlur="{{ onPanelOut }}" style="position:relative;flex:1 1 240px;min-height:clamp(280px,50vh,1100px);overflow:hidden;display:flex;align-items:flex-end;justify-content:center;filter:brightness(0.86);transition:flex-grow .7s cubic-bezier(.2,.7,.2,1),filter .7s ease">
-      <img src="img/bharara-king.jpeg" alt="Bharara King en Niche Club" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 46%;display:block" />
+      <img src="img/bharara-king-portada.jpeg" alt="Bharara King en Niche Club" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 46%;display:block" />
       <span style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,8,0.6) 0%,rgba(8,8,8,0.34) 28%,rgba(8,8,8,0.42) 50%,rgba(8,8,8,0.8) 100%)"></span>
-      <span style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:14px;padding:0 22px clamp(96px,15vh,150px);text-align:center">
-        <span style="font:300 clamp(24px,3.4vw,44px)/1.1 'Cormorant Garamond',serif;color:#FFFFFF;letter-spacing:.01em;text-shadow:0 2px 18px rgba(8,8,8,0.9)">Perfumería Árabe</span>
+      <span style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:10px;padding:0 22px clamp(66px,9vh,96px);text-align:center">
+        <span style="font:300 clamp(20px,2.3vw,32px)/1.1 'Cormorant Garamond',serif;color:#FFFFFF;letter-spacing:.01em;text-shadow:0 2px 18px rgba(8,8,8,0.9)">Perfumería Árabe</span>
         <span style="font:400 11px/1 'Manrope',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#FFFFFF;border-bottom:1px solid rgba(255,255,255,0.85);padding-bottom:5px;text-shadow:0 1px 12px rgba(8,8,8,0.9)">Descubrir</span>
       </span>
     </a>
     <a href="Niche Club.dc.html#decants" data-nc-panel="3" onMouseOver="{{ onPanelOver }}" onMouseOut="{{ onPanelOut }}" onFocus="{{ onPanelOver }}" onBlur="{{ onPanelOut }}" style="position:relative;flex:1 1 240px;min-height:clamp(280px,50vh,1100px);overflow:hidden;display:flex;align-items:flex-end;justify-content:center;filter:brightness(0.86);transition:flex-grow .7s cubic-bezier(.2,.7,.2,1),filter .7s ease">
       <img src="img/creed-aventus.jpeg" alt="Creed Aventus junto a decants de 5 ml y 10 ml" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 52%;display:block" />
       <span style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,8,0.6) 0%,rgba(8,8,8,0.34) 28%,rgba(8,8,8,0.42) 50%,rgba(8,8,8,0.8) 100%)"></span>
-      <span style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:14px;padding:0 22px clamp(96px,15vh,150px);text-align:center">
-        <span style="font:300 clamp(24px,3.4vw,44px)/1.1 'Cormorant Garamond',serif;color:#FFFFFF;letter-spacing:.01em;text-shadow:0 2px 18px rgba(8,8,8,0.9)">Decants 5 y 10 ml</span>
+      <span style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:10px;padding:0 22px clamp(66px,9vh,96px);text-align:center">
+        <span style="font:300 clamp(20px,2.3vw,32px)/1.1 'Cormorant Garamond',serif;color:#FFFFFF;letter-spacing:.01em;text-shadow:0 2px 18px rgba(8,8,8,0.9)">Decants 5 y 10 ml</span>
         <span style="font:400 11px/1 'Manrope',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#FFFFFF;border-bottom:1px solid rgba(255,255,255,0.85);padding-bottom:5px;text-shadow:0 1px 12px rgba(8,8,8,0.9)">Descubrir</span>
       </span>
     </a>
-    <div style="position:absolute;left:0;right:0;top:44%;transform:translateY(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:12px;pointer-events:none;padding:0 16px;text-align:center">
+    <div style="position:absolute;left:0;right:0;top:44%;transform:translateY(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:16px;pointer-events:none;padding:clamp(40px,6vw,80px) 16px;text-align:center;background:radial-gradient(ellipse 46% 50% at 50% 50%,rgba(8,8,8,0.62) 0%,rgba(8,8,8,0.38) 45%,rgba(8,8,8,0) 100%)">
       <h1 style="margin:0;font:300 clamp(26px,6.4vw,88px)/1 'Cormorant Garamond',serif;letter-spacing:.12em;color:#FFFFFF;text-shadow:0 2px 26px rgba(8,8,8,0.95),0 1px 3px rgba(8,8,8,0.9)">NICHE CLUB</h1>
-      <span style="font:400 clamp(8px,1vw,11px)/1.5 'Manrope',sans-serif;letter-spacing:.34em;text-transform:uppercase;color:#EED9AE;text-shadow:0 1px 14px rgba(8,8,8,0.95)">Perfumería de nicho y diseñador</span>
+      <span style="font:500 clamp(10px,1.15vw,14px)/1.5 'Manrope',sans-serif;letter-spacing:.3em;text-transform:uppercase;color:#F6E7C6;text-shadow:0 1px 2px rgba(8,8,8,0.95),0 0 18px rgba(8,8,8,0.9)">Perfumería de nicho y diseñador</span>
     </div>
     <span aria-hidden="true" style="position:absolute;left:50%;bottom:clamp(26px,5vh,46px);transform:translateX(-50%);z-index:3;font:400 9px/1 'Manrope',sans-serif;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,0.82);text-shadow:0 1px 12px rgba(8,8,8,0.9)">5 ml · 10 ml</span>
   </section>
@@ -362,7 +360,7 @@
 
   <section id="arabes" data-screen-label="Árabes" style="padding:0 22px clamp(60px,8vw,130px)">
     <div style="max-width:1400px;margin:0 auto;border-top:1px solid rgba(227,196,146,0.12);padding-top:clamp(40px,5vw,70px);display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:clamp(28px,4vw,70px);align-items:center">
-      <img src="img/bharara-king.jpeg" alt="Bharara King" loading="lazy" style="width:100%;max-height:clamp(320px,58vh,640px);aspect-ratio:4/3.4;object-fit:cover;display:block;border-radius:18px" />
+      <img src="img/bharara-king-v2.jpeg" alt="Bharara King" loading="lazy" style="width:100%;max-height:clamp(320px,58vh,640px);aspect-ratio:4/3.4;object-fit:cover;display:block;border-radius:18px" />
       <div>
         <h2 style="margin:0;max-width:18ch;font:300 clamp(28px,4vw,52px)/1.06 'Cormorant Garamond',serif;color:#FBF8F2;text-wrap:pretty">Otra forma de descubrir perfumería.</h2>
         <p style="margin:18px 0 0;max-width:400px;font:300 15px/1.75 'Manrope',sans-serif;color:#A9A49A">Rasasi, Afnan, Armaf, Bharara y Maison Alhambra: carácter y proyección a un precio accesible para empezar.</p>
@@ -371,9 +369,10 @@
     </div>
   </section>
 
-  <section data-screen-label="CTA final" style="background:#FFFFFF;color:#111010;padding:clamp(70px,10vw,150px) 22px;text-align:center">
-    <h2 style="margin:0 auto;max-width:20ch;font:300 clamp(30px,4.6vw,64px)/1.05 'Cormorant Garamond',serif;letter-spacing:-0.01em;text-wrap:pretty">Elegí la que te intriga. Probala. Después decidí.</h2>
-    <a href="Fragancias.dc.html" style="display:inline-block;margin-top:34px;background:#111010;color:#FFFFFF;padding:17px 30px;font:500 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;border-radius:999px" style-hover="background:#8A6B2E">Ver todas las fragancias</a>
+  <section data-screen-label="CTA final" style="position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:clamp(420px,62vh,640px);background:#0E0B08 url(img/coleccion-fondo.jpeg) center 60%/cover no-repeat;color:#FFFFFF;padding:clamp(70px,10vw,150px) 22px;text-align:center;overflow:hidden">
+    <span aria-hidden="true" style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 70% at 50% 50%,rgba(8,8,8,0.7) 0%,rgba(8,8,8,0.45) 55%,rgba(8,8,8,0.25) 100%)"></span>
+    <h2 style="position:relative;margin:0 auto;max-width:20ch;font:300 clamp(30px,4.6vw,64px)/1.05 'Cormorant Garamond',serif;letter-spacing:-0.01em;text-wrap:pretty;color:#FFFFFF;text-shadow:0 2px 24px rgba(8,8,8,0.85)">Elegí la que te intriga. Probala. Después decidí.</h2>
+    <a href="Fragancias.dc.html" style="position:relative;display:inline-block;margin-top:34px;background:#FFFFFF;color:#080808;padding:17px 30px;font:500 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;border-radius:999px;box-shadow:0 12px 30px -10px rgba(0,0,0,0.6)" style-hover="background:#E3C492;color:#080808">Ver todas las fragancias</a>
   </section>
 
   <footer style="padding:clamp(44px,5vw,68px) 22px 26px;border-top:1px solid rgba(227,196,146,0.1)">
@@ -447,7 +446,7 @@ class Component extends DCLogic {
       const el = document.querySelector('[data-nc-header]');
       if (!el) return;
       const past = window.scrollY > Math.max(120, window.innerHeight * 0.6);
-      const want = past ? 'rgba(8, 8, 8, 0.94)' : 'transparent';
+      const want = past ? 'rgba(8, 8, 8, 0.94)' : 'rgba(8, 8, 8, 0.62)';
       if (el.style.background !== want) el.style.background = want;
       const tr = document.getElementById('nc-edit-track');
       if (tr && !tr.classList.contains('nc-in') && tr.getBoundingClientRect().top < window.innerHeight * 0.9) tr.classList.add('nc-in');
@@ -458,7 +457,7 @@ class Component extends DCLogic {
     };
     window.addEventListener('scroll', this._onScroll, { passive: true });
     this._onScroll();
-    import('./catalog.js').then(m => {
+    import('./catalog.js?v=2').then(m => {
       this.mod = m;
       const cart = m.readCart();
       this.setState({ data: m.PRODUCTS, count: cart.reduce((t, l) => t + l.qty, 0) });

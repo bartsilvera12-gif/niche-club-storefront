@@ -1,0 +1,51 @@
+# Niche Club — configuración para Hostinger (Apache / LiteSpeed)
+
+AddDefaultCharset UTF-8
+Options -Indexes
+
+# Página de inicio
+DirectoryIndex "Niche Club.dc.html" index.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Forzar HTTPS
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Direcciones cortas
+  RewriteRule ^fragancias/?$ "Fragancias.dc.html" [L]
+  RewriteRule ^privacidad/?$ privacidad.html [L]
+</IfModule>
+
+# Tipos de archivo
+AddType application/javascript .js
+AddType image/x-icon .ico
+
+# Compresión
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript text/javascript image/svg+xml
+</IfModule>
+
+# Caché del navegador
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpeg "access plus 1 week"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/x-icon "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 day"
+  ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+# Que el navegador siempre consulte si la página cambió
+<IfModule mod_headers.c>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+# No publicar archivos internos
+<FilesMatch "^(vercel\.json|\.gitignore|README.*)$">
+  Require all denied
+</FilesMatch>

@@ -8,3 +8,6 @@ Niche Club v1.dc.html
 .vercel/
 .DS_Store
 Thumbs.db
+
+# Paquete para Hostinger (se genera)
+niche-club-hostinger.zip

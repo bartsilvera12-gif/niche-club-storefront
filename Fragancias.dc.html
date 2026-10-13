@@ -344,7 +344,7 @@ class Component extends DCLogic {
       const cb = document.getElementById('nc-menu');
       if (cb) cb.checked = false;
     });
-    import('./catalog.js').then(m => {
+    import('./catalog.js?v=2').then(m => {
       this.mod = m;
       const hash = decodeURIComponent((location.hash || '').replace('#', '')).toLowerCase();
       const map = { nicho: 'Nicho', disenador: 'Diseñador', arabes: 'Árabe' };
