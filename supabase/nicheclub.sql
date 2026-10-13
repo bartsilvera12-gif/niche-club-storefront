@@ -168,7 +168,7 @@ insert into nicheclubweb.types (name, slug, position) values
 on conflict do nothing;
 
 insert into nicheclubweb.settings (id, whatsapp, instagram, email, hero1, hero2, hero3, cta_bg) values
-  (1, '595994146975', 'nicheclub.py', '', 'img/layton-exclusif.jpeg', 'img/bharara-king-portada.jpeg', 'img/creed-aventus.jpeg', 'img/coleccion-fondo.jpeg')
+  (1, '595994146975', 'nicheclub.py', '', 'img/productos/layton-exclusif.jpeg', 'img/bharara-king-portada.jpeg', 'img/productos/creed-aventus.jpeg', 'img/coleccion-fondo.jpeg')
 on conflict do nothing;
 
 insert into nicheclubweb.products (id, brand, name, type, img, p5, p10, status, visible, light, position)
@@ -178,7 +178,7 @@ select * from (values
   ('lv-imagination', 'Louis Vuitton', 'Imagination', 'Nicho', 'img/productos/lv-imagination.jpeg', 215000, 399000, 'Disponible', true, false, 2),
   ('lv-limmensite', 'Louis Vuitton', 'L''Immensité', 'Nicho', 'img/productos/lv-limmensite.jpeg', 270000, 470000, 'Disponible', true, false, 3),
   ('tf-oud-wood', 'Tom Ford', 'Oud Wood', 'Nicho', 'img/productos/tf-oud-wood.jpeg', 180000, 290000, 'Disponible', true, false, 4),
-  ('tf-costa-azzurra', 'Tom Ford', 'Costa Azzurra', 'Nicho', 'img/tf-costa-azzurra.jpeg', 180000, 300000, 'Disponible', true, false, 5),
+  ('tf-costa-azzurra', 'Tom Ford', 'Costa Azzurra', 'Nicho', 'img/productos/tf-costa-azzurra.jpeg', 180000, 300000, 'Disponible', true, false, 5),
   ('sauvage-elixir', 'Dior', 'Sauvage Elixir', 'Diseñador', 'img/productos/sauvage-elixir.jpeg', 130000, 190000, 'Disponible', true, false, 6),
   ('ysl-y-edp', 'Yves Saint Laurent', 'Y Eau de Parfum', 'Diseñador', 'img/productos/ysl-y-edp.jpeg', 75000, 130000, 'Disponible', true, true, 7),
   ('swy-powerfully', 'Emporio Armani', 'Stronger With You Powerfully', 'Diseñador', 'img/productos/swy-powerfully.jpeg', 80000, 150000, 'Disponible', true, false, 8),
@@ -195,9 +195,13 @@ select * from (values
 ) as v(id, brand, name, type, img, p5, p10, status, visible, light, position)
 where not exists (select 1 from nicheclubweb.products);
 
+-- Portadas 1 y 3 con las fotos de estudio, solo si siguen con las fotos anteriores
+update nicheclubweb.settings set hero1 = 'img/productos/layton-exclusif.jpeg' where id = 1 and hero1 = 'img/layton-exclusif.jpeg';
+update nicheclubweb.settings set hero3 = 'img/productos/creed-aventus.jpeg' where id = 1 and hero3 = 'img/creed-aventus.jpeg';
+
 -- Fotos de estudio (octubre 2026): solo cambia las fragancias que todavía tienen la foto anterior
 update nicheclubweb.products p set img = 'img/productos/' || p.id || '.jpeg'
-where p.id in ('adg-profondo', 'afnan-9pm', 'bharara-king', 'creed-aventus', 'hawas-ice', 'hawas-malibu', 'layton-exclusif', 'le-beau-le-parfum', 'lv-imagination', 'lv-limmensite', 'odyssey-aqua', 'philos-pura', 'power-of-you', 'sauvage-elixir', 'supremacy-collectors', 'swy-powerfully', 'tf-oud-wood', 'ysl-y-edp')
+where p.id in ('adg-profondo', 'afnan-9pm', 'bharara-king', 'creed-aventus', 'hawas-ice', 'hawas-malibu', 'layton-exclusif', 'le-beau-le-parfum', 'lv-imagination', 'lv-limmensite', 'odyssey-aqua', 'philos-pura', 'power-of-you', 'sauvage-elixir', 'supremacy-collectors', 'swy-powerfully', 'tf-costa-azzurra', 'tf-oud-wood', 'ysl-y-edp')
   and p.img not like 'img/productos/%' and p.img not like 'http%';
 
 -- Marcas que ya se usan en el catálogo

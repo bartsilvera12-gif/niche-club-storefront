@@ -7,7 +7,7 @@ const FALLBACK = [
   { id: 'lv-imagination', brand: 'Louis Vuitton', name: 'Imagination', type: 'Nicho', img: 'img/productos/lv-imagination.jpeg', p5: 215000, p10: 399000, status: 'Disponible' },
   { id: 'lv-limmensite', brand: 'Louis Vuitton', name: "L'Immensité", type: 'Nicho', img: 'img/productos/lv-limmensite.jpeg', p5: 270000, p10: 470000, status: 'Disponible' },
   { id: 'tf-oud-wood', brand: 'Tom Ford', name: 'Oud Wood', type: 'Nicho', img: 'img/productos/tf-oud-wood.jpeg', p5: 180000, p10: 290000, status: 'Disponible' },
-  { id: 'tf-costa-azzurra', brand: 'Tom Ford', name: 'Costa Azzurra', type: 'Nicho', img: 'img/tf-costa-azzurra.jpeg', p5: 180000, p10: 300000, status: 'Disponible' },
+  { id: 'tf-costa-azzurra', brand: 'Tom Ford', name: 'Costa Azzurra', type: 'Nicho', img: 'img/productos/tf-costa-azzurra.jpeg', p5: 180000, p10: 300000, status: 'Disponible' },
   { id: 'sauvage-elixir', brand: 'Dior', name: 'Sauvage Elixir', type: 'Diseñador', img: 'img/productos/sauvage-elixir.jpeg', p5: 130000, p10: 190000, status: 'Disponible' },
   { light: true, id: 'ysl-y-edp', brand: 'Yves Saint Laurent', name: 'Y Eau de Parfum', type: 'Diseñador', img: 'img/productos/ysl-y-edp.jpeg', p5: 75000, p10: 130000, status: 'Disponible' },
   { id: 'swy-powerfully', brand: 'Emporio Armani', name: 'Stronger With You Powerfully', type: 'Diseñador', img: 'img/productos/swy-powerfully.jpeg', p5: 80000, p10: 150000, status: 'Disponible' },

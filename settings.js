@@ -5,9 +5,9 @@ export const DEFAULT_SETTINGS = {
   whatsapp: '595994146975',
   instagram: 'nicheclub.py',
   email: '',
-  hero1: 'img/layton-exclusif.jpeg',
+  hero1: 'img/productos/layton-exclusif.jpeg',
   hero2: 'img/bharara-king-portada.jpeg',
-  hero3: 'img/creed-aventus.jpeg',
+  hero3: 'img/productos/creed-aventus.jpeg',
   cta_bg: 'img/coleccion-fondo.jpeg'
 };
 
