@@ -116,6 +116,7 @@
     { title: '2. Fragancias: lista, filtros y guardado', steps: [
       ['Escribí "tom" en el buscador.', 'Quedan solo las de Tom Ford; las flechas de ordenar se desactivan mientras hay filtro.'],
       ['Borrá la búsqueda y elegí "Árabe" en el filtro de tipos.', 'Solo fragancias árabes. Volvé a "Todos los tipos".'],
+      ['Elegí "Afnan" en el filtro de marcas.', 'Solo las 2 fragancias de Afnan. Volvé a "Todas las marcas".'],
       ['Cambiá el precio de 5 ml de una fragancia (por ejemplo 150000).', 'Se formatea como "150.000", la fila se marca con borde dorado y aparece abajo "1 cambio sin guardar".'],
       ['Cambiá el estado de otra fragancia a "Agotado".', 'La barra dice "2 cambios sin guardar" y sube el contador de agotadas.'],
       ['Apagá el interruptor Visible de una tercera.', 'La fila queda más tenue y baja el contador de visibles.'],
@@ -143,6 +144,7 @@
       ['Agregá la marca "Marca QA".', 'Aparece en la lista con "Sin fragancias".'],
       ['Intentá agregar "marca qa" (en minúsculas).', '"Esa marca ya existe."'],
       ['Renombrá "Prueba QA" a "Prueba QA 2" con el lápiz y Enter.', '"Nombre actualizado."; en Fragancias, "Fragancia QA" ya muestra la marca nueva.'],
+      ['Tocá "2 fragancias" debajo de Afnan.', 'Va a Fragancias con el filtro de marca en Afnan.'],
       ['Mirá la X de una marca con fragancias (por ejemplo Creed).', 'Está desactivada; al pasar el mouse dice "En uso: no se puede eliminar".'],
       ['Eliminá "Marca QA".', 'Pide confirmación y desaparece.'],
       ['Subí "Unisex" con la flecha hasta arriba de Árabe.', 'Cambia el orden; al recargar se mantiene.'],
@@ -154,7 +156,9 @@
       ['En Instagram pegá `https://instagram.com/nicheclub.py/`.', 'Al guardar queda solo "nicheclub.py".'],
       ['Escribí un email inválido ("hola@") y guardá.', '"Revisá el email." y no guarda.'],
       ['Tocá Descartar.', 'Vuelven los valores guardados.'],
-      ['Cambiá la Portada 1 con tu foto de prueba.', 'El botón dice "Subiendo…" y Guardar queda bloqueado hasta que termina; después se ve la foto nueva.'],
+      ['Cambiá la Portada 1 con tu foto de prueba.', 'Se abre "Recortar foto" con un marco vertical 3:4 y el tamaño 1200 × 1600 px; si la foto es chica, aparece un aviso.'],
+      ['Arrastrá la foto, usá el zoom y tocá "Usar esta foto".', 'El botón dice "Subiendo…" y Guardar queda bloqueado hasta que termina; después se ve la foto recortada.'],
+      ['Probá "Cambiar" en Sección final y tocá Cancelar.', 'El marco es horizontal 16:9; al cancelar no cambia nada.'],
       ['Poné un email válido y guardá.', '"Configuración guardada. El sitio ya la muestra."'],
       ['Después de revisar el sitio (sección 7), volvé a poner el WhatsApp y el Instagram originales, y subí como Portada 1 la foto original (`img/layton-exclusif.jpeg` del proyecto).']
     ]},

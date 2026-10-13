@@ -11,7 +11,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #080808; --panel: #0E0E0E; --card: #121212; --pop: #141414; --line: rgba(227,196,146,.16); --line-soft: rgba(255,255,255,.07);
+    --bg: #0B0B0B; --panel: #181818; --card: #222222; --pop: #1C1C1C; --line: rgba(227,196,146,.22); --line-soft: rgba(255,255,255,.10);
+    --bar: #232323; --field: #101010;
     --text: #E9E4DC; --muted: #7E786E; --gold: #E3C492; --ink: #0B0B0B; --danger: #E08A7A; --ok: #9CC59A;
   }
   * { box-sizing: border-box; scrollbar-width: thin; scrollbar-color: #3A352E transparent; }
@@ -21,6 +22,8 @@
   [hidden] { display: none !important; }
   .serif { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 400; }
   .eyebrow { font-size: 10px; letter-spacing: .24em; text-transform: uppercase; color: var(--muted); }
+  .intro .eyebrow { display: inline-block; padding: 7px 14px; border-radius: 999px; background: rgba(227,196,146,.16); border: 1px solid rgba(227,196,146,.32); color: var(--gold); font-weight: 600; }
+  .intro h1 { margin-top: 12px !important; }
   .muted { color: var(--muted); }
 
   .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 40px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--line); background: transparent; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; transition: border-color .2s, background .2s, color .2s; white-space: nowrap; text-decoration: none; color: var(--text); }
@@ -38,11 +41,11 @@
   .field { display: grid; gap: 6px; align-content: start; }
   .field label, .field .label { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
   .field small { color: var(--muted); font-size: 12px; }
-  .input, select.input { width: 100%; min-height: 42px; padding: 0 14px; border-radius: 10px; border: 1px solid var(--line-soft); background: var(--bg); outline: none; transition: border-color .2s; }
+  .input, select.input { width: 100%; min-height: 42px; padding: 0 14px; border-radius: 10px; border: 1px solid var(--line-soft); background: var(--field); outline: none; transition: border-color .2s; }
   .input:focus, .input.open { border-color: var(--gold); }
   select.input { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: calc(100% - 18px) 50%, calc(100% - 13px) 50%; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 34px; }
   select.input option { background: var(--pop); color: var(--text); }
-  .affix { display: flex; align-items: center; border: 1px solid var(--line-soft); border-radius: 10px; background: var(--bg); transition: border-color .2s; }
+  .affix { display: flex; align-items: center; border: 1px solid var(--line-soft); border-radius: 10px; background: var(--field); transition: border-color .2s; }
   .affix:focus-within { border-color: var(--gold); }
   .affix span { padding-left: 14px; color: var(--muted); }
   .affix .input { border: 0; padding-left: 4px; background: transparent; }
@@ -54,7 +57,7 @@
   .picker-btn svg { flex: none; color: var(--muted); transition: transform .2s; }
   .picker-btn.open svg { transform: rotate(180deg); }
   .picker-pop { position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 10; padding: 6px; background: var(--pop); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 18px 40px rgba(0,0,0,.55); }
-  .picker-search { width: 100%; min-height: 38px; padding: 0 12px; margin-bottom: 6px; border-radius: 8px; border: 1px solid var(--line-soft); background: var(--bg); outline: none; }
+  .picker-search { width: 100%; min-height: 38px; padding: 0 12px; margin-bottom: 6px; border-radius: 8px; border: 1px solid var(--line-soft); background: var(--field); outline: none; }
   .picker-search:focus { border-color: var(--gold); }
   .picker-list { max-height: 228px; overflow-y: auto; display: grid; gap: 2px; }
   .picker-opt { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; min-height: 38px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent; text-align: left; font-size: 14px; }
@@ -66,16 +69,17 @@
   /* Login */
   .auth { min-height: 100vh; display: grid; place-items: center; padding: 24px 16px; }
   .auth-card { width: 100%; max-width: 380px; display: grid; gap: 18px; text-align: center; }
-  .auth-card img { width: 72px; height: 72px; border-radius: 999px; margin: 0 auto; object-fit: cover; }
+  .auth-card { padding: 34px 28px; background: var(--panel); border: 1px solid var(--line-soft); border-radius: 22px; }
+  .auth-card img { width: 96px; height: 96px; border-radius: 16px; margin: 0 auto; object-fit: cover; border: 1px solid var(--line); background: #000; }
   .auth-card h1 { margin: 0; font-size: 34px; }
   .auth-card form { display: grid; gap: 14px; text-align: left; margin-top: 8px; }
   .msg { min-height: 20px; font-size: 13px; color: var(--danger); text-align: center; }
 
   /* Layout */
-  header.top { position: sticky; top: 0; z-index: 20; background: rgba(8,8,8,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line-soft); }
+  header.top { position: sticky; top: 0; z-index: 20; background: var(--bar); border-bottom: 1px solid var(--line); box-shadow: 0 6px 24px rgba(0,0,0,.35); }
   .top-inner { max-width: 1180px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; gap: 16px; }
   .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text); }
-  .brand img { width: 36px; height: 36px; border-radius: 999px; object-fit: cover; }
+  .brand img { width: 42px; height: 42px; border-radius: 10px; object-fit: cover; border: 1px solid var(--line); background: #000; }
   .brand b { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 22px; letter-spacing: .02em; }
   .brand span { display: block; font-size: 9px; letter-spacing: .26em; text-transform: uppercase; color: var(--muted); }
   .tabs { display: flex; gap: 4px; margin: 0 auto; }
@@ -128,6 +132,8 @@
   .tax-main { flex: 1; min-width: 0; }
   .tax-main b { display: block; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .tax-main small { color: var(--muted); font-size: 12px; }
+  .linkish { padding: 0; border: 0; background: none; color: var(--gold); font-size: 12px; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(227,196,146,.4); }
+  .linkish:hover { color: #F0D6AC; }
   .tax-main .input { min-height: 36px; }
   .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
   .covers { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
@@ -137,6 +143,17 @@
   .cover small { display: block; color: var(--muted); font-size: 12px; }
   .cover-foot { display: grid; gap: 10px; }
   .cover-foot .btn { width: 100%; }
+  .cover.wide img { aspect-ratio: 16 / 9; }
+  .cover .size { color: var(--gold); opacity: .8; }
+  /* Recortador de portadas */
+  #crop-dlg { width: min(720px, calc(100% - 32px)); }
+  .crop-frame { position: relative; margin: 0 auto; overflow: hidden; border-radius: 12px; background: #000; touch-action: none; cursor: grab; user-select: none; outline: 1px solid var(--line); }
+  .crop-frame.dragging { cursor: grabbing; }
+  .crop-frame img { position: absolute; top: 0; left: 0; max-width: none; transform-origin: 0 0; pointer-events: none; }
+  .crop-frame::after { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(255,255,255,.18) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.18) 1px, transparent 1px); background-size: 33.333% 33.333%; background-position: -1px -1px; }
+  .crop-zoom { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 12px; }
+  .crop-zoom input { flex: 1; accent-color: var(--gold); }
+  .crop-warn { margin: 0; padding: 10px 14px; border-radius: 10px; background: rgba(224,138,122,.1); border: 1px solid rgba(224,138,122,.35); color: var(--danger); font-size: 13px; }
   .card-foot { display: flex; justify-content: flex-end; align-items: center; gap: 14px; }
   .card-foot span { color: var(--muted); font-size: 13px; }
 
@@ -274,7 +291,8 @@
 
       <div class="toolbar">
         <input class="input search" id="q" type="search" placeholder="Buscar por marca o nombre">
-        <select class="input" id="f-type"><option value="">Todos los tipos</option></select>
+        <select class="input" id="f-type" aria-label="Filtrar por tipo"><option value="">Todos los tipos</option></select>
+        <select class="input" id="f-brand" aria-label="Filtrar por marca"><option value="">Todas las marcas</option></select>
         <button class="btn primary" id="add-btn">+ Nueva fragancia</button>
       </div>
 
@@ -293,7 +311,7 @@
       <div class="cols">
         <div class="card">
           <div class="card-head">
-            <div><h2 class="serif">Marcas</h2><p>Se ofrecen al crear o editar una fragancia.</p></div>
+            <div><h2 class="serif">Marcas</h2><p>Para asignar una marca, editá la fragancia en Fragancias (lápiz) y elegila en «Marca». Tocá el número de fragancias para ver las de cada marca.</p></div>
             <span class="muted" id="brand-count"></span>
           </div>
           <form class="add-row" id="brand-add">
@@ -434,6 +452,23 @@
   </form>
 </dialog>
 
+<dialog id="crop-dlg">
+  <div class="dlg">
+    <div>
+      <div class="eyebrow">Recortar foto</div>
+      <h2 class="serif" id="crop-title">Portada</h2>
+      <p class="muted" style="margin:6px 0 0;font-size:13px" id="crop-note"></p>
+    </div>
+    <div class="crop-frame" id="crop-frame"><img id="crop-img" alt=""></div>
+    <label class="crop-zoom"><span>Zoom</span><input type="range" id="crop-zoom" min="1" max="4" step="0.01" value="1"></label>
+    <p class="crop-warn" id="crop-warn" hidden></p>
+    <footer>
+      <button class="btn" type="button" id="crop-cancel">Cancelar</button>
+      <button class="btn primary" type="button" id="crop-ok">Usar esta foto</button>
+    </footer>
+  </div>
+</dialog>
+
 <div class="toast" id="toast"></div>
 
 <script type="module">
@@ -448,10 +483,10 @@ import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
   const STATUSES = ['Disponible', 'Agotado', 'Por encargo'];
   const COLUMNS = 'id,brand,name,type,img,p5,p10,status,visible,light';
   const COVERS = [
-    { key: 'hero1', title: 'Portada 1', note: 'Nicho y Diseñador' },
-    { key: 'hero2', title: 'Portada 2', note: 'Perfumería Árabe' },
-    { key: 'hero3', title: 'Portada 3', note: 'Decants 5 y 10 ml' },
-    { key: 'cta_bg', title: 'Sección final', note: 'Fondo de «Probala. Después decidí.»' }
+    { key: 'hero1', title: 'Portada 1', note: 'Nicho y Diseñador', w: 1200, h: 1600, shape: 'vertical 3:4' },
+    { key: 'hero2', title: 'Portada 2', note: 'Perfumería Árabe', w: 1200, h: 1600, shape: 'vertical 3:4' },
+    { key: 'hero3', title: 'Portada 3', note: 'Decants 5 y 10 ml', w: 1200, h: 1600, shape: 'vertical 3:4' },
+    { key: 'cta_bg', title: 'Sección final', note: 'Fondo de «Probala. Después decidí.»', w: 1920, h: 1080, shape: 'horizontal 16:9' }
   ];
   let saved = [];      // catálogo tal como está en Supabase
   let items = [];      // copia que se edita
@@ -649,11 +684,16 @@ import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
     const current = fType.value;
     fType.innerHTML = '<option value="">Todos los tipos</option>' + typeNames().map(t => `<option${t === current ? ' selected' : ''}>${esc(t)}</option>`).join('');
 
+    const fBrand = $('#f-brand');
+    const currentBrand = fBrand.value;
+    fBrand.innerHTML = '<option value="">Todas las marcas</option>' + brands.map(b => `<option${b === currentBrand ? ' selected' : ''}>${esc(b)}</option>`).join('');
+
     const q = norm($('#q').value);
     const type = fType.value;
-    const filtering = !!(q || type);
+    const brand = fBrand.value;
+    const filtering = !!(q || type || brand);
     const rows = items.map((p, i) => ({ p, i })).filter(({ p }) =>
-      (!type || p.type === type) && (!q || norm(p.brand + ' ' + p.name).includes(q)));
+      (!type || p.type === type) && (!brand || p.brand === brand) && (!q || norm(p.brand + ' ' + p.name).includes(q)));
     const opts = (list, sel) => (list.includes(sel) ? list : [sel].concat(list)).map(t => `<option${t === sel ? ' selected' : ''}>${esc(t)}</option>`).join('');
 
     $('#list').innerHTML = rows.length ? rows.map(({ p, i }) => `
@@ -728,6 +768,7 @@ import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
   });
   $('#q').addEventListener('input', render);
   $('#f-type').addEventListener('change', render);
+  $('#f-brand').addEventListener('change', render);
 
   // Guardar / descartar
   $('#save-btn').addEventListener('click', async () => {
@@ -825,8 +866,10 @@ import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
     return new Promise((ok, ko) => canvas.toBlob(b => b ? ok(b) : ko(new Error('No se pudo procesar la imagen.')), 'image/jpeg', 0.82));
   }
   async function uploadImage(file, folder, hint, max) {
-    const blob = await toJpeg(file, max);
-    const path = folder + '/' + slug(hint || file.name) + '-' + Date.now().toString(36) + '.jpeg';
+    return uploadBlob(await toJpeg(file, max), folder, hint || file.name);
+  }
+  async function uploadBlob(blob, folder, hint) {
+    const path = folder + '/' + slug(hint) + '-' + Date.now().toString(36) + '.jpeg';
     await run(sb.storage.from(BUCKET).upload(path, blob, { contentType: 'image/jpeg', cacheControl: '604800' }));
     return sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
   }
@@ -864,7 +907,7 @@ import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
     if (editing >= 0) Object.assign(items[editing], p);
     else items.unshift(Object.assign({ id: '', _key: 'n' + Date.now() }, p));
     $('#edit-dlg').close();
-    if (editing < 0) { $('#q').value = ''; $('#f-type').value = ''; window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    if (editing < 0) { $('#q').value = ''; $('#f-type').value = ''; $('#f-brand').value = ''; window.scrollTo({ top: 0, behavior: 'smooth' }); }
     render();
   });
   $('#add-btn').addEventListener('click', () => openEdit(-1));
@@ -880,7 +923,7 @@ import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
     const key = kind + ':' + name;
     const main = renaming === key
       ? `<input class="input" data-rename value="${esc(name)}" maxlength="${kind === 'brand' ? 120 : 60}" aria-label="Nuevo nombre">`
-      : `<b>${esc(name)}</b><small>${countLabel(n)}${extra ? ' · ' + extra : ''}</small>`;
+      : `<b>${esc(name)}</b><small>${n ? `<button type="button" class="linkish" data-t="show">${countLabel(n)}</button>` : countLabel(n)}${extra ? ' · ' + extra : ''}</small>`;
     const btns = renaming === key
       ? `<button class="icon-btn" data-t="save" title="Guardar" aria-label="Guardar">${icon.ok}</button><button class="icon-btn" data-t="cancel" title="Cancelar" aria-label="Cancelar">${icon.del}</button>`
       : (kind === 'type' ? `<button class="icon-btn" data-t="up" title="Subir" aria-label="Subir"${i === 0 ? ' disabled' : ''}>${icon.up}</button><button class="icon-btn" data-t="down" title="Bajar" aria-label="Bajar"${i === total - 1 ? ' disabled' : ''}>${icon.down}</button>` : '')
@@ -935,6 +978,14 @@ import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
     const { kind, name } = row.dataset;
     const act = btn.dataset.t;
     try {
+      if (act === 'show') {
+        $('#q').value = '';
+        $('#f-type').value = kind === 'type' ? name : '';
+        $('#f-brand').value = kind === 'brand' ? name : '';
+        showView('products');
+        render();
+        return;
+      }
       if (act === 'rename') { renaming = kind + ':' + name; renderTaxo(); }
       if (act === 'cancel') { renaming = null; renderTaxo(); }
       if (act === 'save') await renameTax(kind, name, row.querySelector('[data-rename]').value);
@@ -993,10 +1044,10 @@ import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
     $('#cfg-email').value = draft.email;
     paintWaHint();
     $('#covers').innerHTML = COVERS.map(c => `
-      <div class="cover" data-key="${c.key}">
+      <div class="cover${c.w > c.h ? ' wide' : ''}" data-key="${c.key}">
         <img src="${esc(imgSrc(draft[c.key]))}" alt="">
         <div class="cover-foot">
-          <div><b>${esc(c.title)}</b><small>${esc(c.note)}</small></div>
+          <div><b>${esc(c.title)}</b><small>${esc(c.note)}</small><small class="size">${c.w} × ${c.h} px · ${c.shape}</small></div>
           <label class="btn small">Cambiar<input type="file" accept="image/jpeg,image/png,image/webp" hidden></label>
         </div>
       </div>`).join('');
@@ -1022,12 +1073,21 @@ import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
     const cover = ev.target.closest('.cover');
     ev.target.value = '';
     if (!file || !cover) return;
+    const spec = COVERS.find(c => c.key === cover.dataset.key);
+    let blob;
+    try {
+      blob = await cropImage(file, spec);
+    } catch (e) {
+      toast(e.message, true);
+      return;
+    }
+    if (!blob) return; // canceló el recorte
     const label = cover.querySelector('label');
     label.firstChild.textContent = 'Subiendo…';
     uploading++;
     paintConfigState();
     try {
-      draft[cover.dataset.key] = await uploadImage(file, 'portada', cover.dataset.key, 2000);
+      draft[cover.dataset.key] = await uploadBlob(blob, 'portada', cover.dataset.key);
       cover.querySelector('img').src = imgSrc(draft[cover.dataset.key]);
     } catch (e) {
       toast(e.message, true);
@@ -1037,6 +1097,97 @@ import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
       paintConfigState();
     }
   });
+  // Recorta con la proporción de la portada: arrastrar para encuadrar, zoom con la barra o la rueda.
+  // Devuelve un JPG del tamaño recomendado, o null si se cancela.
+  function cropImage(file, spec) {
+    return new Promise(async (resolve, reject) => {
+      if (!/^image\/(jpeg|png|webp)$/.test(file.type)) return reject(new Error('Formato no soportado. Usá JPG, PNG o WEBP.'));
+      let bmp;
+      try { bmp = await createImageBitmap(file); } catch (e) { return reject(new Error('No se pudo leer la imagen.')); }
+
+      const dlg = $('#crop-dlg'), frame = $('#crop-frame'), img = $('#crop-img'), zoom = $('#crop-zoom');
+      const ratio = spec.w / spec.h;
+      $('#crop-title').textContent = spec.title;
+      $('#crop-note').textContent = 'Arrastrá la foto para encuadrarla y usá el zoom. Se guarda en ' + spec.w + ' × ' + spec.h + ' px (' + spec.shape + ').';
+      // El recorte más grande posible con esta proporción
+      const maxW = Math.round(Math.min(bmp.width, bmp.height * ratio)), maxH = Math.round(maxW / ratio);
+      $('#crop-warn').hidden = maxW >= spec.w;
+      $('#crop-warn').textContent = 'Recortada a ' + spec.shape + ', esta foto queda en ' + maxW + ' × ' + maxH + ' px y puede verse pixelada. Conviene una de al menos ' + spec.w + ' × ' + spec.h + ' px.';
+
+      const url = URL.createObjectURL(file);
+      img.src = url;
+      zoom.value = 1;
+      dlg.showModal();
+
+      // Tamaño del marco: entra en el diálogo y en la altura de la pantalla
+      const box = frame.parentElement, cs = getComputedStyle(box);
+      const inner = box.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      const W = Math.round(Math.min(inner, window.innerHeight * 0.42 * ratio));
+      const H = Math.round(W / ratio);
+      frame.style.width = W + 'px';
+      frame.style.height = H + 'px';
+      const base = Math.max(W / bmp.width, H / bmp.height);
+      let z = 1, x = (W - bmp.width * base) / 2, y = (H - bmp.height * base) / 2;
+
+      const clamp = () => {
+        const sw = bmp.width * base * z, sh = bmp.height * base * z;
+        x = Math.min(0, Math.max(W - sw, x));
+        y = Math.min(0, Math.max(H - sh, y));
+      };
+      const paint = () => { clamp(); img.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + (base * z) + ')'; };
+      img.style.width = bmp.width + 'px';
+      img.style.height = bmp.height + 'px';
+      paint();
+
+      const setZoom = (nz, cx = W / 2, cy = H / 2) => {
+        nz = Math.min(4, Math.max(1, nz));
+        x = cx - (cx - x) * nz / z;
+        y = cy - (cy - y) * nz / z;
+        z = nz;
+        zoom.value = z;
+        paint();
+      };
+      const onZoom = () => setZoom(parseFloat(zoom.value));
+      const onWheel = ev => { ev.preventDefault(); const r = frame.getBoundingClientRect(); setZoom(z * (ev.deltaY < 0 ? 1.08 : 1 / 1.08), ev.clientX - r.left, ev.clientY - r.top); };
+      let drag = null;
+      const onDown = ev => { drag = { px: ev.clientX, py: ev.clientY, x, y }; frame.setPointerCapture(ev.pointerId); frame.classList.add('dragging'); };
+      const onMove = ev => { if (!drag) return; x = drag.x + ev.clientX - drag.px; y = drag.y + ev.clientY - drag.py; paint(); };
+      const onUp = () => { drag = null; frame.classList.remove('dragging'); };
+
+      const cleanup = () => {
+        zoom.removeEventListener('input', onZoom);
+        frame.removeEventListener('wheel', onWheel);
+        frame.removeEventListener('pointerdown', onDown);
+        frame.removeEventListener('pointermove', onMove);
+        frame.removeEventListener('pointerup', onUp);
+        frame.removeEventListener('pointercancel', onUp);
+        $('#crop-ok').onclick = $('#crop-cancel').onclick = dlg.oncancel = null;
+        URL.revokeObjectURL(url);
+        dlg.close();
+      };
+      zoom.addEventListener('input', onZoom);
+      frame.addEventListener('wheel', onWheel, { passive: false });
+      frame.addEventListener('pointerdown', onDown);
+      frame.addEventListener('pointermove', onMove);
+      frame.addEventListener('pointerup', onUp);
+      frame.addEventListener('pointercancel', onUp);
+
+      $('#crop-cancel').onclick = () => { cleanup(); resolve(null); };
+      dlg.oncancel = ev => { ev.preventDefault(); cleanup(); resolve(null); };
+      $('#crop-ok').onclick = () => {
+        const scale = base * z;
+        const canvas = document.createElement('canvas');
+        canvas.width = spec.w;
+        canvas.height = spec.h;
+        const ctx = canvas.getContext('2d');
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(bmp, -x / scale, -y / scale, W / scale, H / scale, 0, 0, spec.w, spec.h);
+        cleanup();
+        canvas.toBlob(b => b ? resolve(b) : reject(new Error('No se pudo procesar la imagen.')), 'image/jpeg', 0.88);
+      };
+    });
+  }
+
   $('#cfg-discard').addEventListener('click', () => { draft = clone(settings); renderConfig(); });
   $('#cfg-form').addEventListener('submit', async ev => {
     ev.preventDefault();
