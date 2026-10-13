@@ -42,7 +42,8 @@
     .nc-grid h2 { font-size:19px !important; }
     .nc-grid article > div:nth-of-type(2) { gap:14px !important; margin-top:12px !important; }
     .nc-buy { flex-direction:column; align-items:stretch !important; gap:10px !important; margin-top:12px !important; }
-    .nc-buy > span { font-size:17px !important; }
+    .nc-buy > span:not(.nc-soldout) { font-size:17px !important; }
+    .nc-buy > .nc-soldout { border:1px solid rgba(126,120,110,0.3) !important; border-radius:999px; padding:12px 0 !important; text-align:center; }
     .nc-buy > button { border:1px solid rgba(227,196,146,0.36) !important; border-radius:999px; padding:12px 0 !important; text-align:center; }
     .nc-sheet [role="img"] { min-height:300px !important; max-height:46vh; border-radius:0 !important; }
     .nc-ctas > button { flex:1 1 100%; }
@@ -151,7 +152,12 @@
           </div>
           <div class="nc-buy" style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-top:16px">
             <span style="font:300 clamp(19px,2vw,24px)/1 'Manrope',sans-serif;color:#FBF8F2">{{ p.price }}</span>
-            <button onClick="{{ p.add }}" style="background:transparent;border:none;color:#CFCAC2;padding:12px 0;font:400 10px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;border-bottom:1px solid rgba(227,196,146,0.36);min-height:44px" style-hover="color:#E3C492;border-color:#E3C492">Agregar</button>
+            <sc-if value="{{ p.available }}" hint-placeholder-val="{{ true }}">
+              <button onClick="{{ p.add }}" style="background:transparent;border:none;color:#CFCAC2;padding:12px 0;font:400 10px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;border-bottom:1px solid rgba(227,196,146,0.36);min-height:44px" style-hover="color:#E3C492;border-color:#E3C492">Agregar</button>
+            </sc-if>
+            <sc-if value="{{ p.soldOut }}" hint-placeholder-val="{{ false }}">
+              <span class="nc-soldout" style="color:#7E786E;padding:12px 0;font:400 10px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;border-bottom:1px solid rgba(126,120,110,0.3);min-height:44px;box-sizing:border-box">Agotado</span>
+            </sc-if>
           </div>
         </article>
       </sc-for>
@@ -258,7 +264,12 @@
               </span>
             </div>
             <div class="nc-ctas" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:34px">
-              <button onClick="{{ sheet.addQty }}" style="background:#FFFFFF;border:none;color:#080808;padding:17px 28px;font:500 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;min-height:50px;white-space:nowrap;border-radius:999px" style-hover="background:#E3C492">Agregar al carrito</button>
+              <sc-if value="{{ sheet.available }}" hint-placeholder-val="{{ true }}">
+                <button onClick="{{ sheet.addQty }}" style="background:#FFFFFF;border:none;color:#080808;padding:17px 28px;font:500 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;min-height:50px;white-space:nowrap;border-radius:999px" style-hover="background:#E3C492">Agregar al carrito</button>
+              </sc-if>
+              <sc-if value="{{ sheet.soldOut }}" hint-placeholder-val="{{ false }}">
+                <span style="display:inline-flex;align-items:center;background:transparent;border:1px solid rgba(126,120,110,0.4);color:#7E786E;padding:0 28px;font:500 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;min-height:50px;white-space:nowrap;border-radius:999px;cursor:not-allowed">Agotado</span>
+              </sc-if>
               <button onClick="{{ sheet.wa }}" style="background:transparent;border:1px solid rgba(227,196,146,0.3);color:#FFFFFF;padding:17px 26px;font:400 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;min-height:50px;white-space:nowrap;border-radius:999px" style-hover="border-color:#E3C492;color:#E3C492">Consultar por WhatsApp</button>
             </div>
             <div style="margin-top:38px;border-top:1px solid rgba(227,196,146,0.14);padding-top:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:18px">
@@ -344,7 +355,7 @@ class Component extends DCLogic {
       const cb = document.getElementById('nc-menu');
       if (cb) cb.checked = false;
     });
-    import('./catalog.js?v=2').then(m => {
+    import('./catalog.js?v=3').then(m => {
       this.mod = m;
       const hash = decodeURIComponent((location.hash || '').replace('#', '')).toLowerCase();
       const map = { nicho: 'Nicho', disenador: 'Diseñador', arabes: 'Árabe' };
@@ -372,6 +383,7 @@ class Component extends DCLogic {
   }
 
   addToCart(p, ml, qty) {
+    if (p.status === 'Agotado') return;
     this.setState(s => {
       const cart = s.cart.map(l => Object.assign({}, l));
       const key = p.id + '-' + ml;
@@ -426,6 +438,7 @@ class Component extends DCLogic {
     const ml = this.sizeOf(p.id);
     return {
       brand: p.brand, name: p.name, type: p.type, img: p.img, status: p.status,
+      available: p.status !== 'Agotado', soldOut: p.status === 'Agotado',
       alt: p.brand + ' ' + p.name,
       imgStyle: 'width:100%;aspect-ratio:1/1.22;object-fit:cover;object-position:center 46%;display:block;border-radius:999px 999px 12px 12px;transition:transform 1s cubic-bezier(.2,.7,.2,1)',
       price: this.gs(this.priceOf(p, ml)),

@@ -11,3 +11,10 @@ Thumbs.db
 
 # Paquete para Hostinger (se genera)
 niche-club-hostinger.zip
+
+# Panel: contraseña y copias del catálogo (viven solo en el servidor)
+admin/private/*
+!admin/private/.htaccess
+data/backups/*
+!data/backups/.htaccess
+data/catalog.json.tmp

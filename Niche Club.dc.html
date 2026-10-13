@@ -457,7 +457,7 @@ class Component extends DCLogic {
     };
     window.addEventListener('scroll', this._onScroll, { passive: true });
     this._onScroll();
-    import('./catalog.js?v=2').then(m => {
+    import('./catalog.js?v=3').then(m => {
       this.mod = m;
       const cart = m.readCart();
       this.setState({ data: m.PRODUCTS, count: cart.reduce((t, l) => t + l.qty, 0) });

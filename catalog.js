@@ -1,7 +1,8 @@
 export const WA_NUMBER = '595994146975';
 export const WA_DISPLAY = '0994 146975';
 
-export const PRODUCTS = [
+// Respaldo por si no se puede leer data/catalog.json (el panel /admin edita ese archivo)
+const FALLBACK = [
   { id: 'layton-exclusif', brand: 'Parfums de Marly', name: 'Layton Exclusif', type: 'Nicho', img: 'img/layton-exclusif.jpeg', p5: 150000, p10: 260000, status: 'Disponible' },
   { id: 'creed-aventus', brand: 'Creed', name: 'Aventus', type: 'Nicho', img: 'img/creed-aventus.jpeg', p5: 200000, p10: 360000, status: 'Disponible' },
   { id: 'lv-imagination', brand: 'Louis Vuitton', name: 'Imagination', type: 'Nicho', img: 'img/lv-imagination.jpeg', p5: 215000, p10: 399000, status: 'Disponible' },
@@ -22,6 +23,18 @@ export const PRODUCTS = [
   { light: true, id: 'odyssey-aqua', brand: 'Armaf', name: 'Odyssey Aqua Edition', type: 'Árabe', img: 'img/odyssey-aqua.jpeg', p5: 30000, p10: 45000, status: 'Disponible' },
   { light: true, id: 'philos-pura', brand: 'Maison Alhambra', name: 'Philos Pura', type: 'Árabe', img: 'img/philos-pura.jpeg', p5: 35000, p10: 50000, status: 'Disponible' }
 ];
+
+const loadCatalog = async () => {
+  try {
+    const r = await fetch('data/catalog.json?t=' + Date.now(), { cache: 'no-store' });
+    if (!r.ok) throw new Error(r.status);
+    const json = await r.json();
+    if (Array.isArray(json.products) && json.products.length) return json.products;
+  } catch (e) {}
+  return FALLBACK;
+};
+
+export const PRODUCTS = (await loadCatalog()).filter(p => p.visible !== false);
 
 export const gs = n => 'Gs. ' + Number(n).toLocaleString('de-DE');
 
