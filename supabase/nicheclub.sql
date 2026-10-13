@@ -173,27 +173,32 @@ on conflict do nothing;
 
 insert into nicheclubweb.products (id, brand, name, type, img, p5, p10, status, visible, light, position)
 select * from (values
-  ('layton-exclusif', 'Parfums de Marly', 'Layton Exclusif', 'Nicho', 'img/layton-exclusif.jpeg', 150000, 260000, 'Disponible', true, false, 0),
-  ('creed-aventus', 'Creed', 'Aventus', 'Nicho', 'img/creed-aventus.jpeg', 200000, 360000, 'Disponible', true, false, 1),
-  ('lv-imagination', 'Louis Vuitton', 'Imagination', 'Nicho', 'img/lv-imagination.jpeg', 215000, 399000, 'Disponible', true, false, 2),
-  ('lv-limmensite', 'Louis Vuitton', 'L''Immensité', 'Nicho', 'img/lv-limmensite.jpeg', 270000, 470000, 'Disponible', true, false, 3),
-  ('tf-oud-wood', 'Tom Ford', 'Oud Wood', 'Nicho', 'img/tf-oud-wood.jpeg', 180000, 290000, 'Disponible', true, false, 4),
+  ('layton-exclusif', 'Parfums de Marly', 'Layton Exclusif', 'Nicho', 'img/productos/layton-exclusif.jpeg', 150000, 260000, 'Disponible', true, false, 0),
+  ('creed-aventus', 'Creed', 'Aventus', 'Nicho', 'img/productos/creed-aventus.jpeg', 200000, 360000, 'Disponible', true, false, 1),
+  ('lv-imagination', 'Louis Vuitton', 'Imagination', 'Nicho', 'img/productos/lv-imagination.jpeg', 215000, 399000, 'Disponible', true, false, 2),
+  ('lv-limmensite', 'Louis Vuitton', 'L''Immensité', 'Nicho', 'img/productos/lv-limmensite.jpeg', 270000, 470000, 'Disponible', true, false, 3),
+  ('tf-oud-wood', 'Tom Ford', 'Oud Wood', 'Nicho', 'img/productos/tf-oud-wood.jpeg', 180000, 290000, 'Disponible', true, false, 4),
   ('tf-costa-azzurra', 'Tom Ford', 'Costa Azzurra', 'Nicho', 'img/tf-costa-azzurra.jpeg', 180000, 300000, 'Disponible', true, false, 5),
-  ('sauvage-elixir', 'Dior', 'Sauvage Elixir', 'Diseñador', 'img/sauvage-elixir.jpeg', 130000, 190000, 'Disponible', true, false, 6),
-  ('ysl-y-edp', 'Yves Saint Laurent', 'Y Eau de Parfum', 'Diseñador', 'img/ysl-y-edp.jpeg', 75000, 130000, 'Disponible', true, true, 7),
-  ('swy-powerfully', 'Emporio Armani', 'Stronger With You Powerfully', 'Diseñador', 'img/stronger-with-you-powerfully-v2.jpeg', 80000, 150000, 'Disponible', true, false, 8),
-  ('power-of-you', 'Emporio Armani', 'Power of You', 'Diseñador', 'img/power-of-you.jpeg', 90000, 130000, 'Disponible', true, true, 9),
-  ('adg-profondo', 'Giorgio Armani', 'Acqua di Giò Profondo', 'Diseñador', 'img/acqua-di-gio-profondo.jpeg', 60000, 110000, 'Disponible', true, true, 10),
-  ('le-beau-le-parfum', 'Jean Paul Gaultier', 'Le Beau Le Parfum', 'Diseñador', 'img/le-beau-le-parfum.jpeg', 60000, 115000, 'Disponible', true, true, 11),
-  ('hawas-malibu', 'Rasasi', 'Hawas Malibu', 'Árabe', 'img/hawas-malibu.jpeg', 35000, 50000, 'Disponible', true, true, 12),
-  ('hawas-ice', 'Rasasi', 'Hawas Ice', 'Árabe', 'img/hawas-ice-v2.jpeg', 40000, 60000, 'Disponible', true, false, 13),
-  ('supremacy-collectors', 'Afnan', 'Supremacy Collector''s Edition', 'Árabe', 'img/supremacy-collectors.jpeg', 50000, 70000, 'Disponible', true, true, 14),
-  ('afnan-9pm', 'Afnan', '9PM Rebel', 'Árabe', 'img/afnan-9pm.jpeg', 35000, 50000, 'Disponible', true, false, 15),
-  ('bharara-king', 'Bharara', 'King', 'Árabe', 'img/bharara-king-v2.jpeg', 50000, 70000, 'Disponible', true, false, 16),
-  ('odyssey-aqua', 'Armaf', 'Odyssey Aqua Edition', 'Árabe', 'img/odyssey-aqua.jpeg', 30000, 45000, 'Disponible', true, true, 17),
-  ('philos-pura', 'Maison Alhambra', 'Philos Pura', 'Árabe', 'img/philos-pura.jpeg', 35000, 50000, 'Disponible', true, true, 18)
+  ('sauvage-elixir', 'Dior', 'Sauvage Elixir', 'Diseñador', 'img/productos/sauvage-elixir.jpeg', 130000, 190000, 'Disponible', true, false, 6),
+  ('ysl-y-edp', 'Yves Saint Laurent', 'Y Eau de Parfum', 'Diseñador', 'img/productos/ysl-y-edp.jpeg', 75000, 130000, 'Disponible', true, true, 7),
+  ('swy-powerfully', 'Emporio Armani', 'Stronger With You Powerfully', 'Diseñador', 'img/productos/swy-powerfully.jpeg', 80000, 150000, 'Disponible', true, false, 8),
+  ('power-of-you', 'Emporio Armani', 'Power of You', 'Diseñador', 'img/productos/power-of-you.jpeg', 90000, 130000, 'Disponible', true, true, 9),
+  ('adg-profondo', 'Giorgio Armani', 'Acqua di Giò Profondo', 'Diseñador', 'img/productos/adg-profondo.jpeg', 60000, 110000, 'Disponible', true, true, 10),
+  ('le-beau-le-parfum', 'Jean Paul Gaultier', 'Le Beau Le Parfum', 'Diseñador', 'img/productos/le-beau-le-parfum.jpeg', 60000, 115000, 'Disponible', true, true, 11),
+  ('hawas-malibu', 'Rasasi', 'Hawas Malibu', 'Árabe', 'img/productos/hawas-malibu.jpeg', 35000, 50000, 'Disponible', true, true, 12),
+  ('hawas-ice', 'Rasasi', 'Hawas Ice', 'Árabe', 'img/productos/hawas-ice.jpeg', 40000, 60000, 'Disponible', true, false, 13),
+  ('supremacy-collectors', 'Afnan', 'Supremacy Collector''s Edition', 'Árabe', 'img/productos/supremacy-collectors.jpeg', 50000, 70000, 'Disponible', true, true, 14),
+  ('afnan-9pm', 'Afnan', '9PM Rebel', 'Árabe', 'img/productos/afnan-9pm.jpeg', 35000, 50000, 'Disponible', true, false, 15),
+  ('bharara-king', 'Bharara', 'King', 'Árabe', 'img/productos/bharara-king.jpeg', 50000, 70000, 'Disponible', true, false, 16),
+  ('odyssey-aqua', 'Armaf', 'Odyssey Aqua Edition', 'Árabe', 'img/productos/odyssey-aqua.jpeg', 30000, 45000, 'Disponible', true, true, 17),
+  ('philos-pura', 'Maison Alhambra', 'Philos Pura', 'Árabe', 'img/productos/philos-pura.jpeg', 35000, 50000, 'Disponible', true, true, 18)
 ) as v(id, brand, name, type, img, p5, p10, status, visible, light, position)
 where not exists (select 1 from nicheclubweb.products);
+
+-- Fotos de estudio (octubre 2026): solo cambia las fragancias que todavía tienen la foto anterior
+update nicheclubweb.products p set img = 'img/productos/' || p.id || '.jpeg'
+where p.id in ('adg-profondo', 'afnan-9pm', 'bharara-king', 'creed-aventus', 'hawas-ice', 'hawas-malibu', 'layton-exclusif', 'le-beau-le-parfum', 'lv-imagination', 'lv-limmensite', 'odyssey-aqua', 'philos-pura', 'power-of-you', 'sauvage-elixir', 'supremacy-collectors', 'swy-powerfully', 'tf-oud-wood', 'ysl-y-edp')
+  and p.img not like 'img/productos/%' and p.img not like 'http%';
 
 -- Marcas que ya se usan en el catálogo
 insert into nicheclubweb.brands (name, position)
