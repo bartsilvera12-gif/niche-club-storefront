@@ -115,7 +115,7 @@
 
   <section id="top" data-screen-label="Portada" style="position:relative;margin-top:-66px;display:flex;flex-wrap:wrap;min-height:clamp(560px,100vh,1100px)">
     <a href="Fragancias.dc.html#nicho" data-nc-panel="1" onMouseOver="{{ onPanelOver }}" onMouseOut="{{ onPanelOut }}" onFocus="{{ onPanelOver }}" onBlur="{{ onPanelOut }}" style="position:relative;flex:1 1 240px;min-height:clamp(280px,50vh,1100px);overflow:hidden;display:flex;align-items:flex-end;justify-content:center;filter:brightness(0.86);transition:flex-grow .7s cubic-bezier(.2,.7,.2,1),filter .7s ease">
-      <img src="img/layton-exclusif.jpeg" alt="Parfums de Marly Layton Exclusif en Niche Club" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%;display:block" />
+      <img src="{{ hero1 }}" alt="Nicho y Diseñador en Niche Club" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%;display:block" />
       <span style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,8,0.6) 0%,rgba(8,8,8,0.34) 28%,rgba(8,8,8,0.42) 50%,rgba(8,8,8,0.8) 100%)"></span>
       <span style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:10px;padding:0 22px clamp(66px,9vh,96px);text-align:center">
         <span style="font:300 clamp(20px,2.3vw,32px)/1.1 'Cormorant Garamond',serif;color:#FFFFFF;letter-spacing:.01em;text-shadow:0 2px 18px rgba(8,8,8,0.9)">Nicho y Diseñador</span>
@@ -123,7 +123,7 @@
       </span>
     </a>
     <a href="Fragancias.dc.html#arabes" data-nc-panel="2" onMouseOver="{{ onPanelOver }}" onMouseOut="{{ onPanelOut }}" onFocus="{{ onPanelOver }}" onBlur="{{ onPanelOut }}" style="position:relative;flex:1 1 240px;min-height:clamp(280px,50vh,1100px);overflow:hidden;display:flex;align-items:flex-end;justify-content:center;filter:brightness(0.86);transition:flex-grow .7s cubic-bezier(.2,.7,.2,1),filter .7s ease">
-      <img src="img/bharara-king-portada.jpeg" alt="Bharara King en Niche Club" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 46%;display:block" />
+      <img src="{{ hero2 }}" alt="Perfumería árabe en Niche Club" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 46%;display:block" />
       <span style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,8,0.6) 0%,rgba(8,8,8,0.34) 28%,rgba(8,8,8,0.42) 50%,rgba(8,8,8,0.8) 100%)"></span>
       <span style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:10px;padding:0 22px clamp(66px,9vh,96px);text-align:center">
         <span style="font:300 clamp(20px,2.3vw,32px)/1.1 'Cormorant Garamond',serif;color:#FFFFFF;letter-spacing:.01em;text-shadow:0 2px 18px rgba(8,8,8,0.9)">Perfumería Árabe</span>
@@ -131,7 +131,7 @@
       </span>
     </a>
     <a href="Niche Club.dc.html#decants" data-nc-panel="3" onMouseOver="{{ onPanelOver }}" onMouseOut="{{ onPanelOut }}" onFocus="{{ onPanelOver }}" onBlur="{{ onPanelOut }}" style="position:relative;flex:1 1 240px;min-height:clamp(280px,50vh,1100px);overflow:hidden;display:flex;align-items:flex-end;justify-content:center;filter:brightness(0.86);transition:flex-grow .7s cubic-bezier(.2,.7,.2,1),filter .7s ease">
-      <img src="img/creed-aventus.jpeg" alt="Creed Aventus junto a decants de 5 ml y 10 ml" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 52%;display:block" />
+      <img src="{{ hero3 }}" alt="Decants de 5 ml y 10 ml en Niche Club" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 52%;display:block" />
       <span style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,8,0.6) 0%,rgba(8,8,8,0.34) 28%,rgba(8,8,8,0.42) 50%,rgba(8,8,8,0.8) 100%)"></span>
       <span style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:10px;padding:0 22px clamp(66px,9vh,96px);text-align:center">
         <span style="font:300 clamp(20px,2.3vw,32px)/1.1 'Cormorant Garamond',serif;color:#FFFFFF;letter-spacing:.01em;text-shadow:0 2px 18px rgba(8,8,8,0.9)">Decants 5 y 10 ml</span>
@@ -163,11 +163,11 @@
       <footer data-nc-rv style="--d:5;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:18px 24px;padding-top:24px;border-top:1px solid rgba(17,16,16,0.14)">
         <span style="display:flex;align-items:center;gap:10px;font:300 12px/1.5 'Manrope',sans-serif;color:#4B463E">
           <span style="display:block;width:7px;height:7px;background:#7A5C22;border-radius:999px;flex:0 0 auto"></span>
-          WhatsApp 0994 146975
+          WhatsApp {{ waDisplay }}
         </span>
         <span style="display:flex;align-items:center;gap:10px;font:300 12px/1.5 'Manrope',sans-serif;color:#4B463E">
           <span style="display:block;width:7px;height:7px;background:#7A5C22;border-radius:999px;flex:0 0 auto"></span>
-          @nicheclub.py
+          @{{ instagram }}
         </span>
         <span style="display:flex;align-items:center;gap:10px;font:300 12px/1.5 'Manrope',sans-serif;color:#4B463E">
           <span style="display:block;width:7px;height:7px;background:#7A5C22;border-radius:999px;flex:0 0 auto"></span>
@@ -369,7 +369,7 @@
     </div>
   </section>
 
-  <section data-screen-label="CTA final" style="position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:clamp(420px,62vh,640px);background:#0E0B08 url(img/coleccion-fondo.jpeg) center 60%/cover no-repeat;color:#FFFFFF;padding:clamp(70px,10vw,150px) 22px;text-align:center;overflow:hidden">
+  <section data-screen-label="CTA final" style="{{ ctaStyle }}">
     <span aria-hidden="true" style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 70% at 50% 50%,rgba(8,8,8,0.7) 0%,rgba(8,8,8,0.45) 55%,rgba(8,8,8,0.25) 100%)"></span>
     <h2 style="position:relative;margin:0 auto;max-width:20ch;font:300 clamp(30px,4.6vw,64px)/1.05 'Cormorant Garamond',serif;letter-spacing:-0.01em;text-wrap:pretty;color:#FFFFFF;text-shadow:0 2px 24px rgba(8,8,8,0.85)">Elegí la que te intriga. Probala. Después decidí.</h2>
     <a href="Fragancias.dc.html" style="position:relative;display:inline-block;margin-top:34px;background:#FFFFFF;color:#080808;padding:17px 30px;font:500 11px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;border-radius:999px;box-shadow:0 12px 30px -10px rgba(0,0,0,0.6)" style-hover="background:#E3C492;color:#080808">Ver todas las fragancias</a>
@@ -394,8 +394,11 @@
       </div>
       <div style="display:flex;flex-direction:column;gap:8px">
         <span style="font:400 10px/1 'Manrope',sans-serif;letter-spacing:.26em;text-transform:uppercase;color:#B99B63;margin-bottom:4px">Contacto</span>
-        <button onClick="{{ waGeneral }}" style="text-align:left;background:transparent;border:none;padding:0;font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC;cursor:pointer" style-hover="color:#E3C492">WhatsApp 0994 146975</button>
-        <a href="https://instagram.com/nicheclub.py" target="_blank" rel="noopener" style="font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC" style-hover="color:#E3C492">@nicheclub.py</a>
+        <button onClick="{{ waGeneral }}" style="text-align:left;background:transparent;border:none;padding:0;font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC;cursor:pointer" style-hover="color:#E3C492">WhatsApp {{ waDisplay }}</button>
+        <a href="{{ igUrl }}" target="_blank" rel="noopener" style="font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC" style-hover="color:#E3C492">@{{ instagram }}</a>
+        <sc-if value="{{ hasEmail }}" hint-placeholder-val="{{ false }}">
+        <a href="{{ mailto }}" style="font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC;word-break:break-all" style-hover="color:#E3C492">{{ email }}</a>
+        </sc-if>
       </div>
       <div style="display:flex;flex-direction:column;gap:10px">
         <span style="font:400 10px/1 'Manrope',sans-serif;letter-spacing:.26em;text-transform:uppercase;color:#B99B63">Cómo compramos juntos</span>
@@ -457,10 +460,10 @@ class Component extends DCLogic {
     };
     window.addEventListener('scroll', this._onScroll, { passive: true });
     this._onScroll();
-    import('./catalog.js?v=5').then(m => {
+    import('./catalog.js?v=6').then(m => {
       this.mod = m;
       const cart = m.readCart();
-      this.setState({ data: m.PRODUCTS, count: cart.reduce((t, l) => t + l.qty, 0) });
+      this.setState({ data: m.PRODUCTS, site: m.SETTINGS, types: m.TYPES, count: cart.reduce((t, l) => t + l.qty, 0) });
     });
   }
 
@@ -559,7 +562,7 @@ class Component extends DCLogic {
 
   wa(text) {
     if (this.mod) { this.mod.waOpen(text); return; }
-    window.open('https://wa.me/595994146975?text=' + encodeURIComponent(text), '_blank', 'noopener');
+    window.open('https://wa.me/' + ((this.state.site || {}).whatsapp || '595994146975') + '?text=' + encodeURIComponent(text), '_blank', 'noopener');
   }
 
   sizeOf(id) { return this.state.sizes[id] || (this.props.defaultSize === '10 ml' ? 10 : 5); }
@@ -608,7 +611,7 @@ class Component extends DCLogic {
     ];
 
     let finderQuestion = '¿Por dónde querés empezar?';
-    let finderOptions = ['Nicho', 'Diseñador', 'Árabe'].map(t => ({
+    let finderOptions = (s.types || [{ name: 'Nicho' }, { name: 'Diseñador' }, { name: 'Árabe' }]).map(x => x.name).map(t => ({
       label: t, style: this.finderOpt(s.fType === t), pick: () => this.setState({ fType: t, fBudget: null })
     }));
     let finderLead = 'Dos elecciones y te mostramos tres fragancias reales de nuestro catálogo para probar en decant.';
@@ -634,7 +637,24 @@ class Component extends DCLogic {
         : (matches.length === 1 ? 'Una opción de nuestro catálogo dentro de ese rango.' : matches.length + ' opciones de nuestro catálogo, ordenadas por precio de 5 ml.');
     }
 
+    // Antes de cargar Supabase se muestran los valores de siempre
+    const site = s.site || {
+      whatsapp: '595994146975', waDisplay: '0994 146975', instagram: 'nicheclub.py', igUrl: 'https://instagram.com/nicheclub.py',
+      email: '', mailto: '', hero1: 'img/layton-exclusif.jpeg', hero2: 'img/bharara-king-portada.jpeg',
+      hero3: 'img/creed-aventus.jpeg', cta_bg: 'img/coleccion-fondo.jpeg'
+    };
+
     return {
+      hero1: site.hero1,
+      hero2: site.hero2,
+      hero3: site.hero3,
+      ctaStyle: 'position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:clamp(420px,62vh,640px);background:#0E0B08 url("' + site.cta_bg + '") center 60%/cover no-repeat;color:#FFFFFF;padding:clamp(70px,10vw,150px) 22px;text-align:center;overflow:hidden',
+      waDisplay: site.waDisplay,
+      instagram: site.instagram,
+      igUrl: site.igUrl,
+      hasEmail: !!site.email,
+      email: site.email,
+      mailto: site.mailto,
       onPanelOver: e => this.paintPanels(e.currentTarget),
       onPanelOut: () => this.paintPanels(null),
       cartCount: s.count,

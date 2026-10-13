@@ -189,7 +189,10 @@
       <div style="display:flex;flex-direction:column;gap:8px">
         <span style="font:400 10px/1 'Manrope',sans-serif;letter-spacing:.26em;text-transform:uppercase;color:#B99B63;margin-bottom:4px">Contacto</span>
         <button onClick="{{ waGeneral }}" style="text-align:left;background:transparent;border:none;padding:0;font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC;cursor:pointer" style-hover="color:#E3C492">WhatsApp {{ waDisplay }}</button>
-        <a href="https://instagram.com/nicheclub.py" target="_blank" rel="noopener" style="font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC" style-hover="color:#E3C492">@nicheclub.py</a>
+        <a href="{{ igUrl }}" target="_blank" rel="noopener" style="font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC" style-hover="color:#E3C492">@{{ instagram }}</a>
+        <sc-if value="{{ hasEmail }}" hint-placeholder-val="{{ false }}">
+        <a href="{{ mailto }}" style="font:300 14px/1.6 'Manrope',sans-serif;color:#E9E4DC;word-break:break-all" style-hover="color:#E3C492">{{ email }}</a>
+        </sc-if>
       </div>
       <div style="display:flex;flex-direction:column;gap:10px">
         <span style="font:400 10px/1 'Manrope',sans-serif;letter-spacing:.26em;text-transform:uppercase;color:#B99B63">Cómo compramos juntos</span>
@@ -355,12 +358,15 @@ class Component extends DCLogic {
       const cb = document.getElementById('nc-menu');
       if (cb) cb.checked = false;
     });
-    import('./catalog.js?v=5').then(m => {
+    import('./catalog.js?v=6').then(m => {
       this.mod = m;
       const hash = decodeURIComponent((location.hash || '').replace('#', '')).toLowerCase();
-      const map = { nicho: 'Nicho', disenador: 'Diseñador', arabes: 'Árabe' };
+      const map = {};
+      m.TYPES.forEach(t => { map[t.slug] = t.name; });
       this.setState({
         data: m.PRODUCTS,
+        site: m.SETTINGS,
+        types: m.TYPES.map(t => t.name),
         cart: m.readCart(),
         type: map[hash] || 'Todos',
         cartOpen: hash === 'carrito',
@@ -379,7 +385,7 @@ class Component extends DCLogic {
 
   wa(text) {
     if (this.mod) { this.mod.waOpen(text); return; }
-    window.open('https://wa.me/595994146975?text=' + encodeURIComponent(text), '_blank', 'noopener');
+    window.open('https://wa.me/' + ((this.state.site || {}).whatsapp || '595994146975') + '?text=' + encodeURIComponent(text), '_blank', 'noopener');
   }
 
   addToCart(p, ml, qty) {
@@ -515,6 +521,9 @@ class Component extends DCLogic {
       })) : null;
     }
 
+    const typeNames = s.types || ['Nicho', 'Diseñador', 'Árabe'];
+    const site = s.site || { whatsapp: '595994146975', waDisplay: '0994 146975', instagram: 'nicheclub.py', igUrl: 'https://instagram.com/nicheclub.py', email: '', mailto: '' };
+
     return {
       items: list.map(p => this.decorate(p)),
       isEmpty: !!s.data && list.length === 0,
@@ -524,10 +533,10 @@ class Component extends DCLogic {
       sort: s.sort,
       qty: s.qty,
       brandOptions: ['Todas'].concat(brands),
-      typeChips: ['Todos', 'Nicho', 'Diseñador', 'Árabe'].map(t => ({
+      typeChips: ['Todos'].concat(typeNames).map(t => ({
         label: t, style: this.chip(s.type === t), pick: () => this.setState({ type: t })
       })),
-      navChips: ['Todos', 'Nicho', 'Diseñador', 'Árabe'].map(t => ({
+      navChips: ['Todos'].concat(typeNames).map(t => ({
         label: t === 'Todos' ? 'Todas' : t,
         style: this.navChip(s.type === t),
         pick: () => { this.setState({ type: t, brand: 'Todas' }); window.scrollTo({ top: 0, behavior: 'smooth' }); }
@@ -558,7 +567,12 @@ class Component extends DCLogic {
       cartCount: s.cart.reduce((t, l) => t + l.qty, 0),
       cartTotal: this.gs(total),
       helperVisible: this.props.showHelperBubble !== false && !s.cartOpen && !s.sheetId && !s.searchOpen,
-      waDisplay: '0994 146975',
+      waDisplay: site.waDisplay,
+      instagram: site.instagram,
+      igUrl: site.igUrl,
+      hasEmail: !!site.email,
+      email: site.email,
+      mailto: site.mailto,
       waGeneral: () => this.wa('Hola Niche Club, quiero consultar por decants de 5 ml y 10 ml.'),
       waHelp: () => this.wa('Hola Niche Club, necesito ayuda para elegir una fragancia.'),
       waCheckout: () => {

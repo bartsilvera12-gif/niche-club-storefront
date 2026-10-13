@@ -11,33 +11,57 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #080808; --panel: #0E0E0E; --card: #121212; --line: rgba(227,196,146,.16); --line-soft: rgba(255,255,255,.07);
+    --bg: #080808; --panel: #0E0E0E; --card: #121212; --pop: #141414; --line: rgba(227,196,146,.16); --line-soft: rgba(255,255,255,.07);
     --text: #E9E4DC; --muted: #7E786E; --gold: #E3C492; --ink: #0B0B0B; --danger: #E08A7A; --ok: #9CC59A;
   }
-  * { box-sizing: border-box; }
+  * { box-sizing: border-box; scrollbar-width: thin; scrollbar-color: #3A352E transparent; }
   html, body { margin: 0; background: var(--bg); color: var(--text); font: 400 14px/1.5 Manrope, system-ui, sans-serif; }
   button, input, select { font: inherit; color: inherit; }
   button { cursor: pointer; }
   [hidden] { display: none !important; }
   .serif { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 400; }
   .eyebrow { font-size: 10px; letter-spacing: .24em; text-transform: uppercase; color: var(--muted); }
+  .muted { color: var(--muted); }
 
   .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 40px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--line); background: transparent; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; transition: border-color .2s, background .2s, color .2s; white-space: nowrap; text-decoration: none; color: var(--text); }
   .btn:hover { border-color: var(--gold); color: var(--gold); }
   .btn.primary { background: var(--gold); color: var(--ink); border-color: var(--gold); font-weight: 600; }
   .btn.primary:hover { background: #F0D6AC; color: var(--ink); }
-  .btn.primary:disabled { opacity: .35; cursor: default; }
+  .btn:disabled { opacity: .35; cursor: default; pointer-events: none; }
   .btn.danger:hover { border-color: var(--danger); color: var(--danger); }
-  .icon-btn { width: 34px; height: 34px; border-radius: 999px; border: 1px solid var(--line-soft); background: transparent; display: inline-grid; place-items: center; color: var(--muted); transition: all .2s; }
+  .btn.small { min-height: 34px; padding: 0 14px; font-size: 10px; }
+  .icon-btn { width: 34px; height: 34px; flex: none; border-radius: 999px; border: 1px solid var(--line-soft); background: transparent; display: inline-grid; place-items: center; color: var(--muted); transition: all .2s; }
   .icon-btn:hover:not(:disabled) { color: var(--gold); border-color: var(--line); }
   .icon-btn:disabled { opacity: .25; cursor: default; }
-  .icon-btn.danger:hover { color: var(--danger); border-color: rgba(224,138,122,.4); }
+  .icon-btn.danger:hover:not(:disabled) { color: var(--danger); border-color: rgba(224,138,122,.4); }
 
-  .field { display: grid; gap: 6px; }
-  .field label { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+  .field { display: grid; gap: 6px; align-content: start; }
+  .field label, .field .label { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+  .field small { color: var(--muted); font-size: 12px; }
   .input, select.input { width: 100%; min-height: 42px; padding: 0 14px; border-radius: 10px; border: 1px solid var(--line-soft); background: var(--bg); outline: none; transition: border-color .2s; }
-  .input:focus { border-color: var(--gold); }
+  .input:focus, .input.open { border-color: var(--gold); }
   select.input { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: calc(100% - 18px) 50%, calc(100% - 13px) 50%; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 34px; }
+  select.input option { background: var(--pop); color: var(--text); }
+  .affix { display: flex; align-items: center; border: 1px solid var(--line-soft); border-radius: 10px; background: var(--bg); transition: border-color .2s; }
+  .affix:focus-within { border-color: var(--gold); }
+  .affix span { padding-left: 14px; color: var(--muted); }
+  .affix .input { border: 0; padding-left: 4px; background: transparent; }
+
+  /* Selector con buscador */
+  .picker { position: relative; }
+  .picker-btn { display: flex; align-items: center; justify-content: space-between; gap: 10px; text-align: left; }
+  .picker-btn .ph { color: var(--muted); }
+  .picker-btn svg { flex: none; color: var(--muted); transition: transform .2s; }
+  .picker-btn.open svg { transform: rotate(180deg); }
+  .picker-pop { position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 10; padding: 6px; background: var(--pop); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 18px 40px rgba(0,0,0,.55); }
+  .picker-search { width: 100%; min-height: 38px; padding: 0 12px; margin-bottom: 6px; border-radius: 8px; border: 1px solid var(--line-soft); background: var(--bg); outline: none; }
+  .picker-search:focus { border-color: var(--gold); }
+  .picker-list { max-height: 228px; overflow-y: auto; display: grid; gap: 2px; }
+  .picker-opt { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; min-height: 38px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent; text-align: left; font-size: 14px; }
+  .picker-opt:hover, .picker-opt.hl { background: rgba(227,196,146,.08); }
+  .picker-opt.on { color: var(--gold); }
+  .picker-opt.add { color: var(--gold); border-top: 1px solid var(--line-soft); border-radius: 0 0 8px 8px; margin-top: 4px; }
+  .picker-empty { padding: 10px 12px; color: var(--muted); font-size: 13px; }
 
   /* Login */
   .auth { min-height: 100vh; display: grid; place-items: center; padding: 24px 16px; }
@@ -50,10 +74,15 @@
   /* Layout */
   header.top { position: sticky; top: 0; z-index: 20; background: rgba(8,8,8,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line-soft); }
   .top-inner { max-width: 1180px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; gap: 16px; }
-  .brand { display: flex; align-items: center; gap: 12px; margin-right: auto; text-decoration: none; color: var(--text); }
+  .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text); }
   .brand img { width: 36px; height: 36px; border-radius: 999px; object-fit: cover; }
   .brand b { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 22px; letter-spacing: .02em; }
   .brand span { display: block; font-size: 9px; letter-spacing: .26em; text-transform: uppercase; color: var(--muted); }
+  .tabs { display: flex; gap: 4px; margin: 0 auto; }
+  .tab { position: relative; min-height: 38px; padding: 0 16px; border: 0; border-radius: 999px; background: transparent; color: var(--muted); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; white-space: nowrap; transition: color .2s, background .2s; }
+  .tab:hover { color: var(--text); }
+  .tab.on { color: var(--gold); background: rgba(227,196,146,.08); }
+  .tab.dirty::after { content: ''; position: absolute; top: 9px; right: 7px; width: 5px; height: 5px; border-radius: 999px; background: var(--gold); }
   .top-actions { display: flex; gap: 8px; align-items: center; }
   main { max-width: 1180px; margin: 0 auto; padding: 28px 24px 120px; }
 
@@ -66,9 +95,9 @@
   .toolbar .search { flex: 1 1 240px; }
   .toolbar select { width: auto; min-width: 150px; }
 
-  /* Lista */
+  /* Lista de fragancias */
   .list { display: grid; gap: 8px; }
-  .row { display: grid; grid-template-columns: 34px 64px minmax(180px, 1.6fr) 110px 120px 120px 140px 74px 120px; align-items: center; gap: 14px; padding: 10px 14px; background: var(--panel); border: 1px solid var(--line-soft); border-radius: 14px; transition: border-color .2s, opacity .2s; }
+  .row { display: grid; grid-template-columns: 34px 64px minmax(180px, 1.6fr) 120px 120px 120px 140px 74px 120px; align-items: center; gap: 14px; padding: 10px 14px; background: var(--panel); border: 1px solid var(--line-soft); border-radius: 14px; transition: border-color .2s, opacity .2s; }
   .row:hover { border-color: var(--line); }
   .row.hidden-prod { opacity: .55; }
   .row.dirty { border-color: rgba(227,196,146,.45); }
@@ -79,11 +108,37 @@
   .row .input { min-height: 36px; padding: 0 10px; font-size: 13px; }
   .row select.input { padding-right: 28px; background-position: calc(100% - 14px) 50%, calc(100% - 9px) 50%; }
   .price { position: relative; }
-  .price::before { content: attr(data-label); position: absolute; top: -15px; left: 2px; font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+  .price::before { content: attr(data-label); display: none; position: absolute; top: -15px; left: 2px; font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
   .actions { display: flex; gap: 6px; justify-content: flex-end; }
-  .list-head { display: grid; grid-template-columns: 34px 64px minmax(180px, 1.6fr) 110px 120px 120px 140px 74px 120px; gap: 14px; padding: 0 15px 4px; }
+  .list-head { display: grid; grid-template-columns: 34px 64px minmax(180px, 1.6fr) 120px 120px 120px 140px 74px 120px; gap: 14px; padding: 0 15px 4px; }
   .list-head span { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
   .empty { padding: 48px 16px; text-align: center; color: var(--muted); border: 1px dashed var(--line-soft); border-radius: 14px; }
+
+  /* Tarjetas (marcas, tipos, configuración) */
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+  .card { background: var(--panel); border: 1px solid var(--line-soft); border-radius: 18px; padding: 22px; display: grid; gap: 16px; }
+  .card + .card { margin-top: 18px; }
+  .cols .card + .card { margin-top: 0; }
+  .card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .card-head h2 { margin: 0; font-size: 28px; line-height: 1.1; }
+  .card-head p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+  .add-row { display: flex; gap: 8px; }
+  .tax-list { display: grid; gap: 6px; }
+  .tax-row { display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 8px 8px 8px 16px; border: 1px solid var(--line-soft); border-radius: 12px; }
+  .tax-main { flex: 1; min-width: 0; }
+  .tax-main b { display: block; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tax-main small { color: var(--muted); font-size: 12px; }
+  .tax-main .input { min-height: 36px; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .covers { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .cover { display: grid; gap: 10px; align-content: start; }
+  .cover img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 12px; background: var(--card); display: block; }
+  .cover b { display: block; font-weight: 500; }
+  .cover small { display: block; color: var(--muted); font-size: 12px; }
+  .cover-foot { display: grid; gap: 10px; }
+  .cover-foot .btn { width: 100%; }
+  .card-foot { display: flex; justify-content: flex-end; align-items: center; gap: 14px; }
+  .card-foot span { color: var(--muted); font-size: 13px; }
 
   /* Interruptor */
   .switch { position: relative; flex: none; width: 44px; height: 24px; border-radius: 999px; border: 1px solid var(--line); background: transparent; padding: 0; }
@@ -114,7 +169,6 @@
   .toast.show { transform: translate(-50%, 0); }
   .toast.error { border-color: var(--danger); color: var(--danger); }
 
-  .price::before { display: none; }
   @media (max-width: 1080px) {
     .list-head { display: none; }
     .row { grid-template-columns: 64px repeat(4, minmax(0, 1fr)) auto; grid-template-areas: "img title title title title actions" "img type status p5 p10 vis"; row-gap: 22px; padding: 14px; }
@@ -128,6 +182,15 @@
     .row .c-vis { grid-area: vis; display: flex; align-items: center; gap: 8px; }
     .row .actions { grid-area: actions; }
     .price::before { display: block; }
+    .covers { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 860px) {
+    .top-inner { flex-wrap: wrap; row-gap: 10px; }
+    .brand { margin-right: auto; }
+    .tabs { order: 3; width: 100%; margin: 0; overflow-x: auto; scrollbar-width: none; }
+    .tab { flex: 1 0 auto; }
+    .cols { grid-template-columns: 1fr; }
+    .grid3 { grid-template-columns: 1fr; }
   }
   @media (max-width: 640px) {
     .top-inner { padding: 12px 16px; }
@@ -138,6 +201,9 @@
     .row { grid-template-columns: 56px minmax(0, 1fr) minmax(0, 1fr); grid-template-areas: "img title title" "img type status" "img p5 p10" "vis actions actions"; column-gap: 12px; }
     .row .thumb { width: 56px; height: 68px; align-self: start; }
     .row .c-vis::before { content: 'Visible'; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+    .card { padding: 18px; }
+    .covers { gap: 12px; }
+    .tab { padding: 0 10px; font-size: 10px; letter-spacing: .1em; }
     .dlg { padding: 20px; }
     .dlg .grid2 { grid-template-columns: 1fr; }
     .photo { grid-template-columns: 84px 1fr; }
@@ -150,13 +216,13 @@
 </head>
 <body>
 
-<!-- Ingreso / primera configuración -->
+<!-- Ingreso -->
 <section class="auth" id="auth" hidden>
   <div class="auth-card">
     <img src="../img/logo.jpeg" alt="">
     <div>
       <div class="eyebrow">Niche Club</div>
-      <h1 class="serif" id="auth-title">Panel</h1>
+      <h1 class="serif">Panel</h1>
     </div>
     <form id="auth-form">
       <div class="field">
@@ -181,6 +247,11 @@
         <img src="../img/logo.jpeg" alt="">
         <div><b>Niche Club</b><span>Panel de administración</span></div>
       </a>
+      <nav class="tabs" aria-label="Secciones">
+        <button class="tab on" data-view="products">Fragancias</button>
+        <button class="tab" data-view="taxo">Marcas y tipos</button>
+        <button class="tab" data-view="config">Configuración</button>
+      </nav>
       <div class="top-actions">
         <a class="btn ghost-text" href="../fragancias" target="_blank" rel="noopener">Ver sitio</a>
         <button class="icon-btn" id="menu-btn" title="Más opciones" aria-label="Más opciones">
@@ -191,22 +262,100 @@
   </header>
 
   <main>
-    <div class="intro">
-      <div>
-        <div class="eyebrow">Catálogo</div>
-        <h1 class="serif">Fragancias</h1>
+    <!-- Fragancias -->
+    <section id="view-products">
+      <div class="intro">
+        <div>
+          <div class="eyebrow">Catálogo</div>
+          <h1 class="serif">Fragancias</h1>
+        </div>
+        <div class="stats" id="stats"></div>
       </div>
-      <div class="stats" id="stats"></div>
-    </div>
 
-    <div class="toolbar">
-      <input class="input search" id="q" type="search" placeholder="Buscar por marca o nombre">
-      <select class="input" id="f-type"><option value="">Todos los tipos</option></select>
-      <button class="btn primary" id="add-btn">+ Nueva fragancia</button>
-    </div>
+      <div class="toolbar">
+        <input class="input search" id="q" type="search" placeholder="Buscar por marca o nombre">
+        <select class="input" id="f-type"><option value="">Todos los tipos</option></select>
+        <button class="btn primary" id="add-btn">+ Nueva fragancia</button>
+      </div>
 
-    <div class="list-head"><span>#</span><span></span><span>Fragancia</span><span>Tipo</span><span>Precio 5 ml</span><span>Precio 10 ml</span><span>Estado</span><span>Visible</span><span></span></div>
-    <div class="list" id="list"></div>
+      <div class="list-head"><span>#</span><span></span><span>Fragancia</span><span>Tipo</span><span>Precio 5 ml</span><span>Precio 10 ml</span><span>Estado</span><span>Visible</span><span></span></div>
+      <div class="list" id="list"></div>
+    </section>
+
+    <!-- Marcas y tipos -->
+    <section id="view-taxo" hidden>
+      <div class="intro">
+        <div>
+          <div class="eyebrow">Organización</div>
+          <h1 class="serif">Marcas y tipos</h1>
+        </div>
+      </div>
+      <div class="cols">
+        <div class="card">
+          <div class="card-head">
+            <div><h2 class="serif">Marcas</h2><p>Se ofrecen al crear o editar una fragancia.</p></div>
+            <span class="muted" id="brand-count"></span>
+          </div>
+          <form class="add-row" id="brand-add">
+            <input class="input" placeholder="Nueva marca" maxlength="120" required>
+            <button class="btn primary" type="submit">Agregar</button>
+          </form>
+          <div class="tax-list" id="brand-list"></div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div><h2 class="serif">Tipos</h2><p>Son los filtros del catálogo, en este orden.</p></div>
+            <span class="muted" id="type-count"></span>
+          </div>
+          <form class="add-row" id="type-add">
+            <input class="input" placeholder="Nuevo tipo" maxlength="60" required>
+            <button class="btn primary" type="submit">Agregar</button>
+          </form>
+          <div class="tax-list" id="type-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Configuración -->
+    <section id="view-config" hidden>
+      <div class="intro">
+        <div>
+          <div class="eyebrow">Sitio</div>
+          <h1 class="serif">Configuración</h1>
+        </div>
+      </div>
+      <form id="cfg-form">
+        <div class="card">
+          <div class="card-head"><div><h2 class="serif">Contacto</h2><p>Aparece en el pie de página y en los botones de WhatsApp.</p></div></div>
+          <div class="grid3">
+            <div class="field">
+              <label for="cfg-wa">WhatsApp</label>
+              <input class="input" id="cfg-wa" inputmode="tel" placeholder="0994 146975" required>
+              <small id="cfg-wa-hint"></small>
+            </div>
+            <div class="field">
+              <label for="cfg-ig">Instagram</label>
+              <div class="affix"><span>@</span><input class="input" id="cfg-ig" placeholder="nicheclub.py" required></div>
+              <small>Solo el usuario, sin @.</small>
+            </div>
+            <div class="field">
+              <label for="cfg-email">Email</label>
+              <input class="input" id="cfg-email" type="email" placeholder="hola@nicheclubpy.com">
+              <small>Opcional. Si está vacío no se muestra.</small>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div><h2 class="serif">Fotos de portada</h2><p>Las tres fotos de arriba de la página de inicio y el fondo de la sección final.</p></div></div>
+          <div class="covers" id="covers"></div>
+        </div>
+        <div class="card-foot" style="margin-top:18px">
+          <span id="cfg-state"></span>
+          <button class="btn" type="button" id="cfg-discard" disabled>Descartar</button>
+          <button class="btn primary" type="submit" id="cfg-save" disabled>Guardar configuración</button>
+        </div>
+      </form>
+    </section>
   </main>
 
   <div class="savebar" id="savebar">
@@ -232,12 +381,12 @@
       </div>
     </div>
     <div class="grid2">
-      <div class="field"><label for="e-brand">Marca</label><input class="input" id="e-brand" required maxlength="120" list="brands"></div>
+      <div class="field"><span class="label">Marca</span><div class="picker" id="e-brand"></div></div>
       <div class="field"><label for="e-name">Nombre</label><input class="input" id="e-name" required maxlength="120"></div>
     </div>
     <div class="grid2">
-      <div class="field"><label for="e-type">Tipo</label><select class="input" id="e-type"></select></div>
-      <div class="field"><label for="e-status">Estado</label><select class="input" id="e-status"></select></div>
+      <div class="field"><span class="label">Tipo</span><div class="picker" id="e-type"></div></div>
+      <div class="field"><span class="label">Estado</span><div class="picker" id="e-status"></div></div>
     </div>
     <div class="grid2">
       <div class="field"><label for="e-p5">Precio 5 ml (Gs.)</label><input class="input" id="e-p5" inputmode="numeric" required></div>
@@ -251,7 +400,6 @@
     </footer>
   </form>
 </dialog>
-<datalist id="brands"></datalist>
 
 <!-- Menú -->
 <dialog id="menu-dlg">
@@ -268,7 +416,7 @@
 <dialog id="backups-dlg">
   <div class="dlg">
     <div>
-      <div class="eyebrow">Se guarda una copia cada vez que guardás</div>
+      <div class="eyebrow">Se guarda una copia cada vez que guardás el catálogo</div>
       <h2 class="serif">Copias de seguridad</h2>
     </div>
     <div class="backup-list" id="backup-list"></div>
@@ -291,40 +439,61 @@
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm';
 import { SUPABASE_URL, SUPABASE_SCHEMA, SUPABASE_ANON_KEY } from '../supabase-config.js';
+import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
 
 (() => {
   const $ = s => document.querySelector(s);
   const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { db: { schema: SUPABASE_SCHEMA }, auth: { persistSession: true, storageKey: 'nicheclub-admin' } });
   const BUCKET = 'nicheclub';
-  const TYPES = ['Nicho', 'Diseñador', 'Árabe'];
   const STATUSES = ['Disponible', 'Agotado', 'Por encargo'];
   const COLUMNS = 'id,brand,name,type,img,p5,p10,status,visible,light';
+  const COVERS = [
+    { key: 'hero1', title: 'Portada 1', note: 'Nicho y Diseñador' },
+    { key: 'hero2', title: 'Portada 2', note: 'Perfumería Árabe' },
+    { key: 'hero3', title: 'Portada 3', note: 'Decants 5 y 10 ml' },
+    { key: 'cta_bg', title: 'Sección final', note: 'Fondo de «Probala. Después decidí.»' }
+  ];
   let saved = [];      // catálogo tal como está en Supabase
   let items = [];      // copia que se edita
   let editing = null;  // índice en items, o -1 para nueva
+  let brands = [];     // nombres, en orden alfabético
+  let types = [];      // { name, slug, position }
+  let settings = {};   // configuración guardada
+  let draft = {};      // configuración en edición
+  let view = 'products';
 
   const gs = n => Number(n || 0).toLocaleString('de-DE');
   const num = s => parseInt(String(s).replace(/\D/g, ''), 10) || 0;
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const clone = x => JSON.parse(JSON.stringify(x));
+  const norm = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+  const slug = s => norm(s).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'item';
+  const byName = (a, b) => a.localeCompare(b, 'es');
+  const icon = {
+    up: '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8l4-4 4 4"/></svg>',
+    down: '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l4 4 4-4"/></svg>',
+    edit: '<svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M9.5 2.5l2 2L5 11H3V9z"/></svg>',
+    del: '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 2l8 8M10 2l-8 8"/></svg>',
+    ok: '<svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 7.5l3 3 6-7"/></svg>',
+    chevron: '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l4 4 4-4"/></svg>'
+  };
 
   // Traduce los errores de Supabase a algo entendible
   function fail(error) {
     const m = (error && error.message) || String(error);
     if (/Invalid login credentials/i.test(m)) throw new Error('Email o contraseña incorrectos.');
-    if (/No autorizado|permission denied|row-level security/i.test(m)) throw new Error('Esta cuenta no tiene permiso para editar el catálogo.');
+    if (/No autorizado|permission denied|row-level security/i.test(m)) throw new Error('Esta cuenta no tiene permiso para hacer cambios.');
     if (/JWT|session/i.test(m)) { showAuth(); throw new Error('La sesión expiró. Volvé a ingresar.'); }
     if (/Failed to fetch|NetworkError/i.test(m)) throw new Error('No se pudo conectar con el servidor.');
-    if (/duplicate key/i.test(m)) throw new Error('Hay dos fragancias con el mismo nombre y marca.');
-    if (/violates check constraint/i.test(m)) throw new Error('Revisá los datos: marca, nombre, precios y foto son obligatorios.');
+    if (/duplicate key/i.test(m)) throw new Error('Ya existe uno con ese nombre.');
+    if (/foreign key/i.test(m)) throw new Error('Hay fragancias que usan esa marca o tipo.');
+    if (/violates check constraint/i.test(m)) throw new Error('Revisá los datos: hay campos obligatorios vacíos o con formato inválido.');
     throw new Error(m);
   }
   const run = async q => { const { data, error } = await q; if (error) fail(error); return data; };
 
   // Las fotos viejas están en img/ del sitio; las nuevas, en Supabase
-  const imgSrc = img => /^https?:/.test(img) ? img : '../' + img;
-
-  const slug = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'producto';
+  const imgSrc = img => !img ? 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7' : /^https?:/.test(img) ? img : '../' + img;
 
   function withIds(list) {
     const used = new Set(list.filter(p => p.id).map(p => p.id));
@@ -344,6 +513,64 @@ import { SUPABASE_URL, SUPABASE_SCHEMA, SUPABASE_ANON_KEY } from '../supabase-co
     t.className = 'toast show' + (error ? ' error' : '');
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => t.className = 'toast', 3200);
+  }
+
+  // ---- Selector con buscador y opción de agregar ----
+  function picker(root, { placeholder, options, onAdd, addLabel, search = true }) {
+    root.innerHTML = `<button type="button" class="input picker-btn" aria-haspopup="listbox" aria-expanded="false"><span></span>${icon.chevron}</button>
+      <div class="picker-pop" hidden>${search ? `<input class="picker-search" placeholder="${onAdd ? 'Buscar o agregar…' : 'Buscar…'}" autocomplete="off">` : ''}<div class="picker-list" role="listbox"></div></div>`;
+    const btn = root.querySelector('.picker-btn'), pop = root.querySelector('.picker-pop');
+    const input = root.querySelector('.picker-search'), list = root.querySelector('.picker-list');
+    let value = '', hl = 0;
+
+    const paint = () => { btn.querySelector('span').outerHTML = value ? `<span>${esc(value)}</span>` : `<span class="ph">${esc(placeholder)}</span>`; };
+    const entries = () => {
+      const q = input ? input.value.trim() : '';
+      const opts = options().filter(o => !q || norm(o).includes(norm(q)));
+      const out = opts.map(o => ({ value: o }));
+      if (onAdd && q && !options().some(o => norm(o) === norm(q))) out.push({ add: q });
+      return out;
+    };
+    const renderList = () => {
+      const e = entries();
+      hl = Math.min(hl, Math.max(0, e.length - 1));
+      list.innerHTML = e.length ? e.map((x, i) => x.add
+        ? `<button type="button" class="picker-opt add${i === hl ? ' hl' : ''}" data-i="${i}">+ ${esc(addLabel)} «${esc(x.add)}»</button>`
+        : `<button type="button" role="option" class="picker-opt${x.value === value ? ' on' : ''}${i === hl ? ' hl' : ''}" data-i="${i}"><span>${esc(x.value)}</span>${x.value === value ? icon.ok : ''}</button>`).join('')
+        : '<div class="picker-empty">Sin resultados</div>';
+    };
+    const open = () => {
+      pop.hidden = false; btn.classList.add('open'); btn.setAttribute('aria-expanded', 'true');
+      if (input) input.value = '';
+      hl = Math.max(0, options().indexOf(value));
+      renderList();
+      (input || list).focus?.();
+      const on = list.querySelector('.on'); if (on) on.scrollIntoView({ block: 'nearest' });
+    };
+    const close = () => { pop.hidden = true; btn.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); };
+    const choose = async x => {
+      if (!x) return;
+      if (x.add) {
+        try { value = await onAdd(x.add); } catch (e) { toast(e.message, true); return; }
+      } else value = x.value;
+      paint(); close(); btn.focus();
+      root.dispatchEvent(new Event('change'));
+    };
+
+    btn.addEventListener('click', () => pop.hidden ? open() : close());
+    list.addEventListener('click', ev => { const b = ev.target.closest('[data-i]'); if (b) choose(entries()[+b.dataset.i]); });
+    if (input) input.addEventListener('input', () => { hl = 0; renderList(); });
+    root.addEventListener('keydown', ev => {
+      if (pop.hidden) return;
+      const e = entries();
+      if (ev.key === 'Escape') { ev.preventDefault(); ev.stopPropagation(); close(); btn.focus(); }
+      else if (ev.key === 'ArrowDown') { ev.preventDefault(); hl = Math.min(e.length - 1, hl + 1); renderList(); list.querySelector('.hl')?.scrollIntoView({ block: 'nearest' }); }
+      else if (ev.key === 'ArrowUp') { ev.preventDefault(); hl = Math.max(0, hl - 1); renderList(); list.querySelector('.hl')?.scrollIntoView({ block: 'nearest' }); }
+      else if (ev.key === 'Enter' && ev.target === input) { ev.preventDefault(); choose(e[hl]); }
+    });
+    document.addEventListener('pointerdown', ev => { if (!pop.hidden && !root.contains(ev.target)) close(); });
+    paint();
+    return { get value() { return value; }, set value(v) { value = v || ''; paint(); close(); } };
   }
 
   // ---- Ingreso ----
@@ -370,7 +597,7 @@ import { SUPABASE_URL, SUPABASE_SCHEMA, SUPABASE_ANON_KEY } from '../supabase-co
       await run(sb.auth.signInWithPassword({ email: $('#email').value.trim(), password: $('#pw').value }));
       $('#pw').value = '';
       await checkAdmin();
-      await loadCatalog();
+      await loadAll();
     } catch (e) {
       msg.textContent = e.message;
     } finally {
@@ -378,14 +605,35 @@ import { SUPABASE_URL, SUPABASE_SCHEMA, SUPABASE_ANON_KEY } from '../supabase-co
     }
   });
 
-  // ---- Catálogo ----
-  async function loadCatalog() {
-    setSaved(await run(sb.from('products').select(COLUMNS).order('position')));
-    fillSelects();
+  async function loadAll() {
+    const [prods, brandRows, typeRows, cfg] = await Promise.all([
+      run(sb.from('products').select(COLUMNS).order('position')),
+      run(sb.from('brands').select('name').order('name')),
+      run(sb.from('types').select('name,slug,position').order('position')),
+      run(sb.from('settings').select('*').eq('id', 1).maybeSingle())
+    ]);
+    setSaved(prods);
+    brands = brandRows.map(b => b.name).sort(byName);
+    types = typeRows;
+    setSettings(cfg || {});
     $('#auth').hidden = true;
     $('#app').hidden = false;
     render();
+    renderTaxo();
+    renderConfig();
   }
+
+  // ---- Secciones ----
+  document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => showView(t.dataset.view)));
+  function showView(v) {
+    view = v;
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.view === v));
+    ['products', 'taxo', 'config'].forEach(k => { $('#view-' + k).hidden = k !== v; });
+    updateSavebar();
+    window.scrollTo({ top: 0 });
+  }
+
+  // ================= Fragancias =================
 
   // _key identifica cada fila para saber qué cambió, aunque se edite el id
   function setSaved(products) {
@@ -393,47 +641,45 @@ import { SUPABASE_URL, SUPABASE_SCHEMA, SUPABASE_ANON_KEY } from '../supabase-co
     items = clone(saved);
   }
 
-  function fillSelects() {
-    const opts = (arr, sel) => arr.map(v => `<option${v === sel ? ' selected' : ''}>${esc(v)}</option>`).join('');
-    $('#f-type').innerHTML = '<option value="">Todos los tipos</option>' + opts(TYPES);
-    $('#e-type').innerHTML = opts(TYPES);
-    $('#e-status').innerHTML = opts(STATUSES);
-  }
-
+  const typeNames = () => types.map(t => t.name);
   const isDirty = p => JSON.stringify(p) !== JSON.stringify(saved.find(s => s._key === p._key) || null);
 
   function render() {
+    const fType = $('#f-type');
+    const current = fType.value;
+    fType.innerHTML = '<option value="">Todos los tipos</option>' + typeNames().map(t => `<option${t === current ? ' selected' : ''}>${esc(t)}</option>`).join('');
 
-    const q = $('#q').value.trim().toLowerCase();
-    const type = $('#f-type').value;
+    const q = norm($('#q').value);
+    const type = fType.value;
     const filtering = !!(q || type);
     const rows = items.map((p, i) => ({ p, i })).filter(({ p }) =>
-      (!type || p.type === type) && (!q || (p.brand + ' ' + p.name).toLowerCase().includes(q)));
+      (!type || p.type === type) && (!q || norm(p.brand + ' ' + p.name).includes(q)));
+    const opts = (list, sel) => (list.includes(sel) ? list : [sel].concat(list)).map(t => `<option${t === sel ? ' selected' : ''}>${esc(t)}</option>`).join('');
 
     $('#list').innerHTML = rows.length ? rows.map(({ p, i }) => `
       <div class="row${p.visible ? '' : ' hidden-prod'}${isDirty(p) ? ' dirty' : ''}" data-i="${i}">
         <div class="pos">${i + 1}</div>
         <img class="thumb" src="${esc(imgSrc(p.img))}" alt="" loading="lazy">
         <div class="title"><b>${esc(p.name)}</b><small>${esc(p.brand)}</small></div>
-        <div class="c-type"><select class="input" data-f="type" aria-label="Tipo">${TYPES.map(t => `<option${t === p.type ? ' selected' : ''}>${esc(t)}</option>`).join('')}</select></div>
+        <div class="c-type"><select class="input" data-f="type" aria-label="Tipo">${opts(typeNames(), p.type)}</select></div>
         <div class="c-p5 price" data-label="5 ml"><input class="input" data-f="p5" inputmode="numeric" value="${gs(p.p5)}" aria-label="Precio 5 ml"></div>
         <div class="c-p10 price" data-label="10 ml"><input class="input" data-f="p10" inputmode="numeric" value="${gs(p.p10)}" aria-label="Precio 10 ml"></div>
-        <div class="c-status"><select class="input" data-f="status" aria-label="Estado">${STATUSES.map(t => `<option${t === p.status ? ' selected' : ''}>${esc(t)}</option>`).join('')}</select></div>
+        <div class="c-status"><select class="input" data-f="status" aria-label="Estado">${opts(STATUSES, p.status)}</select></div>
         <div class="c-vis"><button class="switch" data-f="visible" role="switch" aria-checked="${!!p.visible}" aria-label="Visible en el sitio"></button></div>
         <div class="actions">
-          <button class="icon-btn" data-a="up" title="Subir" aria-label="Subir"${filtering || i === 0 ? ' disabled' : ''}><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8l4-4 4 4"/></svg></button>
-          <button class="icon-btn" data-a="down" title="Bajar" aria-label="Bajar"${filtering || i === items.length - 1 ? ' disabled' : ''}><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l4 4 4-4"/></svg></button>
-          <button class="icon-btn" data-a="edit" title="Editar" aria-label="Editar"><svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M9.5 2.5l2 2L5 11H3V9z"/></svg></button>
-          <button class="icon-btn danger" data-a="del" title="Eliminar" aria-label="Eliminar"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 2l8 8M10 2l-8 8"/></svg></button>
+          <button class="icon-btn" data-a="up" title="Subir" aria-label="Subir"${filtering || i === 0 ? ' disabled' : ''}>${icon.up}</button>
+          <button class="icon-btn" data-a="down" title="Bajar" aria-label="Bajar"${filtering || i === items.length - 1 ? ' disabled' : ''}>${icon.down}</button>
+          <button class="icon-btn" data-a="edit" title="Editar" aria-label="Editar">${icon.edit}</button>
+          <button class="icon-btn danger" data-a="del" title="Eliminar" aria-label="Eliminar">${icon.del}</button>
         </div>
       </div>`).join('') : `<div class="empty">${items.length ? 'No hay fragancias que coincidan.' : 'Todavía no hay fragancias.'}</div>`;
 
     const vis = items.filter(p => p.visible).length;
     $('#stats').innerHTML = `<div><b>${items.length}</b>en total</div><div><b>${vis}</b>visibles</div><div><b>${items.filter(p => p.status === 'Agotado').length}</b>agotadas</div>`;
-    $('#brands').innerHTML = [...new Set(items.map(p => p.brand))].sort().map(b => `<option value="${esc(b)}">`).join('');
     updateSavebar();
   }
 
+  const strip = p => { const c = Object.assign({}, p); delete c._key; return c; };
   function changeCount() {
     const a = JSON.stringify(items.map(strip)), b = JSON.stringify(saved.map(strip));
     if (a === b) return 0;
@@ -444,12 +690,12 @@ import { SUPABASE_URL, SUPABASE_SCHEMA, SUPABASE_ANON_KEY } from '../supabase-co
     const reordered = keys.filter(k => kept.includes(k)).join() !== kept.join() ? 1 : 0;
     return Math.max(1, removed + edited + reordered);
   }
-  const strip = p => { const c = Object.assign({}, p); delete c._key; return c; };
 
   function updateSavebar() {
     const n = changeCount();
-    $('#savebar').classList.toggle('show', n > 0);
+    $('#savebar').classList.toggle('show', n > 0 && view === 'products');
     $('#save-label').textContent = n === 1 ? '1 cambio sin guardar' : n + ' cambios sin guardar';
+    document.querySelector('.tab[data-view="products"]').classList.toggle('dirty', n > 0);
   }
 
   // Edición en la lista
@@ -491,6 +737,7 @@ import { SUPABASE_URL, SUPABASE_SCHEMA, SUPABASE_ANON_KEY } from '../supabase-co
       const rows = await run(sb.rpc('save_catalog', { items: withIds(items.map(strip)) }));
       setSaved(rows);
       render();
+      renderTaxo();
       toast('Guardado. El sitio ya muestra los cambios.');
     } catch (e) {
       toast(e.message, true);
@@ -503,19 +750,48 @@ import { SUPABASE_URL, SUPABASE_SCHEMA, SUPABASE_ANON_KEY } from '../supabase-co
     items = clone(saved);
     render();
   });
-  window.addEventListener('beforeunload', ev => { if (changeCount()) { ev.preventDefault(); ev.returnValue = ''; } });
+  window.addEventListener('beforeunload', ev => { if (changeCount() || configDirty()) { ev.preventDefault(); ev.returnValue = ''; } });
 
   // ---- Diálogo de edición ----
+  async function addBrand(name) {
+    name = name.trim();
+    const found = brands.find(b => norm(b) === norm(name));
+    if (found) return found;
+    await run(sb.from('brands').insert({ name }));
+    brands = brands.concat(name).sort(byName);
+    renderTaxo();
+    toast('Marca «' + name + '» agregada.');
+    return name;
+  }
+  async function addType(name) {
+    name = name.trim();
+    const found = types.find(t => norm(t.name) === norm(name));
+    if (found) return found.name;
+    let s = slug(name), base = s, n = 2;
+    while (types.some(t => t.slug === s)) s = base + '-' + n++;
+    const position = types.reduce((m, t) => Math.max(m, t.position), -1) + 1;
+    const row = await run(sb.from('types').insert({ name, slug: s, position }).select().single());
+    types = types.concat(row);
+    render();
+    renderTaxo();
+    toast('Tipo «' + name + '» agregado.');
+    return name;
+  }
+
+  const pBrand = picker($('#e-brand'), { placeholder: 'Elegí una marca', options: () => brands, onAdd: addBrand, addLabel: 'Agregar marca' });
+  const pType = picker($('#e-type'), { placeholder: 'Elegí un tipo', options: typeNames, onAdd: addType, addLabel: 'Agregar tipo' });
+  const pStatus = picker($('#e-status'), { placeholder: 'Estado', options: () => STATUSES, search: false });
+
   let draftImg = '';
   function openEdit(i) {
     editing = i;
-    const p = i >= 0 ? items[i] : { brand: '', name: '', type: TYPES[0], status: STATUSES[0], p5: '', p10: '', img: '', visible: true };
+    const p = i >= 0 ? items[i] : { brand: '', name: '', type: typeNames()[0] || '', status: STATUSES[0], p5: '', p10: '', img: '', visible: true };
     $('#edit-eyebrow').textContent = i >= 0 ? 'Editar' : 'Nueva';
     $('#edit-title').textContent = i >= 0 ? p.brand + ' ' + p.name : 'Fragancia';
-    $('#e-brand').value = p.brand;
+    pBrand.value = p.brand;
     $('#e-name').value = p.name;
-    $('#e-type').value = p.type;
-    $('#e-status').value = p.status;
+    pType.value = p.type;
+    pStatus.value = p.status;
     $('#e-p5').value = p.p5 ? gs(p.p5) : '';
     $('#e-p10').value = p.p10 ? gs(p.p10) : '';
     $('#e-visible').setAttribute('aria-checked', String(p.visible !== false));
@@ -526,18 +802,19 @@ import { SUPABASE_URL, SUPABASE_SCHEMA, SUPABASE_ANON_KEY } from '../supabase-co
   }
   function setPreview(img) {
     draftImg = img || '';
-    $('#e-img-preview').src = img ? imgSrc(img) : 'data:image/gif;base64,R0lGODlhAQABAAAAACw=';
+    $('#e-img-preview').src = imgSrc(img);
   }
   ['#e-p5', '#e-p10'].forEach(s => $(s).addEventListener('input', ev => { const v = num(ev.target.value); ev.target.value = v ? gs(v) : ''; }));
   $('#e-visible').addEventListener('click', ev => {
     const b = ev.currentTarget;
     b.setAttribute('aria-checked', String(b.getAttribute('aria-checked') !== 'true'));
   });
-  // Achica a 1200 px y pasa a JPG (las fotos del sitio pesan ~150 KB)
-  async function toJpeg(file) {
+
+  // Achica la imagen y la pasa a JPG (las fotos del sitio pesan ~150 KB)
+  async function toJpeg(file, max) {
     if (!/^image\/(jpeg|png|webp)$/.test(file.type)) throw new Error('Formato no soportado. Usá JPG, PNG o WEBP.');
     const bmp = await createImageBitmap(file).catch(() => { throw new Error('No se pudo leer la imagen.'); });
-    const scale = Math.min(1, 1200 / Math.max(bmp.width, bmp.height));
+    const scale = Math.min(1, max / Math.max(bmp.width, bmp.height));
     const canvas = document.createElement('canvas');
     canvas.width = Math.round(bmp.width * scale);
     canvas.height = Math.round(bmp.height * scale);
@@ -547,6 +824,13 @@ import { SUPABASE_URL, SUPABASE_SCHEMA, SUPABASE_ANON_KEY } from '../supabase-co
     ctx.drawImage(bmp, 0, 0, canvas.width, canvas.height);
     return new Promise((ok, ko) => canvas.toBlob(b => b ? ok(b) : ko(new Error('No se pudo procesar la imagen.')), 'image/jpeg', 0.82));
   }
+  async function uploadImage(file, folder, hint, max) {
+    const blob = await toJpeg(file, max);
+    const path = folder + '/' + slug(hint || file.name) + '-' + Date.now().toString(36) + '.jpeg';
+    await run(sb.storage.from(BUCKET).upload(path, blob, { contentType: 'image/jpeg', cacheControl: '604800' }));
+    return sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
+  }
+
   $('#e-file').addEventListener('change', async ev => {
     const file = ev.target.files[0];
     ev.target.value = '';
@@ -555,10 +839,7 @@ import { SUPABASE_URL, SUPABASE_SCHEMA, SUPABASE_ANON_KEY } from '../supabase-co
     hint.textContent = 'Subiendo foto…';
     $('#edit-ok').disabled = true;
     try {
-      const blob = await toJpeg(file);
-      const path = 'productos/' + slug(($('#e-brand').value + ' ' + $('#e-name').value).trim() || file.name) + '-' + Date.now().toString(36) + '.jpeg';
-      await run(sb.storage.from(BUCKET).upload(path, blob, { contentType: 'image/jpeg', cacheControl: '604800' }));
-      setPreview(sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl);
+      setPreview(await uploadImage(file, 'productos', (pBrand.value + ' ' + $('#e-name').value).trim(), 1200));
       hint.textContent = 'Foto lista.';
     } catch (e) {
       hint.textContent = e.message;
@@ -569,29 +850,221 @@ import { SUPABASE_URL, SUPABASE_SCHEMA, SUPABASE_ANON_KEY } from '../supabase-co
   $('#edit-form').addEventListener('submit', ev => {
     ev.preventDefault();
     const p = {
-      brand: $('#e-brand').value.trim(), name: $('#e-name').value.trim(),
-      type: $('#e-type').value, status: $('#e-status').value,
+      brand: pBrand.value, name: $('#e-name').value.trim(),
+      type: pType.value, status: pStatus.value,
       p5: num($('#e-p5').value), p10: num($('#e-p10').value),
       img: draftImg, visible: $('#e-visible').getAttribute('aria-checked') === 'true'
     };
     const msg = $('#edit-msg');
-    if (!p.brand || !p.name) { msg.textContent = 'Completá marca y nombre.'; return; }
+    if (!p.brand) { msg.textContent = 'Elegí una marca.'; return; }
+    if (!p.name) { msg.textContent = 'Completá el nombre.'; return; }
+    if (!p.type) { msg.textContent = 'Elegí un tipo.'; return; }
     if (!p.p5 || !p.p10) { msg.textContent = 'Completá los dos precios.'; return; }
     if (!p.img) { msg.textContent = 'Subí una foto.'; return; }
     if (editing >= 0) Object.assign(items[editing], p);
     else items.unshift(Object.assign({ id: '', _key: 'n' + Date.now() }, p));
     $('#edit-dlg').close();
+    if (editing < 0) { $('#q').value = ''; $('#f-type').value = ''; window.scrollTo({ top: 0, behavior: 'smooth' }); }
     render();
-    if (editing < 0) { $('#q').value = ''; $('#f-type').value = ''; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
   });
   $('#add-btn').addEventListener('click', () => openEdit(-1));
 
-  // ---- Menú, copias, contraseña ----
+  // ================= Marcas y tipos =================
+
+  const usage = (field, name) => saved.filter(p => p[field] === name).length + items.filter(p => !p.id && p[field] === name).length;
+  const countLabel = n => n === 0 ? 'Sin fragancias' : n === 1 ? '1 fragancia' : n + ' fragancias';
+  let renaming = null; // 'brand:Nombre' o 'type:Nombre'
+
+  function taxRow(kind, name, extra, i, total) {
+    const n = usage(kind, name);
+    const key = kind + ':' + name;
+    const main = renaming === key
+      ? `<input class="input" data-rename value="${esc(name)}" maxlength="${kind === 'brand' ? 120 : 60}" aria-label="Nuevo nombre">`
+      : `<b>${esc(name)}</b><small>${countLabel(n)}${extra ? ' · ' + extra : ''}</small>`;
+    const btns = renaming === key
+      ? `<button class="icon-btn" data-t="save" title="Guardar" aria-label="Guardar">${icon.ok}</button><button class="icon-btn" data-t="cancel" title="Cancelar" aria-label="Cancelar">${icon.del}</button>`
+      : (kind === 'type' ? `<button class="icon-btn" data-t="up" title="Subir" aria-label="Subir"${i === 0 ? ' disabled' : ''}>${icon.up}</button><button class="icon-btn" data-t="down" title="Bajar" aria-label="Bajar"${i === total - 1 ? ' disabled' : ''}>${icon.down}</button>` : '')
+        + `<button class="icon-btn" data-t="rename" title="Renombrar" aria-label="Renombrar">${icon.edit}</button>`
+        + `<button class="icon-btn danger" data-t="del" title="${n ? 'En uso: no se puede eliminar' : 'Eliminar'}" aria-label="Eliminar"${n ? ' disabled' : ''}>${icon.del}</button>`;
+    return `<div class="tax-row" data-kind="${kind}" data-name="${esc(name)}"><div class="tax-main">${main}</div><div class="actions">${btns}</div></div>`;
+  }
+
+  function renderTaxo() {
+    $('#brand-count').textContent = brands.length;
+    $('#type-count').textContent = types.length;
+    $('#brand-list').innerHTML = brands.map(b => taxRow('brand', b)).join('') || '<div class="empty">Todavía no hay marcas.</div>';
+    $('#type-list').innerHTML = types.map((t, i) => taxRow('type', t.name, '/fragancias#' + t.slug, i, types.length)).join('') || '<div class="empty">Todavía no hay tipos.</div>';
+    const inp = document.querySelector('[data-rename]');
+    if (inp) { inp.focus(); inp.select(); }
+  }
+
+  $('#brand-add').addEventListener('submit', async ev => {
+    ev.preventDefault();
+    const inp = ev.target.querySelector('input');
+    if (brands.some(b => norm(b) === norm(inp.value))) { toast('Esa marca ya existe.', true); return; }
+    try { await addBrand(inp.value); inp.value = ''; } catch (e) { toast(e.message, true); }
+  });
+  $('#type-add').addEventListener('submit', async ev => {
+    ev.preventDefault();
+    const inp = ev.target.querySelector('input');
+    if (types.some(t => norm(t.name) === norm(inp.value))) { toast('Ese tipo ya existe.', true); return; }
+    try { await addType(inp.value); inp.value = ''; } catch (e) { toast(e.message, true); }
+  });
+
+  async function renameTax(kind, from, to) {
+    to = to.trim();
+    if (!to || to === from) { renaming = null; renderTaxo(); return; }
+    const list = kind === 'brand' ? brands : typeNames();
+    if (list.some(x => x !== from && norm(x) === norm(to))) { toast('Ya existe uno con ese nombre.', true); return; }
+    await run(sb.from(kind === 'brand' ? 'brands' : 'types').update({ name: to }).eq('name', from));
+    // La base actualiza las fragancias sola; acá se refleja lo mismo
+    if (kind === 'brand') brands = brands.map(b => b === from ? to : b).sort(byName);
+    else types = types.map(t => t.name === from ? Object.assign({}, t, { name: to }) : t);
+    saved.forEach(p => { if (p[kind] === from) p[kind] = to; });
+    items.forEach(p => { if (p[kind] === from) p[kind] = to; });
+    renaming = null;
+    render();
+    renderTaxo();
+    toast('Nombre actualizado.');
+  }
+
+  document.querySelector('#view-taxo .cols').addEventListener('click', async ev => {
+    const btn = ev.target.closest('[data-t]');
+    const row = ev.target.closest('.tax-row');
+    if (!btn || !row) return;
+    const { kind, name } = row.dataset;
+    const act = btn.dataset.t;
+    try {
+      if (act === 'rename') { renaming = kind + ':' + name; renderTaxo(); }
+      if (act === 'cancel') { renaming = null; renderTaxo(); }
+      if (act === 'save') await renameTax(kind, name, row.querySelector('[data-rename]').value);
+      if (act === 'del') {
+        if (!confirm(`¿Eliminar ${kind === 'brand' ? 'la marca' : 'el tipo'} «${name}»?`)) return;
+        await run(sb.from(kind === 'brand' ? 'brands' : 'types').delete().eq('name', name));
+        if (kind === 'brand') brands = brands.filter(b => b !== name);
+        else types = types.filter(t => t.name !== name);
+        render();
+        renderTaxo();
+        toast('Eliminado.');
+      }
+      if (act === 'up' || act === 'down') {
+        const i = types.findIndex(t => t.name === name), j = act === 'up' ? i - 1 : i + 1;
+        const next = types.slice();
+        [next[i], next[j]] = [next[j], next[i]];
+        const updates = next.map((t, k) => Object.assign({}, t, { position: k }));
+        const changed = updates.filter(t => (types.find(x => x.name === t.name) || {}).position !== t.position);
+        await Promise.all(changed.map(t => run(sb.from('types').update({ position: t.position }).eq('name', t.name))));
+        types = updates;
+        render();
+        renderTaxo();
+      }
+    } catch (e) { toast(e.message, true); }
+  });
+  document.querySelector('#view-taxo .cols').addEventListener('keydown', ev => {
+    if (!ev.target.matches('[data-rename]')) return;
+    const row = ev.target.closest('.tax-row');
+    if (ev.key === 'Enter') { ev.preventDefault(); renameTax(row.dataset.kind, row.dataset.name, ev.target.value).catch(e => toast(e.message, true)); }
+    if (ev.key === 'Escape') { renaming = null; renderTaxo(); }
+  });
+
+  // ================= Configuración =================
+
+  const CFG_KEYS = Object.keys(DEFAULT_SETTINGS);
+  function setSettings(row) {
+    settings = {};
+    CFG_KEYS.forEach(k => { settings[k] = row[k] != null && row[k] !== '' ? row[k] : (k === 'email' ? '' : DEFAULT_SETTINGS[k]); });
+    draft = clone(settings);
+  }
+  const configDirty = () => JSON.stringify(draft) !== JSON.stringify(settings);
+  let uploading = 0;
+
+  // 0994 146975 / +595 994 146975 / 595994146975 → 595994146975
+  function normWa(v) {
+    let d = String(v).replace(/\D/g, '');
+    if (d.startsWith('0')) d = '595' + d.slice(1);
+    else if (d.length === 9 && d.startsWith('9')) d = '595' + d;
+    return d;
+  }
+  const normIg = v => String(v).trim().replace(/^https?:\/\/(www\.)?instagram\.com\//i, '').replace(/^@/, '').replace(/[/?#].*$/, '');
+
+  function renderConfig() {
+    $('#cfg-wa').value = waDisplay(draft.whatsapp);
+    $('#cfg-ig').value = draft.instagram;
+    $('#cfg-email').value = draft.email;
+    paintWaHint();
+    $('#covers').innerHTML = COVERS.map(c => `
+      <div class="cover" data-key="${c.key}">
+        <img src="${esc(imgSrc(draft[c.key]))}" alt="">
+        <div class="cover-foot">
+          <div><b>${esc(c.title)}</b><small>${esc(c.note)}</small></div>
+          <label class="btn small">Cambiar<input type="file" accept="image/jpeg,image/png,image/webp" hidden></label>
+        </div>
+      </div>`).join('');
+    paintConfigState();
+  }
+  function paintWaHint() {
+    const d = normWa($('#cfg-wa').value);
+    $('#cfg-wa-hint').textContent = d.length >= 8 ? 'Se muestra como ' + waDisplay(d) + ' · wa.me/' + d : 'Ingresá el número con código de área.';
+  }
+  function paintConfigState() {
+    const dirty = configDirty();
+    $('#cfg-save').disabled = !dirty || uploading > 0;
+    $('#cfg-discard').disabled = !dirty;
+    $('#cfg-state').textContent = uploading ? 'Subiendo foto…' : dirty ? 'Hay cambios sin guardar' : '';
+    document.querySelector('.tab[data-view="config"]').classList.toggle('dirty', dirty);
+  }
+
+  $('#cfg-wa').addEventListener('input', () => { draft.whatsapp = normWa($('#cfg-wa').value); paintWaHint(); paintConfigState(); });
+  $('#cfg-ig').addEventListener('input', () => { draft.instagram = normIg($('#cfg-ig').value); paintConfigState(); });
+  $('#cfg-email').addEventListener('input', () => { draft.email = $('#cfg-email').value.trim(); paintConfigState(); });
+  $('#covers').addEventListener('change', async ev => {
+    const file = ev.target.files && ev.target.files[0];
+    const cover = ev.target.closest('.cover');
+    ev.target.value = '';
+    if (!file || !cover) return;
+    const label = cover.querySelector('label');
+    label.firstChild.textContent = 'Subiendo…';
+    uploading++;
+    paintConfigState();
+    try {
+      draft[cover.dataset.key] = await uploadImage(file, 'portada', cover.dataset.key, 2000);
+      cover.querySelector('img').src = imgSrc(draft[cover.dataset.key]);
+    } catch (e) {
+      toast(e.message, true);
+    } finally {
+      uploading--;
+      label.firstChild.textContent = 'Cambiar';
+      paintConfigState();
+    }
+  });
+  $('#cfg-discard').addEventListener('click', () => { draft = clone(settings); renderConfig(); });
+  $('#cfg-form').addEventListener('submit', async ev => {
+    ev.preventDefault();
+    if (draft.whatsapp.length < 8) { toast('Revisá el número de WhatsApp.', true); return; }
+    if (!draft.instagram) { toast('Completá el usuario de Instagram.', true); return; }
+    if (draft.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(draft.email)) { toast('Revisá el email.', true); return; }
+    const btn = $('#cfg-save');
+    btn.disabled = true; btn.textContent = 'Guardando…';
+    try {
+      const row = await run(sb.from('settings').upsert(Object.assign({ id: 1 }, draft)).select().single());
+      setSettings(row);
+      renderConfig();
+      toast('Configuración guardada. El sitio ya la muestra.');
+    } catch (e) {
+      toast(e.message, true);
+    } finally {
+      btn.textContent = 'Guardar configuración';
+      paintConfigState();
+    }
+  });
+
+  // ================= Menú, copias, contraseña =================
+
   document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => b.closest('dialog').close()));
   document.querySelectorAll('dialog').forEach(d => d.addEventListener('click', ev => { if (ev.target === d) d.close(); }));
   $('#menu-btn').addEventListener('click', () => $('#menu-dlg').showModal());
   $('#logout-btn').addEventListener('click', async () => {
-    if (changeCount() && !confirm('Hay cambios sin guardar. ¿Salir igual?')) return;
+    if ((changeCount() || configDirty()) && !confirm('Hay cambios sin guardar. ¿Salir igual?')) return;
     await sb.auth.signOut().catch(() => {});
     saved = items = [];
     $('#menu-dlg').close();
@@ -618,6 +1091,7 @@ import { SUPABASE_URL, SUPABASE_SCHEMA, SUPABASE_ANON_KEY } from '../supabase-co
       const backup = await run(sb.from('catalog_backups').select('data').eq('id', id).single());
       setSaved(await run(sb.rpc('save_catalog', { items: backup.data })));
       render();
+      renderTaxo();
       $('#backups-dlg').close();
       toast('Catálogo restaurado.');
     } catch (e) { toast(e.message, true); }
@@ -643,7 +1117,7 @@ import { SUPABASE_URL, SUPABASE_SCHEMA, SUPABASE_ANON_KEY } from '../supabase-co
     if (!data.session) return showAuth();
     try {
       await checkAdmin();
-      await loadCatalog();
+      await loadAll();
     } catch (e) {
       showAuth();
       $('#auth-msg').textContent = e.message;

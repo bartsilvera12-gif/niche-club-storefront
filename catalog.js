@@ -1,7 +1,4 @@
-import { SUPABASE_URL, SUPABASE_SCHEMA, SUPABASE_ANON_KEY } from './supabase-config.js';
-
-export const WA_NUMBER = '595994146975';
-export const WA_DISPLAY = '0994 146975';
+import { sbGet, loadSite } from './settings.js';
 
 // Respaldo por si Supabase no responde (el catálogo real se edita en /admin)
 const FALLBACK = [
@@ -26,20 +23,16 @@ const FALLBACK = [
   { light: true, id: 'philos-pura', brand: 'Maison Alhambra', name: 'Philos Pura', type: 'Árabe', img: 'img/philos-pura.jpeg', p5: 35000, p10: 50000, status: 'Disponible' }
 ];
 
-const loadCatalog = async () => {
-  try {
-    const r = await fetch(SUPABASE_URL + '/rest/v1/products?select=*&visible=is.true&order=position', {
-      headers: { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + SUPABASE_ANON_KEY, 'Accept-Profile': SUPABASE_SCHEMA },
-      cache: 'no-store'
-    });
-    if (!r.ok) throw new Error(r.status);
-    const rows = await r.json();
-    if (Array.isArray(rows) && rows.length) return rows;
-  } catch (e) {}
-  return FALLBACK;
-};
+const [rows, site] = await Promise.all([
+  sbGet('products?select=*&visible=is.true&order=position'),
+  loadSite()
+]);
 
-export const PRODUCTS = (await loadCatalog()).filter(p => p.visible !== false);
+export const PRODUCTS = (Array.isArray(rows) && rows.length ? rows : FALLBACK).filter(p => p.visible !== false);
+export const SETTINGS = site.settings;
+export const TYPES = site.types;
+export const WA_NUMBER = SETTINGS.whatsapp;
+export const WA_DISPLAY = SETTINGS.waDisplay;
 
 export const gs = n => 'Gs. ' + Number(n).toLocaleString('de-DE');
 

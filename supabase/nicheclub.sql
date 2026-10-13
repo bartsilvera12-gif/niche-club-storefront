@@ -1,13 +1,11 @@
 -- Niche Club — catálogo y panel de administración en Supabase
--- Correr una sola vez en el SQL Editor de Supabase Studio.
--- Antes: crear el usuario admin@nicheclubpy.com en Authentication → Users (ver paso 3 al final).
+-- Correr en el SQL Editor de Supabase Studio. Se puede volver a correr sin perder datos.
+-- Antes: crear el usuario admin@nicheclubpy.com en Authentication → Users (ver paso 8 al final).
 -- Todo vive en el schema nicheclubweb para no mezclarse con otros proyectos del servidor.
--- La API tiene que exponer ese schema: ver el paso 0.
 
 -- 0. Schema ---------------------------------------------------------------
 -- La API (PostgREST) solo publica los schemas listados en PGRST_DB_SCHEMAS.
--- En el .env del Supabase self-hosted, agregar nicheclubweb a la lista existente, por ejemplo:
---   PGRST_DB_SCHEMAS=public,storage,graphql_public,nicheclubweb
+-- En el .env del Supabase self-hosted, agregar nicheclubweb a la lista existente
 -- y reiniciar el contenedor rest (docker compose up -d rest).
 
 create schema if not exists nicheclubweb;
@@ -19,7 +17,7 @@ create table if not exists nicheclubweb.products (
   id         text primary key check (id ~ '^[a-z0-9-]+$'),
   brand      text not null check (length(trim(brand)) between 1 and 120),
   name       text not null check (length(trim(name)) between 1 and 120),
-  type       text not null check (type in ('Nicho', 'Diseñador', 'Árabe')),
+  type       text not null,
   img        text not null check (length(img) between 1 and 500),
   p5         integer not null check (p5 > 0),
   p10        integer not null check (p10 > 0),
@@ -28,6 +26,32 @@ create table if not exists nicheclubweb.products (
   light      boolean not null default false,
   position   integer not null default 0,
   updated_at timestamptz not null default now()
+);
+-- Los tipos ahora salen de la tabla types
+alter table nicheclubweb.products drop constraint if exists products_type_check;
+
+create table if not exists nicheclubweb.brands (
+  name     text primary key check (length(trim(name)) between 1 and 120),
+  position integer not null default 0
+);
+
+-- slug: lo que va en la dirección, por ejemplo /fragancias#arabes
+create table if not exists nicheclubweb.types (
+  name     text primary key check (length(trim(name)) between 1 and 60),
+  slug     text not null unique check (slug ~ '^[a-z0-9-]+$'),
+  position integer not null default 0
+);
+
+-- Una sola fila con los datos de contacto y las fotos de portada
+create table if not exists nicheclubweb.settings (
+  id        integer primary key default 1 check (id = 1),
+  whatsapp  text not null default '' check (whatsapp ~ '^[0-9]*$'),
+  instagram text not null default '',
+  email     text not null default '',
+  hero1     text not null default '',
+  hero2     text not null default '',
+  hero3     text not null default '',
+  cta_bg    text not null default ''
 );
 
 create table if not exists nicheclubweb.catalog_backups (
@@ -51,6 +75,9 @@ as $$
 $$;
 
 alter table nicheclubweb.products        enable row level security;
+alter table nicheclubweb.brands          enable row level security;
+alter table nicheclubweb.types           enable row level security;
+alter table nicheclubweb.settings        enable row level security;
 alter table nicheclubweb.catalog_backups enable row level security;
 alter table nicheclubweb.admins          enable row level security;
 
@@ -62,10 +89,24 @@ drop policy if exists "backups lectura admin" on nicheclubweb.catalog_backups;
 create policy "backups lectura admin" on nicheclubweb.catalog_backups
   for select to authenticated using (nicheclubweb.is_admin());
 
+-- Marcas, tipos y configuración: todos leen, solo el admin escribe
+do $$
+declare t text;
+begin
+  foreach t in array array['brands', 'types', 'settings'] loop
+    execute format('drop policy if exists "%1$s lectura" on nicheclubweb.%1$I', t);
+    execute format('create policy "%1$s lectura" on nicheclubweb.%1$I for select to anon, authenticated using (true)', t);
+    execute format('drop policy if exists "%1$s admin" on nicheclubweb.%1$I', t);
+    execute format('create policy "%1$s admin" on nicheclubweb.%1$I for all to authenticated using (nicheclubweb.is_admin()) with check (nicheclubweb.is_admin())', t);
+  end loop;
+end $$;
+
 -- admins no tiene políticas: nadie la lee ni escribe desde la web.
 -- Las escrituras del catálogo pasan solo por save_catalog().
-revoke all on nicheclubweb.products, nicheclubweb.catalog_backups, nicheclubweb.admins from anon, authenticated;
-grant select on nicheclubweb.products to anon, authenticated;
+revoke all on nicheclubweb.products, nicheclubweb.brands, nicheclubweb.types, nicheclubweb.settings,
+  nicheclubweb.catalog_backups, nicheclubweb.admins from anon, authenticated;
+grant select on nicheclubweb.products, nicheclubweb.brands, nicheclubweb.types, nicheclubweb.settings to anon, authenticated;
+grant insert, update, delete on nicheclubweb.brands, nicheclubweb.types, nicheclubweb.settings to authenticated;
 grant select on nicheclubweb.catalog_backups to authenticated;
 
 -- 3. Guardar el catálogo completo (con copia de seguridad) -----------------
@@ -102,7 +143,7 @@ revoke all on function nicheclubweb.save_catalog(jsonb) from public, anon;
 grant execute on function nicheclubweb.save_catalog(jsonb) to authenticated;
 grant execute on function nicheclubweb.is_admin() to anon, authenticated;
 
--- 4. Fotos ----------------------------------------------------------------
+-- 4. Fotos (productos y portada) --------------------------------------------
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values ('nicheclub', 'nicheclub', true, 5242880, array['image/jpeg', 'image/png', 'image/webp'])
@@ -120,7 +161,15 @@ drop policy if exists "nicheclub borrar" on storage.objects;
 create policy "nicheclub borrar" on storage.objects
   for delete to authenticated using (bucket_id = 'nicheclub' and nicheclubweb.is_admin());
 
--- 5. Catálogo inicial (solo si la tabla está vacía) -------------------------
+-- 5. Datos iniciales (solo si no existen) ------------------------------------
+
+insert into nicheclubweb.types (name, slug, position) values
+  ('Nicho', 'nicho', 0), ('Diseñador', 'disenador', 1), ('Árabe', 'arabes', 2)
+on conflict do nothing;
+
+insert into nicheclubweb.settings (id, whatsapp, instagram, email, hero1, hero2, hero3, cta_bg) values
+  (1, '595994146975', 'nicheclub.py', '', 'img/layton-exclusif.jpeg', 'img/bharara-king-portada.jpeg', 'img/creed-aventus.jpeg', 'img/coleccion-fondo.jpeg')
+on conflict do nothing;
 
 insert into nicheclubweb.products (id, brand, name, type, img, p5, p10, status, visible, light, position)
 select * from (values
@@ -146,20 +195,40 @@ select * from (values
 ) as v(id, brand, name, type, img, p5, p10, status, visible, light, position)
 where not exists (select 1 from nicheclubweb.products);
 
--- Que la API (PostgREST) vea las tablas y funciones nuevas sin reiniciar
+-- Marcas que ya se usan en el catálogo
+insert into nicheclubweb.brands (name, position)
+select brand, (row_number() over (order by brand))::integer - 1
+from (select distinct brand from nicheclubweb.products) b
+on conflict do nothing;
+
+insert into nicheclubweb.types (name, slug, position)
+select distinct p.type, regexp_replace(lower(p.type), '[^a-z0-9]+', '-', 'g'), 99
+from nicheclubweb.products p
+where not exists (select 1 from nicheclubweb.types t where t.name = p.type)
+on conflict do nothing;
+
+-- 6. Cada fragancia usa una marca y un tipo existentes ----------------------
+-- Renombrar una marca o tipo actualiza las fragancias; no se puede borrar uno en uso.
+
+alter table nicheclubweb.products drop constraint if exists products_brand_fkey;
+alter table nicheclubweb.products add constraint products_brand_fkey
+  foreign key (brand) references nicheclubweb.brands (name) on update cascade;
+
+alter table nicheclubweb.products drop constraint if exists products_type_fkey;
+alter table nicheclubweb.products add constraint products_type_fkey
+  foreign key (type) references nicheclubweb.types (name) on update cascade;
+
+-- 7. Que la API vea los cambios sin reiniciar -------------------------------
+
 notify pgrst, 'reload schema';
 
--- 6. Dar acceso al panel ----------------------------------------------------
+-- 8. Dar acceso al panel ----------------------------------------------------
 -- Requiere que el usuario ya exista en Authentication → Users.
 -- Verificá ahí que la cuenta la creaste vos (el registro de este servidor está abierto).
 
 insert into nicheclubweb.admins (user_id)
 select id from auth.users where email = 'admin@nicheclubpy.com'
 on conflict do nothing;
-
--- 7. Que la API vea las tablas y funciones nuevas sin reiniciar ---------------
-
-notify pgrst, 'reload schema';
 
 select case when exists (
   select 1 from nicheclubweb.admins a join auth.users u on u.id = a.user_id where u.email = 'admin@nicheclubpy.com'

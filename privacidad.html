@@ -61,7 +61,7 @@
   <p>En Niche Club cuidamos la información de quienes visitan nuestro sitio y nos compran. Esta política explica qué datos se usan, para qué y qué derechos tenés sobre ellos. Al usar el sitio aceptás lo que se describe acá.</p>
 
   <h2>1. Quiénes somos</h2>
-  <p>Niche Club es una perfumería de nicho y diseñador en Paraguay que ofrece decants de 5 ml y 10 ml. Para cualquier consulta sobre esta política podés escribirnos por WhatsApp al <a href="https://wa.me/595994146975" target="_blank" rel="noopener">0994 146975</a> o por Instagram a <a href="https://instagram.com/nicheclub.py" target="_blank" rel="noopener">@nicheclub.py</a>.</p>
+  <p>Niche Club es una perfumería de nicho y diseñador en Paraguay que ofrece decants de 5 ml y 10 ml. Para cualquier consulta sobre esta política podés escribirnos por WhatsApp al <a id="nc-wa" href="https://wa.me/595994146975" target="_blank" rel="noopener">0994 146975</a> o por Instagram a <a id="nc-ig" href="https://instagram.com/nicheclub.py" target="_blank" rel="noopener">@nicheclub.py</a>.</p>
 
   <h2>2. Qué información usamos</h2>
   <ul>
@@ -111,5 +111,13 @@
     <span>Desarrollado por <a href="https://neura.com.py" target="_blank" rel="noopener">Neura</a></span>
   </div>
 </footer>
+<script type="module">
+  import { loadSite } from './settings.js';
+  loadSite().then(({ settings: s }) => {
+    const wa = document.getElementById('nc-wa'), ig = document.getElementById('nc-ig');
+    wa.href = 'https://wa.me/' + s.whatsapp; wa.textContent = s.waDisplay;
+    ig.href = s.igUrl; ig.textContent = '@' + s.instagram;
+  });
+</script>
 </body>
 </html>
