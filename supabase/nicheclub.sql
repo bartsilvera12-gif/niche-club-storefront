@@ -59,6 +59,10 @@ create table if not exists nicheclubweb.catalog_backups (
   created_at timestamptz not null default now(),
   data       jsonb not null
 );
+-- Las copias guardan también marcas y tipos, y por qué se hicieron
+alter table nicheclubweb.catalog_backups add column if not exists brands jsonb;
+alter table nicheclubweb.catalog_backups add column if not exists types  jsonb;
+alter table nicheclubweb.catalog_backups add column if not exists reason text;
 
 -- Usuarios con acceso al panel
 create table if not exists nicheclubweb.admins (
@@ -111,6 +115,38 @@ grant select on nicheclubweb.catalog_backups to authenticated;
 
 -- 3. Guardar el catálogo completo (con copia de seguridad) -----------------
 
+-- Copia de fragancias, marcas y tipos tal como están ahora (se guardan las últimas 30)
+create or replace function nicheclubweb.take_snapshot(why text)
+returns void
+language sql security definer set search_path = nicheclubweb
+as $$
+  insert into nicheclubweb.catalog_backups (data, brands, types, reason)
+  select coalesce((select jsonb_agg(to_jsonb(p) order by p.position) from nicheclubweb.products p), '[]'::jsonb),
+         coalesce((select jsonb_agg(b.name order by b.name) from nicheclubweb.brands b), '[]'::jsonb),
+         coalesce((select jsonb_agg(jsonb_build_object('name', t.name, 'slug', t.slug, 'position', t.position) order by t.position) from nicheclubweb.types t), '[]'::jsonb),
+         why;
+  delete from nicheclubweb.catalog_backups
+  where id not in (select id from nicheclubweb.catalog_backups order by created_at desc limit 30);
+$$;
+revoke all on function nicheclubweb.take_snapshot(text) from public, anon, authenticated;
+
+-- Antes de eliminar o renombrar una marca o un tipo, se guarda una copia
+create or replace function nicheclubweb.snapshot_trigger()
+returns trigger
+language plpgsql security definer set search_path = nicheclubweb
+as $$
+begin
+  perform nicheclubweb.take_snapshot(tg_argv[0]);
+  return null;
+end;
+$$;
+drop trigger if exists brands_snapshot on nicheclubweb.brands;
+create trigger brands_snapshot before delete or update of name on nicheclubweb.brands
+  for each statement execute function nicheclubweb.snapshot_trigger('marcas');
+drop trigger if exists types_snapshot on nicheclubweb.types;
+create trigger types_snapshot before delete or update of name on nicheclubweb.types
+  for each statement execute function nicheclubweb.snapshot_trigger('tipos');
+
 create or replace function nicheclubweb.save_catalog(items jsonb)
 returns setof nicheclubweb.products
 language plpgsql security definer set search_path = nicheclubweb
@@ -123,10 +159,7 @@ begin
     raise exception 'El catálogo no puede quedar vacío.';
   end if;
 
-  insert into nicheclubweb.catalog_backups (data)
-  select coalesce(jsonb_agg(to_jsonb(p) order by p.position), '[]'::jsonb) from nicheclubweb.products p;
-  delete from nicheclubweb.catalog_backups
-  where id not in (select id from nicheclubweb.catalog_backups order by created_at desc limit 20);
+  perform nicheclubweb.take_snapshot('catalogo');
 
   delete from nicheclubweb.products where true;
   insert into nicheclubweb.products (id, brand, name, type, img, p5, p10, status, visible, light, position)

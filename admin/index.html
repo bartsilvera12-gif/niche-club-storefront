@@ -1313,7 +1313,18 @@ import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
   let backups = [];
 
   // Qué cambia si se restaura esta copia, comparado con el catálogo guardado ahora
-  function backupDiff(data) {
+  // Marcas y tipos de una copia: los guardados en ella (copias nuevas) y los que usan sus fragancias
+  const backupBrands = b => [...new Set((b.brands || []).concat(b.data.map(p => p.brand)))];
+  const backupTypes = b => {
+    const list = (b.types || []).map(t => ({ ...t }));
+    b.data.forEach(p => { if (!list.some(t => t.name === p.type)) list.push({ name: p.type }); });
+    return list;
+  };
+
+  function backupDiff(b) {
+    const data = b.data;
+    const backBrands = backupBrands(b).filter(x => !brands.includes(x));
+    const backTypes = backupTypes(b).map(t => t.name).filter(x => !typeNames().includes(x));
     const now = new Map(saved.map(p => [p.id, p]));
     const then = new Map(data.map(p => [p.id, p]));
     const back = data.filter(p => !now.has(p.id)).map(p => p.name);
@@ -1321,23 +1332,27 @@ import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
     const fields = ['name', 'brand', 'type', 'img', 'p5', 'p10', 'status', 'visible'];
     const changed = data.filter(p => now.has(p.id) && fields.some(k => String(p[k]) !== String(now.get(p.id)[k]))).length;
     const order = data.map(p => p.id).filter(id => now.has(id)).join() !== saved.map(p => p.id).filter(id => then.has(id)).join();
-    return { back, gone, changed, order, same: !back.length && !gone.length && !changed && !order };
+    const products = !!(back.length || gone.length || changed || order);
+    return { back, gone, changed, order, backBrands, backTypes, products, same: !products && !backBrands.length && !backTypes.length };
   }
   const names = list => list.length > 3 ? list.slice(0, 3).join(', ') + ' y ' + (list.length - 3) + ' más' : list.join(', ');
 
+  const reasonTitle = r => r === 'marcas' ? 'Antes de cambiar marcas, el ' : r === 'tipos' ? 'Antes de cambiar tipos, el ' : 'Antes de guardar el ';
   function renderBackups() {
     const list = $('#backup-list');
     if (!backups.length) { list.innerHTML = '<p style="color:var(--muted)">Todavía no hay copias. Se crean al guardar.</p>'; return; }
     list.innerHTML = backups.map(b => {
-      const d = backupDiff(b.data);
+      const d = backupDiff(b);
       const parts = [];
       if (d.back.length) parts.push(`<span class="plus">recupera ${esc(names(d.back))}</span>`);
       if (d.gone.length) parts.push(`<span class="minus">quita ${esc(names(d.gone))}</span>`);
       if (d.changed) parts.push(d.changed === 1 ? '1 fragancia con datos distintos' : d.changed + ' fragancias con datos distintos');
       if (d.order && !d.back.length && !d.gone.length) parts.push('otro orden');
+      if (d.backBrands.length) parts.push(`<span class="plus">recupera marca ${esc(names(d.backBrands))}</span>`);
+      if (d.backTypes.length) parts.push(`<span class="plus">recupera tipo ${esc(names(d.backTypes))}</span>`);
       return `<div class="bk${d.same ? ' same' : ''}">
         <div class="bk-info">
-          <b>Antes de guardar el ${fmtBackup(b.created_at)}</b>
+          <b>${reasonTitle(b.reason)}${fmtBackup(b.created_at)}</b>
           <small>${b.data.length} fragancias · ${d.same ? 'igual al catálogo actual' : parts.join(' · ')}</small>
         </div>
         <button class="btn" data-id="${b.id}"${d.same ? ' disabled' : ''}>Restaurar</button>
@@ -1351,22 +1366,23 @@ import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
     list.innerHTML = '<p style="color:var(--muted)">Cargando…</p>';
     $('#backups-dlg').showModal();
     try {
-      backups = await run(sb.from('catalog_backups').select('id,created_at,data').order('created_at', { ascending: false }));
+      backups = await run(sb.from('catalog_backups').select('*').order('created_at', { ascending: false }));
       renderBackups();
     } catch (e) { list.innerHTML = `<p class="msg">${esc(e.message)}</p>`; }
   });
 
   // Una copia vieja puede usar marcas o tipos que después se borraron: se vuelven a crear
-  async function ensureTaxonomy(data) {
-    const missingBrands = [...new Set(data.map(p => p.brand))].filter(b => !brands.includes(b));
+  async function ensureTaxonomy(b) {
+    const missingBrands = backupBrands(b).filter(x => !brands.includes(x));
     for (const name of missingBrands) {
       const { error } = await sb.from('brands').insert({ name });
       if (error && !/duplicate key/i.test(error.message)) fail(error);
     }
-    const missingTypes = [...new Set(data.map(p => p.type))].filter(t => !typeNames().includes(t));
+    const missingTypeRows = backupTypes(b).filter(t => !typeNames().includes(t.name));
+    const missingTypes = missingTypeRows.map(t => t.name);
     let pos = types.reduce((m, t) => Math.max(m, t.position), -1);
-    for (const name of missingTypes) {
-      let sl = slug(name), base = sl, n = 2;
+    for (const { name, slug: wanted } of missingTypeRows) {
+      let sl = wanted || slug(name), base = sl, n = 2;
       while (types.some(t => t.slug === sl)) sl = base + '-' + n++;
       const { error } = await sb.from('types').insert({ name, slug: sl, position: ++pos });
       if (error && !/duplicate key/i.test(error.message)) fail(error);
@@ -1389,23 +1405,27 @@ import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
     if (!b) return;
     if (changeCount() && !await ask({ eyebrow: 'Restaurar copia', title: 'Hay cambios sin guardar', danger: true, ok: 'Seguir',
       body: '<p>Tenés cambios sin guardar en Fragancias. Si restaurás una copia, se pierden.</p>' })) return;
-    const d = backupDiff(b.data);
+    const d = backupDiff(b);
     let body = '';
     if (d.back.length) body += '<div class="ask-group plus"><span>Vuelven</span>' + chips(d.back) + '</div>';
     if (d.gone.length) body += '<div class="ask-group minus"><span>Se quitan</span>' + chips(d.gone) + '</div>';
     if (d.changed) body += '<p>Cambian los datos de <b>' + d.changed + (d.changed === 1 ? ' fragancia' : ' fragancias') + '</b> (precio, estado, foto…).</p>';
     if (d.order && !d.back.length && !d.gone.length && !d.changed) body += '<p>Cambia el orden de las fragancias.</p>';
-    body += '<p class="ask-note">El catálogo actual queda guardado como una copia nueva, así que lo podés deshacer.</p>';
-    if (!await ask({ eyebrow: 'Restaurar copia', title: 'Catálogo de antes del ' + fmtBackup(b.created_at), icon: 'restore', ok: 'Restaurar', body })) return;
+    if (d.backBrands.length) body += '<div class="ask-group plus"><span>Vuelven marcas</span>' + chips(d.backBrands) + '</div>';
+    if (d.backTypes.length) body += '<div class="ask-group plus"><span>Vuelven tipos</span>' + chips(d.backTypes) + '</div>';
+    if (!d.products) body += '<p>Las fragancias no cambian.</p>';
+    if (d.products) body += '<p class="ask-note">El catálogo actual queda guardado como una copia nueva, así que lo podés deshacer.</p>';
+    if (!await ask({ eyebrow: 'Restaurar copia', title: reasonTitle(b.reason) + fmtBackup(b.created_at), icon: 'restore', ok: 'Restaurar', body })) return;
     btn.disabled = true; btn.textContent = 'Restaurando…';
     try {
-      const { missingBrands, missingTypes } = await ensureTaxonomy(b.data);
-      setSaved(await run(sb.rpc('save_catalog', { items: b.data })));
+      const { missingBrands, missingTypes } = await ensureTaxonomy(b);
+      // Si solo faltaban marcas o tipos, no hace falta reescribir las fragancias
+      if (d.products) setSaved(await run(sb.rpc('save_catalog', { items: b.data })));
       render();
       renderTaxo();
       $('#backups-dlg').close();
       const extra = [].concat(missingBrands.length ? ['marcas: ' + missingBrands.join(', ')] : [], missingTypes.length ? ['tipos: ' + missingTypes.join(', ')] : []);
-      toast('Catálogo restaurado' + (extra.length ? '. También se recrearon ' + extra.join(' y ') : '') + '.');
+      toast(d.products ? 'Catálogo restaurado' + (extra.length ? '. También se recrearon ' + extra.join(' y ') : '') + '.' : 'Se recrearon ' + extra.join(' y ') + '.');
     } catch (e) {
       toast(e.message, true);
       btn.disabled = false; btn.textContent = 'Restaurar';
