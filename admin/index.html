@@ -49,6 +49,12 @@
   .affix:focus-within { border-color: var(--gold); }
   .affix span { padding-left: 14px; color: var(--muted); }
   .affix .input { border: 0; padding-left: 4px; background: transparent; }
+  /* Mostrar u ocultar contraseña */
+  .pw-wrap { position: relative; }
+  .pw-wrap .input { padding-right: 48px; }
+  .pw-eye { position: absolute; top: 50%; right: 6px; transform: translateY(-50%); width: 36px; height: 36px; display: grid; place-items: center; border: 0; border-radius: 8px; background: transparent; color: var(--muted); }
+  .pw-eye:hover, .pw-eye[aria-pressed="true"] { color: var(--gold); }
+  .pw-eye:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
 
   /* Selector con buscador */
   .picker { position: relative; }
@@ -519,6 +525,32 @@ import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
 
 (() => {
   const $ = s => document.querySelector(s);
+
+  // Ojito para ver la contraseña en todos los campos de contraseña
+  const eyeOpen = '<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1.5 10S4.5 4 10 4s8.5 6 8.5 6-3 6-8.5 6S1.5 10 1.5 10z"/><circle cx="10" cy="10" r="2.6"/></svg>';
+  const eyeShut = '<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1.5 10S4.5 4 10 4s8.5 6 8.5 6-3 6-8.5 6S1.5 10 1.5 10z"/><circle cx="10" cy="10" r="2.6"/><path d="M3 17L17 3"/></svg>';
+  document.querySelectorAll('input[type="password"]').forEach(input => {
+    const wrap = document.createElement('div');
+    wrap.className = 'pw-wrap';
+    input.parentNode.insertBefore(wrap, input);
+    wrap.appendChild(input);
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'pw-eye';
+    const paint = () => {
+      const shown = input.type === 'text';
+      btn.innerHTML = shown ? eyeShut : eyeOpen;
+      btn.setAttribute('aria-pressed', String(shown));
+      btn.setAttribute('aria-label', shown ? 'Ocultar contraseña' : 'Mostrar contraseña');
+      btn.title = shown ? 'Ocultar contraseña' : 'Mostrar contraseña';
+    };
+    btn.addEventListener('click', () => { input.type = input.type === 'password' ? 'text' : 'password'; paint(); input.focus(); });
+    // Al cerrar el diálogo o enviar, vuelve a quedar oculta
+    input.form?.addEventListener('submit', () => { input.type = 'password'; paint(); });
+    input.closest('dialog')?.addEventListener('close', () => { input.type = 'password'; paint(); });
+    wrap.appendChild(btn);
+    paint();
+  });
   const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { db: { schema: SUPABASE_SCHEMA }, auth: { persistSession: true, storageKey: 'nicheclub-admin' } });
   const BUCKET = 'nicheclub';
   const STATUSES = ['Disponible', 'Agotado', 'Por encargo'];
