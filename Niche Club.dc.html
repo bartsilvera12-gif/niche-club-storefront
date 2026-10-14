@@ -88,17 +88,28 @@
     .nc-nav > :last-child { border-bottom:none !important; }
     header:has(.nc-menu-cb:checked) { background:rgba(8,8,8,0.97) !important; }
   }
+  /* Pantallas táctiles: no hay "pasar el mouse", así que los efectos se activan solos */
+  @keyframes ncKen { from { transform:scale(1); } to { transform:scale(1.09); } }
+  @media (hover:none) {
+    [data-nc-panel] { transition:flex-grow .9s cubic-bezier(.2,.7,.2,1), filter .9s ease !important; }
+    [data-nc-panel] img { animation:ncKen 9s ease-in-out infinite alternate; }
+    [data-nc-panel="2"] img { animation-delay:-3s; }
+    [data-nc-panel="3"] img { animation-delay:-6s; }
+    #nc-edit-track article.nc-on > button:first-child { box-shadow:0 0 0 1px rgba(227,196,146,0.55), 0 22px 44px -18px rgba(227,196,146,0.28); }
+    #nc-edit-track article.nc-on > button:first-child::after { opacity:1; }
+    #nc-edit-track article.nc-on img { transform:scale(1.07); }
+  }
   @keyframes ncMenu { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:none; } }
 </style>
 </helmet>
 
-<div style="background:#080808;color:#FFFFFF;font-family:'Manrope',sans-serif;overflow-x:hidden">
+<div style="background:#080808;color:#FFFFFF;font-family:'Manrope',sans-serif;overflow-x:clip">
 
   <header data-nc-header="1" style="position:sticky;top:0;z-index:40;transition:background .5s ease;background:rgba(8, 8, 8, 0.62);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid rgba(227,196,146,0.08)">
     <div class="nc-hd" style="max-width:1400px;margin:0 auto;padding:10px 22px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px">
       <a href="#top" style="display:flex;align-items:center;gap:10px;flex:0 0 auto">
-        <img src="img/logo.jpeg" alt="Niche Club" style="width:40px;height:40px;object-fit:contain;display:block" />
-        <span style="font:400 14px/1 'Cormorant Garamond',serif;letter-spacing:.26em;color:#E3C492">NICHE CLUB</span>
+        <img src="img/logo-icono.png" alt="Niche Club" style="height:46px;width:auto;display:block" />
+        <span style="font:500 16px/1 'Cormorant Garamond',serif;letter-spacing:.26em;color:#E3C492">NICHE CLUB</span>
       </a>
       <input type="checkbox" id="nc-menu" class="nc-menu-cb" aria-hidden="true" tabindex="-1" />
       <nav class="nc-nav" style="display:flex;gap:18px;overflow-x:auto;margin-right:auto;font:300 11px/1 'Manrope',sans-serif;letter-spacing:.18em;text-transform:uppercase">
@@ -378,7 +389,7 @@
     <div class="nc-ft" style="max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:30px clamp(26px,4vw,56px)">
       <div style="display:flex;flex-direction:column;gap:14px">
         <a href="#top" style="display:flex;align-items:center;gap:14px">
-          <img src="img/logo.jpeg" alt="Niche Club" style="width:62px;height:62px;object-fit:contain;display:block;border-radius:8px" />
+          <img src="img/logo-icono.png" alt="Niche Club" style="height:72px;width:auto;display:block" />
           <span style="font:400 15px/1 'Cormorant Garamond',serif;letter-spacing:.26em;color:#E3C492">NICHE CLUB</span>
         </a>
         <p style="margin:0;max-width:260px;font:300 13px/1.7 'Manrope',sans-serif;color:#7E786E">Perfumería de nicho y diseñador. Decants de 5 ml y 10 ml en Paraguay.</p>
@@ -423,6 +434,7 @@ class Component extends DCLogic {
   state = { data: null, count: 0, sizes: {}, fType: null, fBudget: null, hover: null };
 
   componentDidMount() {
+    this._touch = window.matchMedia && window.matchMedia('(hover: none)').matches;
     document.addEventListener('click', ev => {
       if (!ev.target.closest || !ev.target.closest('.nc-nav a, .nc-nav button')) return;
       const cb = document.getElementById('nc-menu');
@@ -459,6 +471,15 @@ class Component extends DCLogic {
     };
     window.addEventListener('scroll', this._onScroll, { passive: true });
     this._onScroll();
+    if (this._touch) {
+      let i = 0;
+      this._cycle = setInterval(() => {
+        const panels = document.querySelectorAll('[data-nc-panel]');
+        if (!panels.length || window.scrollY > window.innerHeight) return;
+        this.paintPanels(panels[i % panels.length]);
+        i += 1;
+      }, 2600);
+    }
     import('./catalog.js?v=6').then(m => {
       this.mod = m;
       const cart = m.readCart();
@@ -471,6 +492,7 @@ class Component extends DCLogic {
     if (this._bindTimer) clearTimeout(this._bindTimer);
     if (this._slideRaf) cancelAnimationFrame(this._slideRaf);
     if (this._onResize) window.removeEventListener('resize', this._onResize);
+    if (this._cycle) clearInterval(this._cycle);
   }
 
   bindTrack() {
@@ -478,6 +500,23 @@ class Component extends DCLogic {
     const bar = document.querySelector('[data-nc-edit-bar]');
     if (!track || !bar) return;
     const thumb = bar.querySelector('[data-nc-edit-thumb]');
+    if (this._touch) {
+      // La tarjeta más cerca del centro se ve como "seleccionada"
+      const mark = () => {
+        const mid = track.getBoundingClientRect().left + track.clientWidth / 2;
+        let best = null, dist = Infinity;
+        track.querySelectorAll('article').forEach(a => {
+          const r = a.getBoundingClientRect();
+          const d = Math.abs(r.left + r.width / 2 - mid);
+          if (d < dist) { dist = d; best = a; }
+        });
+        track.querySelectorAll('article.nc-on').forEach(a => { if (a !== best) a.classList.remove('nc-on'); });
+        if (best) best.classList.add('nc-on');
+      };
+      let raf = 0;
+      track.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(mark); }, { passive: true });
+      setTimeout(mark, 900);
+    }
     const prev = document.querySelector('[data-nc-edit="prev"]');
     const next = document.querySelector('[data-nc-edit="next"]');
     this._paintTrack = () => {

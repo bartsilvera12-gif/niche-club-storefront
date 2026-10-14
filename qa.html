@@ -23,8 +23,8 @@
   header { position:sticky; top:0; z-index:10; background:rgba(8,8,8,0.94); border-bottom:1px solid var(--line); backdrop-filter:blur(8px); }
   .bar { max-width:1400px; margin:0 auto; padding:10px 22px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
   .brand { display:flex; align-items:center; gap:10px; }
-  .brand img { width:40px; height:40px; object-fit:contain; display:block; }
-  .brand span { font:400 14px/1 'Cormorant Garamond',serif; letter-spacing:.26em; color:var(--gold); }
+  .brand img { height:46px; width:auto; display:block; }
+  .brand span { font:500 16px/1 'Cormorant Garamond',serif; letter-spacing:.26em; color:var(--gold); }
   .progress { display:flex; align-items:center; gap:12px; font:400 11px/1 'Manrope',sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#CFCAC2; }
   .meter { width:120px; height:4px; border-radius:999px; background:rgba(255,255,255,0.08); overflow:hidden; }
   .meter i { display:block; height:100%; width:0; background:var(--gold); transition:width .3s ease; }
@@ -67,7 +67,7 @@
 <body>
 <header>
   <div class="bar">
-    <a class="brand" href="admin/"><img src="img/logo.jpeg" alt="Niche Club" /><span>NICHE CLUB</span></a>
+    <a class="brand" href="admin/"><img src="img/logo-icono.png" alt="Niche Club" /><span>NICHE CLUB</span></a>
     <div class="progress"><span id="total">0 / 0</span><span class="meter"><i id="meter"></i></span></div>
   </div>
 </header>

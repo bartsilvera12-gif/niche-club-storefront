@@ -70,7 +70,7 @@
   .auth { min-height: 100vh; display: grid; place-items: center; padding: 24px 16px; }
   .auth-card { width: 100%; max-width: 380px; display: grid; gap: 18px; text-align: center; }
   .auth-card { padding: 34px 28px; background: var(--panel); border: 1px solid var(--line-soft); border-radius: 22px; }
-  .auth-card img { width: 96px; height: 96px; border-radius: 16px; margin: 0 auto; object-fit: cover; border: 1px solid var(--line); background: #000; }
+  .auth-card img { width: 200px; height: 200px; border-radius: 18px; margin: 0 auto; object-fit: cover; border: 1px solid var(--line); background: #000; }
   .auth-card h1 { margin: 0; font-size: 34px; }
   .auth-card form { display: grid; gap: 14px; text-align: left; margin-top: 8px; }
   .msg { min-height: 20px; font-size: 13px; color: var(--danger); text-align: center; }
@@ -79,7 +79,7 @@
   header.top { position: sticky; top: 0; z-index: 20; background: var(--bar); border-bottom: 1px solid var(--line); box-shadow: 0 6px 24px rgba(0,0,0,.35); }
   .top-inner { max-width: 1180px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; gap: 16px; }
   .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text); }
-  .brand img { width: 42px; height: 42px; border-radius: 10px; object-fit: cover; border: 1px solid var(--line); background: #000; }
+  .brand img { height: 48px; width: auto; display: block; }
   .brand b { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 22px; letter-spacing: .02em; }
   .brand span { display: block; font-size: 9px; letter-spacing: .26em; text-transform: uppercase; color: var(--muted); }
   .tabs { display: flex; gap: 4px; margin: 0 auto; }
@@ -179,8 +179,15 @@
   .photo img { width: 110px; height: 132px; border-radius: 999px 999px 10px 10px; object-fit: cover; background: var(--card); }
   .photo .hint { color: var(--muted); font-size: 12px; margin: 8px 0 0; }
   .check { display: flex; align-items: center; gap: 10px; font-size: 13px; }
-  .backup-list { display: grid; gap: 6px; max-height: 50vh; overflow: auto; }
-  .backup-list div { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 8px 8px 8px 14px; border: 1px solid var(--line-soft); border-radius: 10px; font-size: 13px; }
+  .backup-list { display: grid; gap: 6px; max-height: 52vh; overflow: auto; }
+  .bk-info { display: grid; gap: 3px; min-width: 0; }
+  .bk-info b { font-weight: 500; }
+  .bk-info small { color: var(--muted); font-size: 12px; line-height: 1.45; }
+  .bk-info .plus { color: var(--ok); }
+  .bk-info .minus { color: var(--danger); }
+  .bk.same { opacity: .55; }
+  .bk-help { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+  .backup-list .bk { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 8px 8px 8px 14px; border: 1px solid var(--line-soft); border-radius: 10px; font-size: 13px; }
 
   .toast { position: fixed; top: 18px; left: 50%; transform: translate(-50%, -150%); z-index: 50; padding: 12px 20px; border-radius: 999px; background: #1A1A1A; border: 1px solid var(--line); font-size: 13px; transition: transform .3s; max-width: calc(100% - 32px); }
   .toast.show { transform: translate(-50%, 0); }
@@ -236,7 +243,7 @@
 <!-- Ingreso -->
 <section class="auth" id="auth" hidden>
   <div class="auth-card">
-    <img src="../img/logo.jpeg" alt="">
+    <img src="../img/logo.jpeg" alt="Niche Club · Perfumería de nicho y diseñador">
     <div>
       <div class="eyebrow">Niche Club</div>
       <h1 class="serif">Panel</h1>
@@ -261,7 +268,7 @@
   <header class="top">
     <div class="top-inner">
       <a class="brand" href="./">
-        <img src="../img/logo.jpeg" alt="">
+        <img src="../img/logo-icono.png" alt="">
         <div><b>Niche Club</b><span>Panel de administración</span></div>
       </a>
       <nav class="tabs" aria-label="Secciones">
@@ -434,9 +441,10 @@
 <dialog id="backups-dlg">
   <div class="dlg">
     <div>
-      <div class="eyebrow">Se guarda una copia cada vez que guardás el catálogo</div>
+      <div class="eyebrow">Una por cada vez que se guarda el catálogo</div>
       <h2 class="serif">Copias de seguridad</h2>
     </div>
+    <p class="bk-help">Cada copia es el catálogo <b>como estaba justo antes</b> de ese guardado. Para volver a lo que quedó al final de un día, elegí la primera copia del día siguiente. Debajo de cada una ves qué cambiaría si la restaurás.</p>
     <div class="backup-list" id="backup-list"></div>
     <footer><button class="btn" data-close>Cerrar</button></footer>
   </div>
@@ -1223,29 +1231,104 @@ import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
   });
 
   const fmtBackup = d => new Date(d).toLocaleString('es-PY', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  let backups = [];
+
+  // Qué cambia si se restaura esta copia, comparado con el catálogo guardado ahora
+  function backupDiff(data) {
+    const now = new Map(saved.map(p => [p.id, p]));
+    const then = new Map(data.map(p => [p.id, p]));
+    const back = data.filter(p => !now.has(p.id)).map(p => p.name);
+    const gone = saved.filter(p => !then.has(p.id)).map(p => p.name);
+    const fields = ['name', 'brand', 'type', 'img', 'p5', 'p10', 'status', 'visible'];
+    const changed = data.filter(p => now.has(p.id) && fields.some(k => String(p[k]) !== String(now.get(p.id)[k]))).length;
+    const order = data.map(p => p.id).filter(id => now.has(id)).join() !== saved.map(p => p.id).filter(id => then.has(id)).join();
+    return { back, gone, changed, order, same: !back.length && !gone.length && !changed && !order };
+  }
+  const names = list => list.length > 3 ? list.slice(0, 3).join(', ') + ' y ' + (list.length - 3) + ' más' : list.join(', ');
+
+  function renderBackups() {
+    const list = $('#backup-list');
+    if (!backups.length) { list.innerHTML = '<p style="color:var(--muted)">Todavía no hay copias. Se crean al guardar.</p>'; return; }
+    list.innerHTML = backups.map(b => {
+      const d = backupDiff(b.data);
+      const parts = [];
+      if (d.back.length) parts.push(`<span class="plus">recupera ${esc(names(d.back))}</span>`);
+      if (d.gone.length) parts.push(`<span class="minus">quita ${esc(names(d.gone))}</span>`);
+      if (d.changed) parts.push(d.changed === 1 ? '1 fragancia con datos distintos' : d.changed + ' fragancias con datos distintos');
+      if (d.order && !d.back.length && !d.gone.length) parts.push('otro orden');
+      return `<div class="bk${d.same ? ' same' : ''}">
+        <div class="bk-info">
+          <b>Antes de guardar el ${fmtBackup(b.created_at)}</b>
+          <small>${b.data.length} fragancias · ${d.same ? 'igual al catálogo actual' : parts.join(' · ')}</small>
+        </div>
+        <button class="btn" data-id="${b.id}"${d.same ? ' disabled' : ''}>Restaurar</button>
+      </div>`;
+    }).join('');
+  }
+
   $('#open-backups').addEventListener('click', async () => {
     $('#menu-dlg').close();
     const list = $('#backup-list');
     list.innerHTML = '<p style="color:var(--muted)">Cargando…</p>';
     $('#backups-dlg').showModal();
     try {
-      const rows = await run(sb.from('catalog_backups').select('id,created_at').order('created_at', { ascending: false }));
-      list.innerHTML = rows.length
-        ? rows.map(b => `<div><span>${fmtBackup(b.created_at)}</span><button class="btn" data-id="${b.id}" data-date="${esc(b.created_at)}">Restaurar</button></div>`).join('')
-        : '<p style="color:var(--muted)">Todavía no hay copias. Se crean al guardar.</p>';
+      backups = await run(sb.from('catalog_backups').select('id,created_at,data').order('created_at', { ascending: false }));
+      renderBackups();
     } catch (e) { list.innerHTML = `<p class="msg">${esc(e.message)}</p>`; }
   });
+
+  // Una copia vieja puede usar marcas o tipos que después se borraron: se vuelven a crear
+  async function ensureTaxonomy(data) {
+    const missingBrands = [...new Set(data.map(p => p.brand))].filter(b => !brands.includes(b));
+    for (const name of missingBrands) {
+      const { error } = await sb.from('brands').insert({ name });
+      if (error && !/duplicate key/i.test(error.message)) fail(error);
+    }
+    const missingTypes = [...new Set(data.map(p => p.type))].filter(t => !typeNames().includes(t));
+    let pos = types.reduce((m, t) => Math.max(m, t.position), -1);
+    for (const name of missingTypes) {
+      let sl = slug(name), base = sl, n = 2;
+      while (types.some(t => t.slug === sl)) sl = base + '-' + n++;
+      const { error } = await sb.from('types').insert({ name, slug: sl, position: ++pos });
+      if (error && !/duplicate key/i.test(error.message)) fail(error);
+    }
+    if (missingBrands.length || missingTypes.length) {
+      const [b, t] = await Promise.all([
+        run(sb.from('brands').select('name').order('name')),
+        run(sb.from('types').select('name,slug,position').order('position'))
+      ]);
+      brands = b.map(x => x.name).sort(byName);
+      types = t;
+    }
+    return { missingBrands, missingTypes };
+  }
+
   $('#backup-list').addEventListener('click', async ev => {
-    const { id, date } = ev.target.dataset;
-    if (!id || !confirm(`¿Volver el catálogo a como estaba el ${fmtBackup(date)}?\n\nEl estado actual queda guardado como copia.`)) return;
+    const btn = ev.target.closest('button[data-id]');
+    if (!btn) return;
+    const b = backups.find(x => String(x.id) === btn.dataset.id);
+    if (!b) return;
+    if (changeCount() && !confirm('Tenés cambios sin guardar en Fragancias y se van a perder. ¿Seguir?')) return;
+    const d = backupDiff(b.data);
+    const lines = [`¿Volver el catálogo a como estaba antes de guardar el ${fmtBackup(b.created_at)}?`, ''];
+    if (d.back.length) lines.push('Vuelven: ' + d.back.join(', '));
+    if (d.gone.length) lines.push('Se quitan: ' + d.gone.join(', '));
+    if (d.changed) lines.push('Cambian datos de ' + d.changed + (d.changed === 1 ? ' fragancia' : ' fragancias') + ' (precio, estado, foto…)');
+    lines.push('', 'El catálogo actual queda guardado como una copia nueva, así que podés deshacerlo.');
+    if (!confirm(lines.join('\n'))) return;
+    btn.disabled = true; btn.textContent = 'Restaurando…';
     try {
-      const backup = await run(sb.from('catalog_backups').select('data').eq('id', id).single());
-      setSaved(await run(sb.rpc('save_catalog', { items: backup.data })));
+      const { missingBrands, missingTypes } = await ensureTaxonomy(b.data);
+      setSaved(await run(sb.rpc('save_catalog', { items: b.data })));
       render();
       renderTaxo();
       $('#backups-dlg').close();
-      toast('Catálogo restaurado.');
-    } catch (e) { toast(e.message, true); }
+      const extra = [].concat(missingBrands.length ? ['marcas: ' + missingBrands.join(', ')] : [], missingTypes.length ? ['tipos: ' + missingTypes.join(', ')] : []);
+      toast('Catálogo restaurado' + (extra.length ? '. También se recrearon ' + extra.join(' y ') : '') + '.');
+    } catch (e) {
+      toast(e.message, true);
+      btn.disabled = false; btn.textContent = 'Restaurar';
+    }
   });
 
   $('#open-password').addEventListener('click', () => { $('#menu-dlg').close(); $('#pw-msg').textContent = ''; $('#pw-dlg').showModal(); });

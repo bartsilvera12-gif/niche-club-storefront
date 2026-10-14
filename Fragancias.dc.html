@@ -82,17 +82,28 @@
     .nc-nav > :last-child { border-bottom:none !important; }
     header:has(.nc-menu-cb:checked) { background:rgba(8,8,8,0.97) !important; }
   }
+  /* Las tarjetas aparecen al entrar en pantalla (también en celular) */
+  .nc-grid article.nc-rv { opacity:0; transform:translateY(22px); transition:opacity .7s ease, transform .8s cubic-bezier(.2,.7,.2,1); }
+  .nc-grid article.nc-rv.nc-in { opacity:1; transform:none; }
+  .nc-grid article.nc-rv.nc-in img { animation:ncZoom 1.4s cubic-bezier(.2,.7,.2,1) backwards; }
+  @keyframes ncZoom { from { transform:scale(1.08); } to { transform:none; } }
+  .nc-incart { position:absolute; left:12px; bottom:12px; z-index:2; display:flex; align-items:center; gap:6px; padding:7px 12px; border-radius:999px; background:#E3C492; color:#080808; font:600 10px/1 'Manrope',sans-serif; letter-spacing:.14em; text-transform:uppercase; box-shadow:0 6px 18px rgba(0,0,0,.35); animation:ncPop .4s cubic-bezier(.2,.9,.3,1.3) both; }
+  @keyframes ncPop { from { opacity:0; transform:scale(.6); } to { opacity:1; transform:none; } }
+  .nc-toast { position:fixed; left:50%; bottom:22px; z-index:65; transform:translateX(-50%); display:flex; align-items:center; gap:16px; max-width:calc(100% - 32px); padding:10px 10px 10px 20px; border-radius:999px; background:#151515; border:1px solid rgba(227,196,146,0.35); box-shadow:0 18px 44px rgba(0,0,0,.55); animation:ncToast .35s cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes ncToast { from { opacity:0; transform:translate(-50%, 16px); } to { opacity:1; transform:translate(-50%, 0); } }
+  @media (max-width:720px) { .nc-toast { left:16px; right:16px; transform:none; bottom:16px; justify-content:space-between; animation-name:ncToastM; } }
+  @keyframes ncToastM { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
   @keyframes ncMenu { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:none; } }
 </style>
 </helmet>
 
-<div style="background:#080808;color:#FFFFFF;font-family:'Manrope',sans-serif;min-height:100vh;overflow-x:hidden">
+<div style="background:#080808;color:#FFFFFF;font-family:'Manrope',sans-serif;min-height:100vh;overflow-x:clip">
 
   <header style="position:sticky;top:0;z-index:40;background:rgba(8,8,8,0.94)">
     <div class="nc-hd" style="max-width:1400px;margin:0 auto;padding:10px 22px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px">
       <a class="nc-brand" href="/" style="display:flex;align-items:center;gap:10px;flex:0 0 auto">
-        <img src="img/logo.jpeg" alt="Niche Club" style="width:40px;height:40px;object-fit:contain;display:block" />
-        <span style="font:400 14px/1 'Cormorant Garamond',serif;letter-spacing:.26em;color:#E3C492">NICHE CLUB</span>
+        <img src="img/logo-icono.png" alt="Niche Club" style="height:46px;width:auto;display:block" />
+        <span style="font:500 16px/1 'Cormorant Garamond',serif;letter-spacing:.26em;color:#E3C492">NICHE CLUB</span>
       </a>
       <input type="checkbox" id="nc-menu" class="nc-menu-cb" aria-hidden="true" tabindex="-1" />
       <nav class="nc-nav" style="display:flex;gap:16px;overflow-x:auto;margin-right:auto;font:300 11px/1 'Manrope',sans-serif;letter-spacing:.18em;text-transform:uppercase">
@@ -147,8 +158,11 @@
     <div class="nc-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(max(220px,22%),1fr));gap:clamp(44px,5vw,86px) clamp(22px,2.6vw,44px)">
       <sc-for list="{{ items }}" as="p" hint-placeholder-count="6">
         <article style="display:flex;flex-direction:column">
-          <div onClick="{{ p.open }}" style="overflow:hidden;cursor:pointer;background:#0E0E0E;border-radius:999px 999px 12px 12px">
+          <div onClick="{{ p.open }}" style="position:relative;overflow:hidden;cursor:pointer;background:#0E0E0E;border-radius:999px 999px 12px 12px">
             <img src="{{ p.img }}" alt="{{ p.alt }}" loading="lazy" style="{{ p.imgStyle }}" style-hover="transform:scale(1.02)" />
+            <sc-if value="{{ p.hasInCart }}" hint-placeholder-val="{{ false }}">
+              <span class="nc-incart">{{ p.inCartLabel }}</span>
+            </sc-if>
           </div>
           <span style="margin-top:20px;font:400 10px/1 'Manrope',sans-serif;letter-spacing:.24em;text-transform:uppercase;color:#B99B63">{{ p.brand }}</span>
           <h2 onClick="{{ p.open }}" style="margin:10px 0 0;font:400 clamp(21px,2.2vw,27px)/1.16 'Cormorant Garamond',serif;color:#FBF8F2;cursor:pointer;text-wrap:pretty" style-hover="color:#E3C492">{{ p.name }}</h2>
@@ -182,7 +196,7 @@
     <div class="nc-ft" style="max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:30px clamp(26px,4vw,56px)">
       <div style="display:flex;flex-direction:column;gap:14px">
         <a href="/" style="display:flex;align-items:center;gap:14px">
-          <img src="img/logo.jpeg" alt="Niche Club" style="width:62px;height:62px;object-fit:contain;display:block;border-radius:8px" />
+          <img src="img/logo-icono.png" alt="Niche Club" style="height:72px;width:auto;display:block" />
           <span style="font:400 15px/1 'Cormorant Garamond',serif;letter-spacing:.26em;color:#E3C492">NICHE CLUB</span>
         </a>
         <p style="margin:0;max-width:260px;font:300 13px/1.7 'Manrope',sans-serif;color:#7E786E">Perfumería de nicho y diseñador. Decants de 5 ml y 10 ml en Paraguay.</p>
@@ -211,6 +225,13 @@
       <span>Desarrollado por <a href="https://neura.com.py" target="_blank" rel="noopener" style="color:#CFCAC2;font-weight:400" style-hover="color:#E3C492">Neura</a></span>
     </div>
   </footer>
+
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div class="nc-toast" role="status">
+      <span style="font:300 13px/1.4 'Manrope',sans-serif;color:#FBF8F2">{{ toast }}</span>
+      <button onClick="{{ toastCart }}" style="flex:none;background:#E3C492;border:none;color:#080808;padding:12px 18px;border-radius:999px;font:600 10px/1 'Manrope',sans-serif;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap">Ver carrito</button>
+    </div>
+  </sc-if>
 
   <sc-if value="{{ helperVisible }}" hint-placeholder-val="{{ false }}">
     <button onClick="{{ waHelp }}" aria-label="Escribinos por WhatsApp" title="¿Necesitás ayuda para elegir? Escribinos" style="position:fixed;right:18px;bottom:18px;z-index:50;display:flex;align-items:center;justify-content:center;width:60px;height:60px;padding:0;background:#25D366;border:none;border-radius:999px;color:#FFFFFF;box-shadow:0 10px 28px -8px rgba(0,0,0,0.55)" style-hover="background:#1EBE5A">
@@ -378,7 +399,7 @@ class Component extends DCLogic {
         type: map[hash] || 'Todos',
         cartOpen: hash === 'carrito',
         searchOpen: hash === 'buscar'
-      });
+      }, () => this.watchCards());
     });
   }
 
@@ -404,8 +425,32 @@ class Component extends DCLogic {
       if (found) found.qty += (qty || 1);
       else cart.push({ key: key, id: p.id, ml: ml, qty: qty || 1 });
       if (this.mod) this.mod.writeCart(cart);
-      return { cart: cart, cartOpen: true, sheetId: null, searchOpen: false, qty: 1 };
+      return { cart: cart, sheetId: null, searchOpen: false, qty: 1 };
     });
+    const n = qty || 1;
+    this.setState({ toast: 'Agregado: ' + p.name + ' ' + ml + ' ml' + (n > 1 ? ' × ' + n : '') });
+    clearTimeout(this._toastTimer);
+    this._toastTimer = setTimeout(() => this.setState({ toast: null }), 3500);
+  }
+
+  inCart(id) { return this.state.cart.filter(l => l.id === id).reduce((t, l) => t + l.qty, 0); }
+
+  // Aparición de las tarjetas al bajar; observa también las que aparecen al filtrar
+  watchCards() {
+    if (!('IntersectionObserver' in window)) return;
+    this._io = new IntersectionObserver(entries => entries.forEach(en => {
+      if (en.isIntersecting) { en.target.classList.add('nc-in'); this._io.unobserve(en.target); }
+    }), { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+    const scan = () => document.querySelectorAll('.nc-grid article:not(.nc-rv)').forEach(a => { a.classList.add('nc-rv'); this._io.observe(a); });
+    scan();
+    const grid = document.querySelector('.nc-grid');
+    if (grid) { this._mo = new MutationObserver(scan); this._mo.observe(grid, { childList: true, subtree: true }); }
+  }
+
+  componentWillUnmount() {
+    if (this._io) this._io.disconnect();
+    if (this._mo) this._mo.disconnect();
+    clearTimeout(this._toastTimer);
   }
 
   changeQty(key, delta) {
@@ -451,6 +496,8 @@ class Component extends DCLogic {
     const ml = this.sizeOf(p.id);
     return {
       brand: p.brand, name: p.name, type: p.type, img: p.img, status: p.status,
+      hasInCart: this.inCart(p.id) > 0,
+      inCartLabel: this.inCart(p.id) + ' en el carrito',
       available: p.status !== 'Agotado', soldOut: p.status === 'Agotado',
       alt: p.brand + ' ' + p.name,
       imgStyle: 'width:100%;aspect-ratio:1/1.22;object-fit:cover;object-position:center 46%;display:block;border-radius:999px 999px 12px 12px;transition:transform 1s cubic-bezier(.2,.7,.2,1)',
@@ -568,12 +615,14 @@ class Component extends DCLogic {
       decQty: () => this.setState(st => ({ qty: Math.max(1, st.qty - 1) })),
       cartOpen: s.cartOpen,
       openCart: () => this.setState({ cartOpen: true }),
+      toast: s.toast || null,
+      toastCart: () => this.setState({ cartOpen: true, toast: null }),
       closeCart: () => this.setState({ cartOpen: false }),
       cartLines: cartLines,
       cartEmpty: cartLines.length === 0,
       cartCount: s.cart.reduce((t, l) => t + l.qty, 0),
       cartTotal: this.gs(total),
-      helperVisible: this.props.showHelperBubble !== false && !s.cartOpen && !s.sheetId && !s.searchOpen,
+      helperVisible: this.props.showHelperBubble !== false && !s.cartOpen && !s.sheetId && !s.searchOpen && !s.toast,
       waDisplay: site.waDisplay,
       instagram: site.instagram,
       igUrl: site.igUrl,
