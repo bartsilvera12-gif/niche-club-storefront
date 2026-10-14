@@ -189,6 +189,24 @@
   .bk-help { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
   .backup-list .bk { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 8px 8px 8px 14px; border: 1px solid var(--line-soft); border-radius: 10px; font-size: 13px; }
 
+  /* Confirmaciones propias del panel (en lugar del aviso del navegador) */
+  #ask-dlg { width: min(480px, calc(100% - 32px)); }
+  #ask-dlg .dlg { gap: 16px; }
+  .ask-icon { width: 44px; height: 44px; border-radius: 999px; display: grid; place-items: center; background: rgba(227,196,146,.14); border: 1px solid rgba(227,196,146,.35); color: var(--gold); }
+  .ask-icon.danger { background: rgba(224,138,122,.12); border-color: rgba(224,138,122,.4); color: var(--danger); }
+  .ask-body { display: grid; gap: 12px; color: var(--muted); font-size: 14px; line-height: 1.55; }
+  .ask-body p { margin: 0; }
+  .ask-group { display: grid; gap: 8px; }
+  .ask-group > span { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; }
+  .ask-group.plus > span { color: var(--ok); }
+  .ask-group.minus > span { color: var(--danger); }
+  .ask-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .ask-chips em { font-style: normal; padding: 5px 11px; border-radius: 999px; background: var(--card); border: 1px solid var(--line-soft); color: var(--text); font-size: 13px; }
+  .ask-group.plus em { border-color: rgba(156,197,154,.4); }
+  .ask-group.minus em { border-color: rgba(224,138,122,.4); }
+  .ask-note { padding: 10px 14px; border-radius: 10px; background: var(--card); border: 1px solid var(--line-soft); font-size: 13px; }
+  .btn.danger-fill { background: var(--danger); border-color: var(--danger); color: #1A0E0B; font-weight: 600; }
+  .btn.danger-fill:hover { background: #EBA092; color: #1A0E0B; }
   .toast { position: fixed; top: 18px; left: 50%; transform: translate(-50%, -150%); z-index: 50; padding: 12px 20px; border-radius: 999px; background: #1A1A1A; border: 1px solid var(--line); font-size: 13px; transition: transform .3s; max-width: calc(100% - 32px); }
   .toast.show { transform: translate(-50%, 0); }
   .toast.error { border-color: var(--danger); color: var(--danger); }
@@ -477,6 +495,21 @@
   </div>
 </dialog>
 
+<dialog id="ask-dlg">
+  <div class="dlg">
+    <div class="ask-icon" id="ask-icon"></div>
+    <div>
+      <div class="eyebrow" id="ask-eyebrow"></div>
+      <h2 class="serif" id="ask-title"></h2>
+    </div>
+    <div class="ask-body" id="ask-body"></div>
+    <footer>
+      <button class="btn" type="button" id="ask-no">Cancelar</button>
+      <button class="btn primary" type="button" id="ask-yes">Aceptar</button>
+    </footer>
+  </div>
+</dialog>
+
 <div class="toast" id="toast"></div>
 
 <script type="module">
@@ -548,6 +581,42 @@ import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
       return Object.assign({}, p, { id });
     });
   }
+
+  // Confirmación con el estilo del panel. Devuelve true si se acepta.
+  const askIcons = {
+    warn: '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 3l8 14H2z"/><path d="M10 8v4M10 14.5v.5"/></svg>',
+    trash: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 5h12M7 5V3h4v2M5 5l1 10h6l1-10"/></svg>',
+    restore: '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 10a6 6 0 1 0 2-4.5"/><path d="M4 3v3.5h3.5"/></svg>'
+  };
+  function ask({ eyebrow = '', title, body = '', ok = 'Aceptar', cancel = 'Cancelar', danger = false, icon = 'warn' }) {
+    const dlg = $('#ask-dlg');
+    $('#ask-icon').innerHTML = askIcons[icon] || askIcons.warn;
+    $('#ask-icon').classList.toggle('danger', danger);
+    $('#ask-eyebrow').textContent = eyebrow;
+    $('#ask-eyebrow').hidden = !eyebrow;
+    $('#ask-title').textContent = title;
+    $('#ask-body').innerHTML = body;
+    $('#ask-body').hidden = !body;
+    $('#ask-yes').textContent = ok;
+    $('#ask-yes').className = 'btn ' + (danger ? 'danger-fill' : 'primary');
+    $('#ask-no').textContent = cancel;
+    // Una sola confirmación pendiente: si quedó otra abierta, cuenta como cancelada
+    askDone(false);
+    if (!dlg.open) dlg.showModal();
+    $('#ask-no').focus();
+    return new Promise(resolve => { askResolve = resolve; });
+  }
+  let askResolve = null;
+  function askDone(answer) {
+    const r = askResolve;
+    askResolve = null;
+    if (r) r(answer);
+  }
+  $('#ask-yes').addEventListener('click', () => { askDone(true); $('#ask-dlg').close(); });
+  $('#ask-no').addEventListener('click', () => { askDone(false); $('#ask-dlg').close(); });
+  // Esc o clic afuera: cancelar
+  $('#ask-dlg').addEventListener('close', () => { if (!$('#ask-dlg').open) askDone(false); });
+  const chips = list => '<div class="ask-chips">' + list.map(n => '<em>' + esc(n) + '</em>').join('') + '</div>';
 
   let toastTimer;
   function toast(text, error) {
@@ -772,7 +841,13 @@ import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
     if (a === 'up' && i > 0) { [items[i - 1], items[i]] = [items[i], items[i - 1]]; render(); }
     if (a === 'down' && i < items.length - 1) { [items[i + 1], items[i]] = [items[i], items[i + 1]]; render(); }
     if (a === 'edit') openEdit(i);
-    if (a === 'del' && confirm(`¿Eliminar «${items[i].brand} ${items[i].name}» del catálogo?\n\nSe aplica al guardar.`)) { items.splice(i, 1); render(); }
+    if (a === 'del') {
+      const p = items[i];
+      ask({
+        eyebrow: 'Eliminar fragancia', title: p.brand + ' ' + p.name, icon: 'trash', danger: true, ok: 'Eliminar',
+        body: '<p>Se quita de la lista. El cambio se aplica recién cuando tocás <b>Guardar</b>, y hasta entonces lo podés descartar.</p>'
+      }).then(yes => { const at = items.indexOf(p); if (yes && at >= 0) { items.splice(at, 1); render(); } });
+    }
   });
   $('#q').addEventListener('input', render);
   $('#f-type').addEventListener('change', render);
@@ -794,8 +869,10 @@ import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
       btn.disabled = false; btn.textContent = 'Guardar';
     }
   });
-  $('#discard-btn').addEventListener('click', () => {
-    if (!confirm('¿Descartar todos los cambios sin guardar?')) return;
+  $('#discard-btn').addEventListener('click', async () => {
+    const n = changeCount();
+    if (!await ask({ eyebrow: 'Descartar', title: '¿Descartar los cambios?', danger: true, ok: 'Descartar',
+      body: '<p>Se pierden ' + (n === 1 ? 'el cambio sin guardar' : 'los ' + n + ' cambios sin guardar') + ' y la lista vuelve a como está en el sitio.</p>' })) return;
     items = clone(saved);
     render();
   });
@@ -998,7 +1075,8 @@ import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
       if (act === 'cancel') { renaming = null; renderTaxo(); }
       if (act === 'save') await renameTax(kind, name, row.querySelector('[data-rename]').value);
       if (act === 'del') {
-        if (!confirm(`¿Eliminar ${kind === 'brand' ? 'la marca' : 'el tipo'} «${name}»?`)) return;
+        if (!await ask({ eyebrow: kind === 'brand' ? 'Eliminar marca' : 'Eliminar tipo', title: name, icon: 'trash', danger: true, ok: 'Eliminar',
+          body: '<p>No tiene fragancias asignadas. Se borra al instante.</p>' })) return;
         await run(sb.from(kind === 'brand' ? 'brands' : 'types').delete().eq('name', name));
         if (kind === 'brand') brands = brands.filter(b => b !== name);
         else types = types.filter(t => t.name !== name);
@@ -1223,7 +1301,8 @@ import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
   document.querySelectorAll('dialog').forEach(d => d.addEventListener('click', ev => { if (ev.target === d) d.close(); }));
   $('#menu-btn').addEventListener('click', () => $('#menu-dlg').showModal());
   $('#logout-btn').addEventListener('click', async () => {
-    if ((changeCount() || configDirty()) && !confirm('Hay cambios sin guardar. ¿Salir igual?')) return;
+    if ((changeCount() || configDirty()) && !await ask({ eyebrow: 'Cerrar sesión', title: 'Hay cambios sin guardar', danger: true, ok: 'Salir igual',
+      body: '<p>Si salís ahora se pierden los cambios que no guardaste.</p>' })) return;
     await sb.auth.signOut().catch(() => {});
     saved = items = [];
     $('#menu-dlg').close();
@@ -1308,14 +1387,16 @@ import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
     if (!btn) return;
     const b = backups.find(x => String(x.id) === btn.dataset.id);
     if (!b) return;
-    if (changeCount() && !confirm('Tenés cambios sin guardar en Fragancias y se van a perder. ¿Seguir?')) return;
+    if (changeCount() && !await ask({ eyebrow: 'Restaurar copia', title: 'Hay cambios sin guardar', danger: true, ok: 'Seguir',
+      body: '<p>Tenés cambios sin guardar en Fragancias. Si restaurás una copia, se pierden.</p>' })) return;
     const d = backupDiff(b.data);
-    const lines = [`¿Volver el catálogo a como estaba antes de guardar el ${fmtBackup(b.created_at)}?`, ''];
-    if (d.back.length) lines.push('Vuelven: ' + d.back.join(', '));
-    if (d.gone.length) lines.push('Se quitan: ' + d.gone.join(', '));
-    if (d.changed) lines.push('Cambian datos de ' + d.changed + (d.changed === 1 ? ' fragancia' : ' fragancias') + ' (precio, estado, foto…)');
-    lines.push('', 'El catálogo actual queda guardado como una copia nueva, así que podés deshacerlo.');
-    if (!confirm(lines.join('\n'))) return;
+    let body = '';
+    if (d.back.length) body += '<div class="ask-group plus"><span>Vuelven</span>' + chips(d.back) + '</div>';
+    if (d.gone.length) body += '<div class="ask-group minus"><span>Se quitan</span>' + chips(d.gone) + '</div>';
+    if (d.changed) body += '<p>Cambian los datos de <b>' + d.changed + (d.changed === 1 ? ' fragancia' : ' fragancias') + '</b> (precio, estado, foto…).</p>';
+    if (d.order && !d.back.length && !d.gone.length && !d.changed) body += '<p>Cambia el orden de las fragancias.</p>';
+    body += '<p class="ask-note">El catálogo actual queda guardado como una copia nueva, así que lo podés deshacer.</p>';
+    if (!await ask({ eyebrow: 'Restaurar copia', title: 'Catálogo de antes del ' + fmtBackup(b.created_at), icon: 'restore', ok: 'Restaurar', body })) return;
     btn.disabled = true; btn.textContent = 'Restaurando…';
     try {
       const { missingBrands, missingTypes } = await ensureTaxonomy(b.data);
