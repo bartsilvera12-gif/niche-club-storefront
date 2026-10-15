@@ -36,7 +36,18 @@ export const WA_DISPLAY = SETTINGS.waDisplay;
 
 export const gs = n => 'Gs. ' + Number(n).toLocaleString('de-DE');
 
-export const priceOf = (p, ml) => (ml === 10 ? p.p10 : p.p5);
+// Precio de lista (sin descuento) para la etiqueta tachada
+export const listPrice = (p, ml) => (ml === 10 ? p.p10 : p.p5);
+
+// true si la fragancia está en oferta
+export const hasOff = p => (Number(p.discount) || 0) > 0;
+
+// Precio final: aplica el descuento y redondea al millar más cercano (precios limpios)
+export const priceOf = (p, ml) => {
+  const base = listPrice(p, ml);
+  const d = Number(p.discount) || 0;
+  return d > 0 ? Math.round(base * (100 - d) / 100 / 1000) * 1000 : base;
+};
 
 export const readCart = () => {
   try {

@@ -21,6 +21,7 @@ create table if not exists nicheclubweb.products (
   img        text not null check (length(img) between 1 and 500),
   p5         integer not null check (p5 > 0),
   p10        integer not null check (p10 > 0),
+  discount   integer not null default 0 check (discount between 0 and 90),
   status     text not null default 'Disponible' check (status in ('Disponible', 'Agotado', 'Por encargo')),
   visible    boolean not null default true,
   light      boolean not null default false,
@@ -29,6 +30,10 @@ create table if not exists nicheclubweb.products (
 );
 -- Los tipos ahora salen de la tabla types
 alter table nicheclubweb.products drop constraint if exists products_type_check;
+-- Descuento opcional por fragancia (porcentaje 0–90; 0 = sin descuento)
+alter table nicheclubweb.products add column if not exists discount integer not null default 0;
+alter table nicheclubweb.products drop constraint if exists products_discount_check;
+alter table nicheclubweb.products add constraint products_discount_check check (discount between 0 and 90);
 
 create table if not exists nicheclubweb.brands (
   name     text primary key check (length(trim(name)) between 1 and 120),
@@ -162,9 +167,9 @@ begin
   perform nicheclubweb.take_snapshot('catalogo');
 
   delete from nicheclubweb.products where true;
-  insert into nicheclubweb.products (id, brand, name, type, img, p5, p10, status, visible, light, position)
+  insert into nicheclubweb.products (id, brand, name, type, img, p5, p10, discount, status, visible, light, position)
   select v->>'id', trim(v->>'brand'), trim(v->>'name'), v->>'type', v->>'img',
-         (v->>'p5')::integer, (v->>'p10')::integer, coalesce(v->>'status', 'Disponible'),
+         (v->>'p5')::integer, (v->>'p10')::integer, coalesce((v->>'discount')::integer, 0), coalesce(v->>'status', 'Disponible'),
          coalesce((v->>'visible')::boolean, true), coalesce((v->>'light')::boolean, false), (ord - 1)::integer
   from jsonb_array_elements(items) with ordinality as e(v, ord);
 

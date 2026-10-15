@@ -115,6 +115,7 @@
   .thumb { width: 64px; height: 76px; border-radius: 999px 999px 8px 8px; object-fit: cover; background: var(--card); display: block; }
   .row .title b { display: block; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 19px; line-height: 1.15; }
   .row .title small { color: var(--muted); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; }
+  .off-tag { display: inline-block; vertical-align: middle; margin-left: 6px; padding: 2px 7px; border-radius: 999px; background: rgba(227,196,146,.16); border: 1px solid rgba(227,196,146,.4); color: var(--gold); font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 10px; letter-spacing: .08em; }
   .row .input { min-height: 36px; padding: 0 10px; font-size: 13px; }
   .row select.input { padding-right: 28px; background-position: calc(100% - 14px) 50%, calc(100% - 9px) 50%; }
   .price { position: relative; }
@@ -441,6 +442,7 @@
       <div class="field"><label for="e-p5">Precio 5 ml (Gs.)</label><input class="input" id="e-p5" inputmode="numeric" required></div>
       <div class="field"><label for="e-p10">Precio 10 ml (Gs.)</label><input class="input" id="e-p10" inputmode="numeric" required></div>
     </div>
+    <div class="field"><label for="e-off">Descuento (%)</label><input class="input" id="e-off" inputmode="numeric" placeholder="0" maxlength="2"><small id="e-off-hint">Opcional. 0 = sin descuento. Se aplica a los dos tamaños y se muestra el precio anterior tachado.</small></div>
     <label class="check"><button type="button" class="switch" id="e-visible" role="switch" aria-checked="true"></button> Mostrar en el sitio</label>
     <div class="msg" id="edit-msg"></div>
     <footer>
@@ -809,7 +811,7 @@ import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
       <div class="row${p.visible ? '' : ' hidden-prod'}${isDirty(p) ? ' dirty' : ''}" data-i="${i}">
         <div class="pos">${i + 1}</div>
         <img class="thumb" src="${esc(imgSrc(p.img))}" alt="" loading="lazy">
-        <div class="title"><b>${esc(p.name)}</b><small>${esc(p.brand)}</small></div>
+        <div class="title"><b>${esc(p.name)}${p.discount > 0 ? ` <span class="off-tag">−${p.discount}%</span>` : ''}</b><small>${esc(p.brand)}</small></div>
         <div class="c-type"><select class="input" data-f="type" aria-label="Tipo">${opts(typeNames(), p.type)}</select></div>
         <div class="c-p5 price" data-label="5 ml"><input class="input" data-f="p5" inputmode="numeric" value="${gs(p.p5)}" aria-label="Precio 5 ml"></div>
         <div class="c-p10 price" data-label="10 ml"><input class="input" data-f="p10" inputmode="numeric" value="${gs(p.p10)}" aria-label="Precio 10 ml"></div>
@@ -943,7 +945,7 @@ import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
   let draftImg = '';
   function openEdit(i) {
     editing = i;
-    const p = i >= 0 ? items[i] : { brand: '', name: '', type: typeNames()[0] || '', status: STATUSES[0], p5: '', p10: '', img: '', visible: true };
+    const p = i >= 0 ? items[i] : { brand: '', name: '', type: typeNames()[0] || '', status: STATUSES[0], p5: '', p10: '', discount: 0, img: '', visible: true };
     $('#edit-eyebrow').textContent = i >= 0 ? 'Editar' : 'Nueva';
     $('#edit-title').textContent = i >= 0 ? p.brand + ' ' + p.name : 'Fragancia';
     pBrand.value = p.brand;
@@ -952,6 +954,8 @@ import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
     pStatus.value = p.status;
     $('#e-p5').value = p.p5 ? gs(p.p5) : '';
     $('#e-p10').value = p.p10 ? gs(p.p10) : '';
+    $('#e-off').value = p.discount ? String(p.discount) : '';
+    offHint();
     $('#e-visible').setAttribute('aria-checked', String(p.visible !== false));
     setPreview(p.img);
     $('#e-img-hint').textContent = 'JPG, PNG o WEBP. Se ajusta sola al tamaño del sitio.';
@@ -962,7 +966,22 @@ import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
     draftImg = img || '';
     $('#e-img-preview').src = imgSrc(img);
   }
-  ['#e-p5', '#e-p10'].forEach(s => $(s).addEventListener('input', ev => { const v = num(ev.target.value); ev.target.value = v ? gs(v) : ''; }));
+  ['#e-p5', '#e-p10'].forEach(s => $(s).addEventListener('input', ev => { const v = num(ev.target.value); ev.target.value = v ? gs(v) : ''; offHint(); }));
+  // Precio con descuento: redondea al millar, igual que la tienda (ver catalog.js)
+  const salePrice = (base, off) => off > 0 ? Math.round(base * (100 - off) / 100 / 1000) * 1000 : base;
+  function offHint() {
+    const off = Math.min(90, num($('#e-off').value));
+    const p5 = num($('#e-p5').value), p10 = num($('#e-p10').value);
+    const hint = $('#e-off-hint');
+    if (off > 0 && p5 && p10) hint.textContent = 'Queda en Gs. ' + gs(salePrice(p5, off)) + ' (5 ml) y Gs. ' + gs(salePrice(p10, off)) + ' (10 ml).';
+    else hint.textContent = 'Opcional. 0 = sin descuento. Se aplica a los dos tamaños y se muestra el precio anterior tachado.';
+  }
+  $('#e-off').addEventListener('input', ev => {
+    let v = num(ev.target.value);
+    if (v > 90) v = 90;
+    ev.target.value = v ? String(v) : '';
+    offHint();
+  });
   $('#e-visible').addEventListener('click', ev => {
     const b = ev.currentTarget;
     b.setAttribute('aria-checked', String(b.getAttribute('aria-checked') !== 'true'));
@@ -1013,6 +1032,7 @@ import { DEFAULT_SETTINGS, waDisplay } from '../settings.js';
       brand: pBrand.value, name: $('#e-name').value.trim(),
       type: pType.value, status: pStatus.value,
       p5: num($('#e-p5').value), p10: num($('#e-p10').value),
+      discount: Math.min(90, num($('#e-off').value)),
       img: draftImg, visible: $('#e-visible').getAttribute('aria-checked') === 'true'
     };
     const msg = $('#edit-msg');
